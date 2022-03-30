@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+apply plugin: 'com.diffplug.spotless'
+
 android {
     compileSdk 32
 
@@ -34,8 +36,26 @@ android {
     }
 }
 
-dependencies {
+// Automatic Code Formatting
+spotless {
+    java {
+        target '**/*.java'
+        googleJavaFormat()
+        importOrder 'java', 'javax', 'org', 'com', ''
+        removeUnusedImports() // removes any unused imports
+    }
+}
 
+afterEvaluate {
+    def spotless = tasks.findByName('spotlessApply')
+    if (spotless) {
+        tasks.withType(JavaCompile) {
+            finalizedBy(spotless)
+        }
+    }
+}
+
+dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
