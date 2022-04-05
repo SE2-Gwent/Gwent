@@ -4,6 +4,8 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply plugin: 'com.diffplug.spotless'
+
 android {
     compileSdk 30
 
@@ -32,6 +34,25 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+}
+
+// Automatic Code Formatting
+spotless {
+    java {
+        target '**/*.java'
+        googleJavaFormat()
+        importOrder 'java', 'javax', 'org', 'com', ''
+        removeUnusedImports() // removes any unused imports
+    }
+}
+
+afterEvaluate {
+    def spotless = tasks.findByName('spotlessApply')
+    if (spotless) {
+        tasks.withType(JavaCompile) {
+            finalizedBy(spotless)
+        }
     }
 }
 
