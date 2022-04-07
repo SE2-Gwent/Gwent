@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
           if (messages == null) {
             messages = new ArrayList<>();
           }
-          Log.v(TAG, "Messages: " + messages);
+          Log.v(TAG, "Messages: Max " + messages);
         }
 
         @Override
