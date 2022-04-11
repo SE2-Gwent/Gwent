@@ -7,9 +7,14 @@ plugins {
 apply plugin: 'com.diffplug.spotless'
 apply plugin: 'jacoco'
 
+def Properties signingProps = new Properties()
+def signingPropsFile = file('signing.properties')
+if (signingPropsFile.canRead()){
+    signingProps.load(new FileInputStream(signingPropsFile))
+}
+
 android {
     compileSdk 30
-
     defaultConfig {
         applicationId "at.aau.se2.gwent"
         minSdk 23
@@ -19,7 +24,14 @@ android {
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
-
+    signingConfigs {
+        release {
+            storeFile = file("gwent-keystore")
+            storePassword signingProps['signing.password']
+            keyAlias signingProps['signing.alias']
+            keyPassword signingProps['signing.keypassword']
+        }
+    }
     buildTypes {
         debug {
             testCoverageEnabled true
@@ -27,6 +39,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
