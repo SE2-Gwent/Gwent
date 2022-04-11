@@ -7,10 +7,18 @@ plugins {
 apply plugin: 'com.diffplug.spotless'
 apply plugin: 'jacoco'
 
-def Properties signingProps = new Properties()
+// Read signing.properties file for safe signing inside github action
+Properties signingProps = new Properties()
 def signingPropsFile = file('signing.properties')
 if (signingPropsFile.canRead()){
     signingProps.load(new FileInputStream(signingPropsFile))
+}
+
+// Read version.properties file for automatic build incrementation
+Properties versionProps = new Properties()
+def versionPropsFile = file('version.properties')
+if (versionPropsFile.canRead()){
+    versionProps.load(new FileInputStream(versionPropsFile))
 }
 
 android {
@@ -19,8 +27,8 @@ android {
         applicationId "at.aau.se2.gwent"
         minSdk 23
         targetSdk 28
-        versionCode 1
-        versionName "1.0"
+        versionCode versionProps['buildnumber'].toInteger()
+        versionName "0.1.0"
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -71,6 +79,12 @@ afterEvaluate {
             finalizedBy(spotless)
         }
     }
+}
+
+tasks.create(name: "bumpBuildNumber") {
+    def versionBuild = versionProps['buildnumber'].toInteger() + 1
+    versionProps['buildnumber'] = versionBuild.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
 }
 
 tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {

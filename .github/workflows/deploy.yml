@@ -43,10 +43,24 @@ jobs:
           echo "signing.password=$KEYPASS" > ./app/signing.properties 
           echo "signing.alias=gwent" >> ./app/signing.properties 
           echo "signing.keypassword=$KEYPASS" >> ./app/signing.properties
+      - name: Bump Build Version
+        run: ./gradlew bumpBuildNumber
       - name: Clean
         run: ./gradlew clean
       - name: Build debug
         run: ./gradlew assembleRelease
+
+      - name: setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: commit
+        run: |
+          # Stage the file, commit and push
+          git version.properties
+          git commit -m "Bump build number"
+          git push origin feature/setup-ci-cd-pipeline
+
       - name: Upload Results
         uses: actions/upload-artifact@v2
         with:
