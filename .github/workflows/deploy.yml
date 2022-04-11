@@ -52,10 +52,6 @@ jobs:
       - name: Build debug
         run: ./gradlew assembleRelease
 
-      - name: Setup git config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Bump version code
