@@ -10,4 +10,9 @@
         android:name="at.aau.se2.gwent.StartFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_start"/>
+    <fragment
+        android:id="@+id/settings"
+        android:name="at.aau.se2.gwent.views.settings.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/settings_fragment" />
 </navigation>
