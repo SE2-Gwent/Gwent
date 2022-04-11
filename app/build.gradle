@@ -81,10 +81,12 @@ afterEvaluate {
     }
 }
 
-tasks.create(name: "bumpBuildNumber") {
-    def versionBuild = versionProps['buildnumber'].toInteger() + 1
-    versionProps['buildnumber'] = versionBuild.toString()
-    versionProps.store(versionPropsFile.newWriter(), null)
+tasks.register('bumpBuildNumber') {
+    doLast {
+        def versionBuild = versionProps['buildnumber'].toInteger() + 1
+        versionProps['buildnumber'] = versionBuild.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
 }
 
 tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
