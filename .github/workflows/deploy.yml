@@ -9,7 +9,7 @@ name: Generate signed APK
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
 
 permissions:
   contents: write
