@@ -36,28 +36,28 @@
             android:orientation="horizontal" />
 
         <include
-            layout="@layout/sidebar"
+            layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="16"
             android:orientation="horizontal" />
 
         <include
-            layout="@layout/sidebar"
+            layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="16"
             android:orientation="horizontal" />
 
         <include
-            layout="@layout/sidebar"
+            layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="16"
             android:orientation="horizontal" />
 
         <include
-            layout="@layout/sidebar"
+            layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="16"
