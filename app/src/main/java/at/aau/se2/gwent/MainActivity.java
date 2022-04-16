@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,12 +65,9 @@ public class MainActivity extends AppCompatActivity {
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
     binding.fab.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            messages.add("Hello, World!");
-            databaseRef.setValue(messages);
-          }
+        view -> {
+          messages.add("Hello, World!");
+          databaseRef.setValue(messages);
         });
 
     setupDatabaseReference();
@@ -94,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_settings:
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+            .navigate(R.id.settings);
         return true;
       default:
         return super.onOptionsItemSelected(item);
