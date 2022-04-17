@@ -18,6 +18,18 @@ plugins {
     id 'com.diffplug.spotless' version '6.4.1' apply true
 }
 
+// Automatic Code Formatting
+subprojects {
+    afterEvaluate {
+        def spotless = tasks.findByName('spotlessApply')
+        if (spotless) {
+            tasks.withType(JavaCompile) {
+                finalizedBy(spotless)
+            }
+        }
+    }
+}
+
 allprojects {
     repositories {
         google()  // Google's Maven repository
