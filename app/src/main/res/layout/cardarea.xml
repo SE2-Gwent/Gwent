@@ -6,66 +6,91 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="948dp"
         android:orientation="vertical"
-        android:showDividers="middle"
-        android:weightSum="100">
+        android:weightSum="110">
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_weight="10"
-            app:srcCompat="@drawable/ic_launcher_background" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="match_parent"
-            android:layout_height="81dp"
-            android:layout_weight="10"
-            app:srcCompat="@drawable/ic_launcher_background" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
+        <ImageView
+            android:id="@+id/imageView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_launcher_background" />
 
-        <ImageButton
-            android:id="@+id/imageButton5"
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_launcher_background" />
 
-        <ImageButton
-            android:id="@+id/imageButton6"
+        <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_launcher_background" />
 
-        <ImageButton
-            android:id="@+id/imageButton7"
+        <ImageView
+            android:id="@+id/imageView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_launcher_background" />
 
-        <ImageButton
-            android:id="@+id/imageButton8"
+        <ImageView
+            android:id="@+id/imageView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_launcher_background" />
 
-        <ImageButton
-            android:id="@+id/imageButton9"
+        <ImageView
+            android:id="@+id/imageView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_launcher_background" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:padding="1pt"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_launcher_background" />
+
 
     </LinearLayout>
 </LinearLayout>
