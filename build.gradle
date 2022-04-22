@@ -19,7 +19,7 @@ plugins {
 }
 
 // Automatic Code Formatting
-subprojects {
+allprojects {
     afterEvaluate {
         def spotless = tasks.findByName('spotlessApply')
         if (spotless) {
