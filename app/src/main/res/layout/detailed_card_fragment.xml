@@ -1,32 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginStart="75dp"
-    android:layout_marginTop="100dp"
-    android:layout_marginEnd="75dp"
-    android:layout_marginBottom="100dp"
+    android:layout_margin="40dp"
     tools:context=".views.detailedcard.DetailedCardFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp">
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/cardImage"
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:contentDescription="@string/card_name"
+            android:src="@drawable/test_img"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/cardName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello, World."
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/card_name"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/cardTypes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/card_types"
+            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintTop_toBottomOf="@id/cardName" />
+
+        <TextView
+            android:id="@+id/cardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/card_text"
+            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintTop_toBottomOf="@id/cardTypes" />
+
+        <TextView
+            android:id="@+id/cardFlavortext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/card_flavortext"
+            android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintTop_toBottomOf="@id/cardText" />
+
+        <TextView
+            android:id="@+id/cardPower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/card_power"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintTop_toBottomOf="@id/cardFlavortext" />
+
+        <Button
+            android:id="@+id/abilityButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activate_ability"
+            app:layout_constraintBaseline_toBaselineOf="@+id/cardPower"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf= "parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toEndOf="@id/cardPower" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- CardName -->
+    <!-- CardTypes -->
+    <!-- CardText -->
+    <!-- CardFlavorText -->
+    <!-- CardPower -->
 
     <!-- TODO: refine padding, margin, add views -->
 
