@@ -17,5 +17,6 @@
     <string name="card_flavortext">When Cintra fell, Attre followed, leaving its defenders a choice: accept the Nilfgaardian leash or die.</string>
     <string name="card_power">5</string>
     <string name="activate_ability">Ability</string>
+    <string name="action_detailed_card">Detailed card</string>
 
 </resources>

@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="40dp"
+    android:layout_margin="@dimen/default_margin"
     tools:context=".views.detailedcard.DetailedCardFragment">
 
+    <!-- TODO: refine padding and margin -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/cardImage"
@@ -43,7 +44,7 @@
             android:id="@+id/cardText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_text"
             app:layout_constraintStart_toEndOf="@id/cardImage"
             app:layout_constraintTop_toBottomOf="@id/cardTypes" />
@@ -52,7 +53,7 @@
             android:id="@+id/cardFlavortext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_flavortext"
             android:textStyle="italic"
             app:layout_constraintStart_toEndOf="@id/cardImage"
@@ -62,7 +63,7 @@
             android:id="@+id/cardPower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_power"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -80,13 +81,4 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- CardName -->
-    <!-- CardTypes -->
-    <!-- CardText -->
-    <!-- CardFlavorText -->
-    <!-- CardPower -->
-
-    <!-- TODO: refine padding, margin, add views -->
-
 </FrameLayout>
