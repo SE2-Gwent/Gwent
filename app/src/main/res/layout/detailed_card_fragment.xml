@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/cardImage"
             android:layout_width="200dp"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:contentDescription="@string/card_name"
             android:src="@drawable/test_img"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -25,37 +25,43 @@
 
         <TextView
             android:id="@+id/cardName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/card_name"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cardImage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/cardTypes"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/card_types"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cardImage"
             app:layout_constraintTop_toBottomOf="@id/cardName" />
 
         <TextView
             android:id="@+id/cardText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_text"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cardImage"
             app:layout_constraintTop_toBottomOf="@id/cardTypes" />
 
         <TextView
             android:id="@+id/cardFlavortext"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_related_margin"
+            android:ellipsize="none"
+            android:scrollHorizontally="false"
             android:text="@string/card_flavortext"
             android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cardImage"
             app:layout_constraintTop_toBottomOf="@id/cardText" />
 
@@ -65,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_power"
+            android:textSize="50dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/cardImage"
@@ -74,11 +81,10 @@
             android:id="@+id/abilityButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/default_margin"
             android:text="@string/activate_ability"
             app:layout_constraintBaseline_toBaselineOf="@+id/cardPower"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardPower" />
-
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
