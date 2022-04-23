@@ -32,13 +32,15 @@
         android:weightSum="60">
 
         <include
+            android:id="@+id/handdeck"
             layout="@layout/carddeck"
-            android:layout_width="85dp"
+            android:layout_width="74dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
             android:orientation="horizontal" />
 
         <include
+            android:id="@+id/firstrow"
             layout="@layout/cardarea"
             android:layout_width="96dp"
             android:layout_height="704dp"

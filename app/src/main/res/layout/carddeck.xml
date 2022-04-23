@@ -6,5 +6,102 @@
     android:orientation="vertical">
 
 
+<LinearLayout
+    android:id="@+id/handLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:gravity="center"
+    android:orientation="vertical"
+   >
+
+    <ImageView
+        android:id="@+id/card1"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card2"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card3"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card4"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card5"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card6"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card7"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card8"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+
+    <ImageView
+        android:id="@+id/card9"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card10"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card11"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+    <ImageView
+    android:id="@+id/card12"
+    android:layout_width="40dp"
+    android:layout_height="50dp"
+    android:rotation="90"
+    app:srcCompat="@drawable/hearts10" />
+    <ImageView
+        android:id="@+id/card13"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/hearts10" />
+
+
+
+
+
+</LinearLayout>
+
 
 </RelativeLayout>
+
+
