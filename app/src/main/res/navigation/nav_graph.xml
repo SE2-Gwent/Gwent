@@ -9,10 +9,15 @@
         android:id="@+id/StartFragment"
         android:name="at.aau.se2.gwent.StartFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_start"/>
+        tools:layout="@layout/fragment_start" />
     <fragment
         android:id="@+id/settings"
         android:name="at.aau.se2.gwent.views.settings.SettingsFragment"
         android:label="settings_fragment"
         tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/detailed_card"
+        android:name="at.aau.se2.gwent.views.detailedcard.DetailedCardFragment"
+        android:label="@string/action_detailed_card"
+        tools:layout="@layout/detailed_card_fragment" />
 </navigation>
