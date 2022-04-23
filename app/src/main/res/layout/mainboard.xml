@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"/>
+
+    <LinearLayout
+        android:id="@+id/boardview"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal">
+
+        <include
+            layout="@layout/sidebar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="663dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal"
+        android:weightSum="60">
+
+        <include
+            layout="@layout/carddeck"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="horizontal" />
+
+        <include
+            layout="@layout/cardarea"
+            android:layout_width="96dp"
+            android:layout_height="704dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:visibility="visible" />
+
+        <include
+            layout="@layout/cardarea"
+            android:layout_width="96dp"
+            android:layout_height="704dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:visibility="visible" />
+
+        <include
+            layout="@layout/cardarea"
+            android:layout_width="96dp"
+            android:layout_height="704dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:visibility="visible" />
+
+        <include
+            layout="@layout/cardarea"
+            android:layout_width="96dp"
+            android:layout_height="704dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+</RelativeLayout>
+

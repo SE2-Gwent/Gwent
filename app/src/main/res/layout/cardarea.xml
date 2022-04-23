@@ -16,6 +16,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -24,6 +25,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -32,6 +34,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -40,6 +43,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -48,6 +52,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -56,6 +61,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -64,6 +70,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <ImageView
@@ -72,6 +79,7 @@
             android:layout_height="80dp"
             android:paddingRight="9dp"
             android:scaleType="centerInside"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_launcher_background" />
 
 
