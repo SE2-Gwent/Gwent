@@ -1,75 +1,93 @@
 package at.aau.se2.gwent.data;
 
-import java.util.Set;
+import java.util.LinkedList;
 
 public class Card {
-    enum CardType {
-        Human,
-        Knight,
-        Elf
-    }
+  public enum CardType {
+    Human,
+    Soldier,
+    Knight,
+    Elf
+  }
 
-    private int id;
-    private String name;
-    private Set <CardType> types;
-    private int power;
-    private String text;
-    private String flavorText;
-    private int powerDiff;
+  private int id;
+  private String name;
+  private LinkedList<CardType> types;
+  private int power;
+  private String text;
+  private String flavorText;
+  private int powerDiff;
 
-    public int getId() {
-        return id;
-    }
+  public Card(
+      int id,
+      String name,
+      LinkedList<CardType> types,
+      int power,
+      String text,
+      String flavorText,
+      int powerDiff) {
+    this.id = id;
+    this.name = name;
+    this.types = types;
+    this.power = power;
+    this.text = text;
+    this.flavorText = flavorText;
+    this.powerDiff = powerDiff;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Set<CardType> getTypes() {
-        return types;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setTypes(Set<CardType> types) {
-        this.types = types;
-    }
+  public LinkedList<CardType> getTypes() {
+    return types;
+  }
 
-    public int getPower() {
-        return power;
-    }
+  public void setTypes(LinkedList<CardType> types) {
+    this.types = types;
+  }
 
-    public void setPower(int power) {
-        this.power = power;
-    }
+  public int getPower() {
+    return power;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setPower(int power) {
+    this.power = power;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public String getFlavorText() {
-        return flavorText;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
-    public void setFlavorText(String flavorText) {
-        this.flavorText = flavorText;
-    }
+  public String getFlavorText() {
+    return flavorText;
+  }
 
-    public int getPowerDiff() {
-        return powerDiff;
-    }
+  public void setFlavorText(String flavorText) {
+    this.flavorText = flavorText;
+  }
 
-    public void setPowerDiff(int powerDiff) {
-        this.powerDiff = powerDiff;
-    }
+  public int getPowerDiff() {
+    return powerDiff;
+  }
+
+  public void setPowerDiff(int powerDiff) {
+    this.powerDiff = powerDiff;
+  }
 }
