@@ -10,7 +10,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,7 +108,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   }
 
   @Override
-  public void onClick(View v) {
-
-  }
+  public void onClick(View v) {}
 }

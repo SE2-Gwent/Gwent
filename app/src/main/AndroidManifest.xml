@@ -11,6 +11,7 @@
         android:theme="@style/Theme.Gwent">
         <activity
             android:name=".Spielkarte_Detailed"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

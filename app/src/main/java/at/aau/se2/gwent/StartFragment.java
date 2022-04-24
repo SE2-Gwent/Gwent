@@ -1,5 +1,6 @@
 package at.aau.se2.gwent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,15 @@ public class StartFragment extends Fragment {
           @Override
           public void onClick(View view) {
             Log.v(TAG, "DidClick StartGame");
+          }
+        });
+    binding.spielkarte.setOnLongClickListener(
+        new View.OnLongClickListener() {
+          @Override
+          public boolean onLongClick(View v) {
+            Intent i = new Intent(getContext(), Spielkarte_Detailed.class);
+            startActivity(i);
+            return true;
           }
         });
   }

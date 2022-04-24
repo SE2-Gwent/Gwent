@@ -34,7 +34,9 @@
 
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/Example"/>
+            android:src="@drawable/example"
+            />
+
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
