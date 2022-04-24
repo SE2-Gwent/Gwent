@@ -18,5 +18,6 @@
     <string name="card_power">5</string>
     <string name="activate_ability">Ability</string>
     <string name="action_detailed_card">Detailed card</string>
+    <string name="close">Close</string>
 
 </resources>

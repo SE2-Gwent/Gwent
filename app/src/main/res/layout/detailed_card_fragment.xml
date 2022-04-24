@@ -7,6 +7,7 @@
     android:layout_margin="@dimen/default_margin"
     tools:context=".views.detailedcard.DetailedCardFragment">
 
+
     <!-- TODO: refine padding and margin -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -77,13 +78,24 @@
             app:layout_constraintStart_toEndOf="@id/cardImage"
             app:layout_constraintTop_toBottomOf="@id/cardFlavortext" />
 
+        <!-- Possible extension: use a styling for the button -->
         <Button
             android:id="@+id/abilityButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/default_margin"
             android:text="@string/activate_ability"
-            app:layout_constraintBaseline_toBaselineOf="@+id/cardPower"
+            app:layout_constraintBaseline_toBaselineOf="@id/cardPower"
+            app:layout_constraintStart_toStartOf="@id/cardPower"
+            app:layout_constraintEnd_toStartOf="@id/closeButton"/>
+
+        <!-- Possible extension: use a styling for the button -->
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/close"
+            app:layout_constraintBaseline_toBaselineOf="@id/cardPower"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
