@@ -10,6 +10,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
   private static final String TAG = MainActivity.class.getSimpleName();
 
   private AppBarConfiguration appBarConfiguration;
@@ -105,5 +106,10 @@ public class MainActivity extends AppCompatActivity {
     NavController navController =
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
     return navController.navigateUp();
+  }
+
+  @Override
+  public void onClick(View v) {
+
   }
 }
