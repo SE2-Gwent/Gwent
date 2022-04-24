@@ -85,8 +85,8 @@
             android:layout_height="wrap_content"
             android:text="@string/activate_ability"
             app:layout_constraintBaseline_toBaselineOf="@id/cardPower"
-            app:layout_constraintStart_toStartOf="@id/cardPower"
-            app:layout_constraintEnd_toStartOf="@id/closeButton"/>
+            app:layout_constraintEnd_toStartOf="@id/closeButton"
+            app:layout_constraintStart_toStartOf="@id/cardPower" />
 
         <!-- Possible extension: use a styling for the button -->
         <Button
