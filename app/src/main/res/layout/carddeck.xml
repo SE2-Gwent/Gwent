@@ -76,26 +76,6 @@
         android:layout_height="50dp"
         android:rotation="90"
         app:srcCompat="@drawable/hearts10" />
-    <ImageView
-        android:id="@+id/card11"
-        android:layout_width="40dp"
-        android:layout_height="50dp"
-        android:rotation="90"
-        app:srcCompat="@drawable/hearts10" />
-    <ImageView
-    android:id="@+id/card12"
-    android:layout_width="40dp"
-    android:layout_height="50dp"
-    android:rotation="90"
-    app:srcCompat="@drawable/hearts10" />
-    <ImageView
-        android:id="@+id/card13"
-        android:layout_width="40dp"
-        android:layout_height="50dp"
-        android:rotation="90"
-        app:srcCompat="@drawable/hearts10" />
-
-
 
 
 
