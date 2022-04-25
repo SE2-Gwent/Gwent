@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.sql.Array;
@@ -16,7 +17,17 @@ public class MainGame extends AppCompatActivity {
 
     //TODO: karten von gegenüber verstecke nur anzahl soll ersichtlich sein
     //TODO: wenn done gedrückt wird wird die karte aus den Handkarten entfernt und ein platzhalter muss verschwinden
-    //TODO: die richtige Bildressource muss hineingeladen werden
+
+    //testdaten
+    Card one = new Card(1, R.drawable.hearts2);
+    Card two = new Card(2, R.drawable.hearts3);
+    Card three = new Card( 3, R.drawable.hearts4);
+    Card four = new Card(4, R.drawable.hearts5);
+    Card five = new Card(5, R.drawable.hearts6);
+    Card six = new Card(6, R.drawable.hearts7);
+    Card seven = new Card(7, R.drawable.hearts7);
+    ArrayList<Card> handcards = new ArrayList<Card>(8);
+    Card current;
 
     ArrayList<ImageView> cards = new ArrayList<ImageView>(10);
     ArrayList<ImageView> placeholder = new ArrayList<ImageView>(18);
@@ -26,23 +37,53 @@ public class MainGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainboard);
-        ArrayList<Card> handcards = new ArrayList<>();
-
+        //testdaten
+        handcards.add(one);
+        handcards.add(four);
+        handcards.add(six);
+        handcards.add(three);
+        handcards.add(one);
+        handcards.add(two);
+        handcards.add(four);
+        handcards.add(seven);
+        activatedonebutton();
         getSupportActionBar().hide();
-        fillarray();
+        fillhandcardarray();
+        showpicturesforhandcards(handcards);
         fillplaceholder();
-
         addonclicklistenerfordetailedcardview(handcards);
 
     }
 
+    public void activatedonebutton(){
 
-    public void fillarray(){
+        View forbutton = findViewById(R.id.sidebar);
+        Button test = forbutton.findViewById(R.id.donebutton);
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("testitii");
+            }
+        });
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("testitii");
+                for(int i=0; i<cards.size(); i++) {
+                    if (cards.get(i).getId() == currentcard.getId()) {
+                        System.out.println("test12222");
+                        handcards.remove(handcards.get(i));
+                        fillhandcardarray();
+                        showpicturesforhandcards(handcards);
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void fillhandcardarray(){
         View include = findViewById(R.id.handdeck);
-        include.findViewById(R.id.card1).setTag("Hallo");
-        String test = (String) include.findViewById(R.id.card1).getTag();
-        System.out.println(test);
-
         cards.add(include.findViewById(R.id.card1));
         cards.add(include.findViewById(R.id.card2));
         cards.add(include.findViewById(R.id.card3));
@@ -53,6 +94,17 @@ public class MainGame extends AppCompatActivity {
         cards.add(include.findViewById(R.id.card8));
         cards.add(include.findViewById(R.id.card9));
         cards.add(include.findViewById(R.id.card10));
+
+        for(ImageView i:cards){
+            i.setVisibility(View.INVISIBLE);
+        }
+    }
+    public void showpicturesforhandcards(ArrayList<Card> handcards){
+        for(int i = 0; i<handcards.size(); i++){
+            cards.get(i).setImageResource(handcards.get(i).resource);
+            cards.get(i).setTag(handcards.get(i).resource);
+            cards.get(i).setVisibility(View.VISIBLE);
+        }
     }
     public void fillplaceholder(){
 
@@ -87,7 +139,10 @@ public class MainGame extends AppCompatActivity {
             cards.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(currentcard!=null){
+                        currentplaceholder.setImageResource(R.drawable.card_back);
+                        currentcard.setVisibility(View.VISIBLE);
+                    }
                     currentcard = (ImageView) v;
                     activateplaceholders();
                     activateonclicklistenertoplaceholders();
@@ -113,9 +168,11 @@ public class MainGame extends AppCompatActivity {
                     if(currentplaceholder!=null) {
                         currentplaceholder.setImageResource(R.drawable.card_back);
                     }
-
                     ImageView test = (ImageView) v ;
                     currentplaceholder = test;
+                    currentplaceholder.setImageResource((Integer) currentcard.getTag());
+                    currentcard.setVisibility(View.INVISIBLE);
+
 
 
                 }

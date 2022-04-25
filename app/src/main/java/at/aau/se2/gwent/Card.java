@@ -1,37 +1,23 @@
 package at.aau.se2.gwent;
 
 public class Card {
-    String name;
-    String effect;
-    int points;
+    int id;
+    int resource;
 
-    public Card(String name, String effect, int points) {
-        this.name = name;
-        this.effect = effect;
-        this.points = points;
+
+    public Card(int id, int resource) {
+        this.id = id;
+        this.resource = resource;
+
     }
 
-    public String getName() {
-        return name;
+    public int getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEffect() {
-        return effect;
-    }
-
-    public void setEffect(String effect) {
-        this.effect = effect;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
+    public void setId(int id) {
+        this.id = id;
     }
 }
+
+
