@@ -19,6 +19,7 @@
             app:srcCompat="@drawable/card_back"
             android:layout_marginBottom="-15dp"
             android:alpha="0.80"
+            android:visibility="invisible"
             />
 
         <ImageView
@@ -29,7 +30,9 @@
             android:scaleType="centerInside"
             android:rotation="90"
             android:alpha="0.80"
-            app:srcCompat="@drawable/card_back"/>
+            app:srcCompat="@drawable/card_back"
+            android:visibility="invisible"
+            />
 
         <ImageView
             android:id="@+id/rowcard3"
@@ -39,7 +42,8 @@
             android:rotation="90"
             android:layout_marginBottom="-15dp"
             app:srcCompat="@drawable/card_back"
-            android:alpha="0.80"/>
+            android:alpha="0.80"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/rowcard4"
@@ -50,6 +54,7 @@
             android:layout_marginBottom="-15dp"
             app:srcCompat="@drawable/card_back"
             android:alpha="0.80"
+            android:visibility="invisible"
             />
 
         <ImageView
@@ -60,7 +65,8 @@
             android:rotation="90"
             android:layout_marginBottom="-15dp"
             app:srcCompat="@drawable/card_back"
-            android:alpha="0.80"/>
+            android:alpha="0.80"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/rowcard6"
@@ -70,7 +76,8 @@
             android:rotation="90"
             android:layout_marginBottom="-15dp"
             app:srcCompat="@drawable/card_back"
-            android:alpha="0.80"/>
+            android:alpha="0.80"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/rowcard7"
@@ -80,7 +87,8 @@
             android:rotation="90"
             android:layout_marginBottom="-15dp"
             app:srcCompat="@drawable/card_back"
-            android:alpha="0.80"/>
+            android:alpha="0.80"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/rowcard8"
@@ -90,7 +98,8 @@
             android:scaleType="centerInside"
             android:rotation="90"
             app:srcCompat="@drawable/card_back"
-            android:alpha="0.80"/>
+            android:alpha="0.80"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/rowcard9"
@@ -100,7 +109,9 @@
             android:rotation="90"
             android:layout_marginBottom="-15dp"
             app:srcCompat="@drawable/card_back"
-            android:alpha="0.80"/>
+            android:alpha="0.80"
+            android:visibility="invisible"
+            />
 
 
 

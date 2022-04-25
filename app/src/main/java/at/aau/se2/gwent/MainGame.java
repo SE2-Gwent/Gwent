@@ -1,5 +1,8 @@
 package at.aau.se2.gwent;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,30 +14,35 @@ import java.util.ArrayList;
 
 public class MainGame extends AppCompatActivity {
 
-    //TODO: drag and drop der Handkarten ins eigene Spielfeld setzten
-    //TODO: Karten gemäß ihrer Anzahl sortieren (nicht von links nach rechts sondern zentriert)
-    //TODO: Auf der Seite Anzeige der Punkte, Möglichkeit Zug rückgängig zu machen/OK für den nächsten Zug/Sonderfunktion
+    //TODO: karten von gegenüber verstecke nur anzahl soll ersichtlich sein
+    //TODO: wenn done gedrückt wird wird die karte aus den Handkarten entfernt und ein platzhalter muss verschwinden
+    //TODO: die richtige Bildressource muss hineingeladen werden
 
     ArrayList<ImageView> cards = new ArrayList<ImageView>(10);
-    ArrayList<ImageView> placeholder = new ArrayList<ImageView>(10);
+    ArrayList<ImageView> placeholder = new ArrayList<ImageView>(18);
     ImageView currentcard;
+    ImageView currentplaceholder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainboard);
         ArrayList<Card> handcards = new ArrayList<>();
-        addonclicklistenerfordetailedcardview(handcards);
+
         getSupportActionBar().hide();
         fillarray();
         fillplaceholder();
 
-
+        addonclicklistenerfordetailedcardview(handcards);
 
     }
 
 
     public void fillarray(){
-        View include = findViewById(R.id.firstrow);
+        View include = findViewById(R.id.handdeck);
+        include.findViewById(R.id.card1).setTag("Hallo");
+        String test = (String) include.findViewById(R.id.card1).getTag();
+        System.out.println(test);
+
         cards.add(include.findViewById(R.id.card1));
         cards.add(include.findViewById(R.id.card2));
         cards.add(include.findViewById(R.id.card3));
@@ -47,29 +55,42 @@ public class MainGame extends AppCompatActivity {
         cards.add(include.findViewById(R.id.card10));
     }
     public void fillplaceholder(){
-        View include = findViewById(R.id.firstrow);
-        cards.add(include.findViewById(R.id.rowcard1));
-        cards.add(include.findViewById(R.id.rowcard2));
-        cards.add(include.findViewById(R.id.rowcard3));
-        cards.add(include.findViewById(R.id.rowcard4));
-        cards.add(include.findViewById(R.id.rowcard5));
-        cards.add(include.findViewById(R.id.rowcard6));
-        cards.add(include.findViewById(R.id.rowcard7));
-        cards.add(include.findViewById(R.id.rowcard8));
-        cards.add(include.findViewById(R.id.rowcard9));
+
+        View firstrow = findViewById(R.id.firstrow);
+        placeholder.add(firstrow.findViewById(R.id.rowcard1));
+        placeholder.add(firstrow.findViewById(R.id.rowcard2));
+        placeholder.add(firstrow.findViewById(R.id.rowcard3));
+        placeholder.add(firstrow.findViewById(R.id.rowcard4));
+        placeholder.add(firstrow.findViewById(R.id.rowcard5));
+        placeholder.add(firstrow.findViewById(R.id.rowcard6));
+        placeholder.add(firstrow.findViewById(R.id.rowcard7));
+        placeholder.add(firstrow.findViewById(R.id.rowcard8));
+        placeholder.add(firstrow.findViewById(R.id.rowcard9));
+        View secondrow = findViewById(R.id.secondrow);
+        placeholder.add(secondrow.findViewById(R.id.rowcard1));
+        placeholder.add(secondrow.findViewById(R.id.rowcard2));
+        placeholder.add(secondrow.findViewById(R.id.rowcard3));
+        placeholder.add(secondrow.findViewById(R.id.rowcard4));
+        placeholder.add(secondrow.findViewById(R.id.rowcard5));
+        placeholder.add(secondrow.findViewById(R.id.rowcard6));
+        placeholder.add(secondrow.findViewById(R.id.rowcard7));
+        placeholder.add(secondrow.findViewById(R.id.rowcard8));
+        placeholder.add(secondrow.findViewById(R.id.rowcard9));
+
+
 
     }
 
     public void addonclicklistenerfordetailedcardview(ArrayList<Card> handcards){
         int numberofhandcards=handcards.size();
-        for(int i=0; i<numberofhandcards; i++){
+        for(int i=0; i<10; i++){
             cards.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activateonclicklistenertootherelements();
+
                     currentcard = (ImageView) v;
-                    System.out.println("Juhu");
-                    activateonclicklistenertootherelements();
+                    activateplaceholders();
+                    activateonclicklistenertoplaceholders();
                 }
             }
             );
@@ -78,12 +99,25 @@ public class MainGame extends AppCompatActivity {
 
 
     }
-    public void activateonclicklistenertootherelements(){
+
+    public void activateplaceholders(){
+        for(ImageView i:placeholder){
+            i.setVisibility(View.VISIBLE);
+        }
+    }
+    public void activateonclicklistenertoplaceholders(){
         for(ImageView i:placeholder){
             i.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("karte ");
+                    if(currentplaceholder!=null) {
+                        currentplaceholder.setImageResource(R.drawable.card_back);
+                    }
+
+                    ImageView test = (ImageView) v ;
+                    currentplaceholder = test;
+
+
                 }
             }
             );
