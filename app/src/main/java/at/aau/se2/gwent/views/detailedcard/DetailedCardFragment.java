@@ -50,6 +50,11 @@ public class DetailedCardFragment extends Fragment {
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+
+    binding.backgroundImageButton.setOnClickListener(
+        view -> {
+          Log.v(TAG, "Button pressed");
+        });
   }
 
   private void updateUI(DetailedCardViewModel.ViewState state) {
@@ -115,6 +120,6 @@ public class DetailedCardFragment extends Fragment {
     Log.v(TAG, "imgId retrieved: " + imgId);
 
     Drawable artwork = ResourcesCompat.getDrawable(res, imgId, null);
-    binding.backgroundImage.setImageDrawable(artwork);
+    binding.backgroundImageButton.setImageDrawable(artwork);
   }
 }
