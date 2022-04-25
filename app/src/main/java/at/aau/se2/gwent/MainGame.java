@@ -15,7 +15,9 @@ public class MainGame extends AppCompatActivity {
     //TODO: Karten gemäß ihrer Anzahl sortieren (nicht von links nach rechts sondern zentriert)
     //TODO: Auf der Seite Anzeige der Punkte, Möglichkeit Zug rückgängig zu machen/OK für den nächsten Zug/Sonderfunktion
 
-    ArrayList<ImageView> cards;
+    ArrayList<ImageView> cards = new ArrayList<ImageView>(10);
+    ArrayList<ImageView> placeholder = new ArrayList<ImageView>(10);
+    ImageView currentcard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,26 +26,38 @@ public class MainGame extends AppCompatActivity {
         addonclicklistenerfordetailedcardview(handcards);
         getSupportActionBar().hide();
         fillarray();
-        ImageView teo = findViewById(R.id.card1);
-        teo.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                System.out.println("Test hat funktioniert");
-            }
-        });
+        fillplaceholder();
+
 
 
     }
+
+
     public void fillarray(){
-        cards.add(findViewById(R.id.card1));
-        cards.add(findViewById(R.id.card2));
-        cards.add(findViewById(R.id.card3));
-        cards.add(findViewById(R.id.card4));
-        cards.add(findViewById(R.id.card5));
-        cards.add(findViewById(R.id.card6));
-        cards.add(findViewById(R.id.card7));
-        cards.add(findViewById(R.id.card8));
-        cards.add(findViewById(R.id.card9));
-        cards.add(findViewById(R.id.card10));
+        View include = findViewById(R.id.firstrow);
+        cards.add(include.findViewById(R.id.card1));
+        cards.add(include.findViewById(R.id.card2));
+        cards.add(include.findViewById(R.id.card3));
+        cards.add(include.findViewById(R.id.card4));
+        cards.add(include.findViewById(R.id.card5));
+        cards.add(include.findViewById(R.id.card6));
+        cards.add(include.findViewById(R.id.card7));
+        cards.add(include.findViewById(R.id.card8));
+        cards.add(include.findViewById(R.id.card9));
+        cards.add(include.findViewById(R.id.card10));
+    }
+    public void fillplaceholder(){
+        View include = findViewById(R.id.firstrow);
+        cards.add(include.findViewById(R.id.rowcard1));
+        cards.add(include.findViewById(R.id.rowcard2));
+        cards.add(include.findViewById(R.id.rowcard3));
+        cards.add(include.findViewById(R.id.rowcard4));
+        cards.add(include.findViewById(R.id.rowcard5));
+        cards.add(include.findViewById(R.id.rowcard6));
+        cards.add(include.findViewById(R.id.rowcard7));
+        cards.add(include.findViewById(R.id.rowcard8));
+        cards.add(include.findViewById(R.id.rowcard9));
+
     }
 
     public void addonclicklistenerfordetailedcardview(ArrayList<Card> handcards){
@@ -52,12 +66,29 @@ public class MainGame extends AppCompatActivity {
             cards.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //detailed cardview
+                    activateonclicklistenertootherelements();
+                    currentcard = (ImageView) v;
+                    System.out.println("Juhu");
+                    activateonclicklistenertootherelements();
                 }
             }
             );
         }
 
+
+
+    }
+    public void activateonclicklistenertootherelements(){
+        for(ImageView i:placeholder){
+            i.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("karte ");
+                }
+            }
+            );
+
+        }
 
     }
 

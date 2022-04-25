@@ -5,10 +5,11 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background"/>
+        android:background="@drawable/backgroundmainboard" />
 
     <LinearLayout
         android:id="@+id/boardview"
@@ -25,16 +26,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="663dp"
+        android:layout_height="549dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="76dp"
         android:orientation="horizontal"
         android:weightSum="60">
 
         <include
             android:id="@+id/handdeck"
             layout="@layout/carddeck"
-            android:layout_width="74dp"
+            android:layout_width="47dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
             android:orientation="horizontal" />
@@ -42,36 +43,62 @@
         <include
             android:id="@+id/firstrow"
             layout="@layout/cardarea"
-            android:layout_width="96dp"
+            android:layout_width="68dp"
             android:layout_height="704dp"
             android:layout_weight="10"
             android:orientation="horizontal"
             android:visibility="visible" />
 
         <include
+            android:id="@+id/secondrow"
             layout="@layout/cardarea"
-            android:layout_width="96dp"
+            android:layout_width="82dp"
+            android:layout_height="704dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:layout_marginLeft="0dp"/>
+
+        <include
+            android:id="@+id/secondrowenemy"
+            layout="@layout/cardarea"
+            android:layout_width="89dp"
+            android:layout_height="704dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:layout_marginLeft="8dp"/>
+
+        <include
+            android:id="@+id/firstrowenemy"
+            layout="@layout/cardarea"
+            android:layout_width="76dp"
             android:layout_height="704dp"
             android:layout_weight="10"
             android:orientation="horizontal"
             android:visibility="visible" />
 
         <include
-            layout="@layout/cardarea"
-            android:layout_width="96dp"
-            android:layout_height="704dp"
+            android:id="@+id/handdeckenemy"
+            layout="@layout/carddeck"
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
             android:layout_weight="10"
-            android:orientation="horizontal"
-            android:visibility="visible" />
+            android:orientation="horizontal" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/upper"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal">
 
         <include
-            layout="@layout/cardarea"
-            android:layout_width="96dp"
-            android:layout_height="704dp"
-            android:layout_weight="10"
-            android:orientation="horizontal"
-            android:visibility="visible" />
-
+            layout="@layout/sidebar"
+            android:layout_width="match_parent"
+            android:layout_height="75dp" />
 
     </LinearLayout>
 </RelativeLayout>

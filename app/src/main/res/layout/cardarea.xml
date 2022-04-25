@@ -11,78 +11,96 @@
         >
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:rotation="90"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/card_back" />
-
-        <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/rowcard1"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
+            android:rotation="90"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/card_back"
+            android:layout_marginBottom="-15dp"
+            android:alpha="0.80"
+            />
 
+        <ImageView
+            android:id="@+id/rowcard2"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginBottom="-15dp"
             android:scaleType="centerInside"
             android:rotation="90"
+            android:alpha="0.80"
             app:srcCompat="@drawable/card_back"/>
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/rowcard3"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            android:layout_marginBottom="-15dp"
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"/>
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/rowcard4"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            android:layout_marginBottom="-15dp"
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"
+            />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/rowcard5"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            android:layout_marginBottom="-15dp"
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"/>
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/rowcard6"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            android:layout_marginBottom="-15dp"
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"/>
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/rowcard7"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            android:layout_marginBottom="-15dp"
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"/>
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/rowcard8"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
-
+            android:layout_marginBottom="-15dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"/>
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/rowcard9"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:scaleType="centerInside"
             android:rotation="90"
-            app:srcCompat="@drawable/card_back" />
+            android:layout_marginBottom="-15dp"
+            app:srcCompat="@drawable/card_back"
+            android:alpha="0.80"/>
 
 
 
