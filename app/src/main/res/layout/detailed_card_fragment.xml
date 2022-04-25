@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,40 +7,59 @@
     android:layout_margin="@dimen/default_margin"
     tools:context=".views.detailedcard.DetailedCardFragment">
 
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/detailed_card_test_initial" />
 
-    <!-- TODO: refine padding and margin -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:padding="@dimen/default_margin">
 
-        <ImageView
-            android:id="@+id/cardImage"
-            android:layout_width="200dp"
-            android:layout_height="250dp"
-            android:contentDescription="@string/card_name"
-            android:src="@drawable/test_img"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineVertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="300dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineHorizontal1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineHorizontal2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="20dp" />
 
         <TextView
             android:id="@+id/cardName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/card_name"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
+            app:layout_constraintTop_toTopOf="@id/guideLineHorizontal1" />
 
         <TextView
             android:id="@+id/cardTypes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/card_types"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
             app:layout_constraintTop_toBottomOf="@id/cardName" />
 
         <TextView
@@ -49,8 +68,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_text"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
             app:layout_constraintTop_toBottomOf="@id/cardTypes" />
 
         <TextView
@@ -61,9 +81,10 @@
             android:ellipsize="none"
             android:scrollHorizontally="false"
             android:text="@string/card_flavortext"
+            android:textColor="@color/white"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
             app:layout_constraintTop_toBottomOf="@id/cardText" />
 
         <TextView
@@ -72,31 +93,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_power"
-            android:textSize="50dp"
+            android:textColor="@color/green"
+            android:textSize="40sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideLineVertical"
             app:layout_constraintTop_toBottomOf="@id/cardFlavortext" />
 
-        <!-- Possible extension: use a styling for the button -->
-        <Button
-            android:id="@+id/abilityButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/activate_ability"
-            app:layout_constraintBaseline_toBaselineOf="@id/cardPower"
-            app:layout_constraintEnd_toStartOf="@id/closeButton"
-            app:layout_constraintStart_toStartOf="@id/cardPower" />
-
-        <!-- Possible extension: use a styling for the button -->
-        <Button
-            android:id="@+id/closeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/default_margin"
-            android:text="@string/close"
-            app:layout_constraintBaseline_toBaselineOf="@id/cardPower"
-            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</RelativeLayout>
+
+<!--
+Important notes:
+-) We can adjust the displayed size of the fragment by altering the following:
+android:layout_margin:[insert margin here]
+within the relative layout (root)
+-) The vertical guideline should help us, that the textViews are not overlapping the image.
+We can be more defensively by increasing the beginning of the guideline (lets say to 350dp)
+-) The font could be change too to create a cooler look.
+-->

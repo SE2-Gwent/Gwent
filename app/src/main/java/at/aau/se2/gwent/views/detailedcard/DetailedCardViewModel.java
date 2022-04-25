@@ -31,7 +31,7 @@ public class DetailedCardViewModel extends ViewModel {
             "Ard Feainn Crossbow Man",
             types,
             4,
-            "Deploy: Damage an enemy unit by 2. Barricade: Damage a random enemy unit by 1 whenever you play a soldier",
+            "Deploy: Damage an enemy unit by 2. Barricade: Damage a random enemy unit by 1 whenever you play a soldier. Lorem ipsum, dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             "Many thought that mounted crossbowman wouldn't work. Until they saw them in action.",
             0);
     // TODO: ------REMOVE------

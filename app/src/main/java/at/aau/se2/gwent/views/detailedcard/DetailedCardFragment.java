@@ -50,18 +50,6 @@ public class DetailedCardFragment extends Fragment {
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-
-    // register onClickListener on ability button
-    binding.abilityButton.setOnClickListener(
-        view -> {
-          Log.v(TAG, "ABILITY clicked.");
-        });
-
-    // register onClickListener on close button
-    binding.closeButton.setOnClickListener(
-        view -> {
-          Log.v(TAG, "CLOSE clicked");
-        });
   }
 
   private void updateUI(DetailedCardViewModel.ViewState state) {
@@ -121,12 +109,12 @@ public class DetailedCardFragment extends Fragment {
     // retrieve the id of the image - TODO: change argument [name]
     int imgId =
         res.getIdentifier(
-            "test_img_to_load",
+            "detailed_card_test_to_load",
             "drawable",
             Objects.requireNonNull(DetailedCardFragment.this.getActivity()).getPackageName());
     Log.v(TAG, "imgId retrieved: " + imgId);
 
     Drawable artwork = ResourcesCompat.getDrawable(res, imgId, null);
-    binding.cardImage.setImageDrawable(artwork);
+    binding.backgroundImage.setImageDrawable(artwork);
   }
 }
