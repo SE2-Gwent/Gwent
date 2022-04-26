@@ -3,7 +3,8 @@ package at.aau.se2.gamelogic;
 public class CardAction {
   public enum ActionType {
     DEPLOY(1),
-    ;
+    ATTACK(2),
+    FOG(3);
 
     private final int id;
 

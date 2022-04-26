@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
+import at.aau.se2.gamelogic.models.cardactions.FogParams;
 
 public class GameLogicTest {
   private final ArrayList<Card> testCards = new ArrayList<>();
@@ -48,6 +50,10 @@ public class GameLogicTest {
   public void testPerformActionMappings() {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, Row.MELEE, 0));
+    testData.put(
+        new CardAction(CardAction.ActionType.ATTACK),
+        new AttackParams(0, new ArrayList<Integer>(Arrays.asList(1, 2))));
+    testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(Row.MELEE));
     // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
@@ -61,7 +67,13 @@ public class GameLogicTest {
   @Test
   public void testPerformActionWithWrongParams() {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
-    testData.put(new CardAction(CardAction.ActionType.DEPLOY), new AttackParams());
+    testData.put(
+        new CardAction(CardAction.ActionType.DEPLOY),
+        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
+    testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(Row.MELEE));
+    testData.put(
+        new CardAction(CardAction.ActionType.FOG),
+        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
     // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
@@ -73,7 +85,7 @@ public class GameLogicTest {
   }
 
   @Test
-  public void testPerformCardActionsResults() {
+  public void testPerformDeployCardActionResults() {
     CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
     CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
 
