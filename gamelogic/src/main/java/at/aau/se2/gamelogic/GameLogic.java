@@ -9,6 +9,7 @@ import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.GameFieldRows;
+import at.aau.se2.gamelogic.util.Log;
 
 public class GameLogic {
 
@@ -22,12 +23,16 @@ public class GameLogic {
   }
 
   public void performAction(CardAction action, ActionParams params) {
-    if (action.performed) return;
+    if (action.performed) {
+      Log.w("Action is already performed.");
+      return;
+    }
 
     switch (action.getType()) {
       case DEPLOY:
         DeployParams deployParams = (params instanceof DeployParams ? (DeployParams) params : null);
         if (deployParams == null) return;
+
         Card card = cardDecks.getCard(deployParams.getCardUUID(), whoami);
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
         notifyCardActionCallbacks(action, params);
