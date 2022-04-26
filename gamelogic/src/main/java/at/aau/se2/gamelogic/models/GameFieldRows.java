@@ -14,7 +14,7 @@ public class GameFieldRows {
   // Still wrong, because we dont know who is me.
   public ArrayList<Card> meleeRowFor(Player player) {
     switch (player) {
-      case ME:
+      case INITIATOR:
         return p1MeleeRow;
       case OPPONENT:
         return p2MeleeRow;
@@ -25,7 +25,7 @@ public class GameFieldRows {
 
   public ArrayList<Card> rangedRowFor(Player player) {
     switch (player) {
-      case ME:
+      case INITIATOR:
         return p1RangeRow;
       case OPPONENT:
         return p2RangeRow;

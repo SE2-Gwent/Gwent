@@ -13,12 +13,13 @@ import at.aau.se2.gamelogic.util.Log;
 
 public class GameLogic {
 
-  private Player whoami = Player.ME;
-  private GameFieldRows gameFieldRows = new GameFieldRows();
+  private Player me;
   private CardDecks cardDecks;
+  private GameFieldRows gameFieldRows = new GameFieldRows();
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
 
-  public GameLogic(CardDecks cardDecks) {
+  public GameLogic(Player player, CardDecks cardDecks) {
+    this.me = player;
     this.cardDecks = cardDecks;
   }
 
@@ -33,12 +34,12 @@ public class GameLogic {
         DeployParams deployParams = (params instanceof DeployParams ? (DeployParams) params : null);
         if (deployParams == null) return;
 
-        Card card = cardDecks.getCard(deployParams.getCardUUID(), whoami);
+        Card card = cardDecks.getCard(deployParams.getCardUUID(), me);
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
-        notifyCardActionCallbacks(action, params);
     }
 
     action.performed = true;
+    notifyCardActionCallbacks(action, params);
   }
 
   private void deployCard(Card card, Row row, int position) {
@@ -46,10 +47,10 @@ public class GameLogic {
 
     switch (row) {
       case MELEE:
-        cardRow = gameFieldRows.meleeRowFor(whoami);
+        cardRow = gameFieldRows.meleeRowFor(me);
         break;
       case RANGED:
-        cardRow = gameFieldRows.rangedRowFor(whoami);
+        cardRow = gameFieldRows.rangedRowFor(me);
         break;
     }
     cardRow.add(position, card);

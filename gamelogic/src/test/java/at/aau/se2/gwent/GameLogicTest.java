@@ -27,7 +27,7 @@ import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 
 public class GameLogicTest {
-  private ArrayList<Card> testCards = new ArrayList<>();
+  private final ArrayList<Card> testCards = new ArrayList<>();
   private CardDecks cardDecks;
   private GameLogic sut;
 
@@ -38,7 +38,7 @@ public class GameLogicTest {
     testCards.add(new Card(1));
     testCards.add(new Card(2));
     cardDecks = new CardDecks(testCards, testCards);
-    sut = new GameLogic(cardDecks);
+    sut = new GameLogic(Player.INITIATOR, cardDecks);
 
     mockCallback = mock(CardActionCallback.class);
     sut.registerCardActionCallback(mockCallback);
@@ -80,7 +80,7 @@ public class GameLogicTest {
     sut.performAction(action, new DeployParams(1, Row.MELEE, 0));
     sut.performAction(action2, new DeployParams(2, Row.MELEE, 0));
 
-    assertEquals(2, sut.getGameFieldRows().meleeRowFor(Player.ME).size());
-    assertEquals(2, sut.getGameFieldRows().meleeRowFor(Player.ME).get(0).getId());
+    assertEquals(2, sut.getGameFieldRows().meleeRowFor(Player.INITIATOR).size());
+    assertEquals(2, sut.getGameFieldRows().meleeRowFor(Player.INITIATOR).get(0).getId());
   }
 }

@@ -15,7 +15,7 @@ public class CardDecks {
 
   public Card getCard(int cardId, Player player) {
     switch (player) {
-      case ME:
+      case INITIATOR:
         return p1Deck.get(cardId);
       case OPPONENT:
         return p2Deck.get(cardId);
