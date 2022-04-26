@@ -3,6 +3,9 @@ package at.aau.se2.gwent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import at.aau.se2.gamelogic.CardAction;
+import at.aau.se2.gamelogic.CardActionCallback;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
@@ -22,9 +26,11 @@ import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 
 public class GameLogicTest {
-  ArrayList<Card> testCards = new ArrayList<>();
-  CardDecks cardDecks;
-  GameLogic sut;
+  private ArrayList<Card> testCards = new ArrayList<>();
+  private CardDecks cardDecks;
+  private GameLogic sut;
+
+  CardActionCallback mockCallback;
 
   @Before
   public void setup() {
@@ -32,16 +38,22 @@ public class GameLogicTest {
     testCards.add(new Card(2));
     cardDecks = new CardDecks(testCards, testCards);
     sut = new GameLogic(cardDecks);
+
+    mockCallback = mock(CardActionCallback.class);
+    sut.registerCardActionCallback(mockCallback);
   }
 
   @Test
   public void testPerformActionMappings() {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, Row.MELEE, 0));
+    // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
       sut.performAction(entry.getKey(), entry.getValue());
+
       assertTrue(entry.getKey().isPerformed());
+      verify(mockCallback).didPerformAction(eq(entry.getKey()), eq(entry.getValue()));
     }
   }
 

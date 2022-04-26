@@ -15,6 +15,7 @@ public class GameLogic {
   private Player whoami = Player.ME;
   private GameFieldRows gameFieldRows = new GameFieldRows();
   private CardDecks cardDecks;
+  private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
 
   public GameLogic(CardDecks cardDecks) {
     this.cardDecks = cardDecks;
@@ -29,6 +30,7 @@ public class GameLogic {
         if (deployParams == null) return;
         Card card = cardDecks.getCard(deployParams.getCardUUID(), whoami);
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
+        notifyCardActionCallbacks(action, params);
     }
 
     action.performed = true;
@@ -48,7 +50,21 @@ public class GameLogic {
     cardRow.add(position, card);
   }
 
+  private void notifyCardActionCallbacks(CardAction action, ActionParams params) {
+    for (CardActionCallback callback : cardActionCallbacks) {
+      callback.didPerformAction(action, params);
+    }
+  }
+
   public GameFieldRows getGameFieldRows() {
     return gameFieldRows;
+  }
+
+  public void registerCardActionCallback(CardActionCallback callback) {
+    if (cardActionCallbacks.contains(callback)) {
+      return;
+    }
+
+    cardActionCallbacks.add(callback);
   }
 }
