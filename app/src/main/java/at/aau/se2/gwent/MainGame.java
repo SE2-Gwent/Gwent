@@ -1,34 +1,19 @@
 package at.aau.se2.gwent;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import java.sql.Array;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class MainGame extends AppCompatActivity {
 
-    //TODO: karten von gegenüber verstecke nur anzahl soll ersichtlich sein
-    //TODO: wenn done gedrückt wird wird die karte aus den Handkarten entfernt und ein platzhalter muss verschwinden
 
-    //testdaten
-    Card one = new Card(1, R.drawable.hearts2);
-    Card two = new Card(2, R.drawable.hearts3);
-    Card three = new Card( 3, R.drawable.hearts4);
-    Card four = new Card(4, R.drawable.hearts5);
-    Card five = new Card(5, R.drawable.hearts6);
-    Card six = new Card(6, R.drawable.hearts7);
-    Card seven = new Card(7, R.drawable.hearts7);
+    //TODO: wenn Karte angedrückt wird automatisch ins erste freie feld
+
     ArrayList<Card> handcards = new ArrayList<Card>(8);
-    Card current;
-
     ArrayList<ImageView> cards = new ArrayList<ImageView>(10);
     ArrayList<ImageView> placeholder = new ArrayList<ImageView>(18);
     ImageView currentcard;
@@ -37,7 +22,21 @@ public class MainGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainboard);
-        //testdaten
+        generatetestentities();
+        getSupportActionBar().hide();
+        fillhandcardarray();
+        showpicturesforhandcards(handcards);
+        fillplaceholderimageviewarray();
+        addonclicklistenerfortothrowcardintoplaceholder(handcards);
+
+    }
+    public void generatetestentities(){
+        Card one = new Card(1, R.drawable.hearts2);
+        Card two = new Card(2, R.drawable.hearts3);
+        Card three = new Card( 3, R.drawable.hearts4);
+        Card four = new Card(4, R.drawable.hearts5);
+        Card six = new Card(6, R.drawable.hearts7);
+        Card seven = new Card(7, R.drawable.hearts7);
         handcards.add(one);
         handcards.add(four);
         handcards.add(six);
@@ -46,35 +45,27 @@ public class MainGame extends AppCompatActivity {
         handcards.add(two);
         handcards.add(four);
         handcards.add(seven);
-        activatedonebutton();
-        getSupportActionBar().hide();
-        fillhandcardarray();
-        showpicturesforhandcards(handcards);
-        fillplaceholder();
-        addonclicklistenerfordetailedcardview(handcards);
-
     }
-
     public void activatedonebutton(){
 
-        View forbutton = findViewById(R.id.sidebar);
-        Button test = forbutton.findViewById(R.id.donebutton);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("testitii");
-            }
-        });
+
+        Button test = findViewById(R.id.testbutton);
+        test.setVisibility(View.VISIBLE);
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("testitii");
-                for(int i=0; i<cards.size(); i++) {
+                currentplaceholder.setTag("full");
+                for(int i=0; i<handcards.size(); i++) {
                     if (cards.get(i).getId() == currentcard.getId()) {
-                        System.out.println("test12222");
                         handcards.remove(handcards.get(i));
                         fillhandcardarray();
                         showpicturesforhandcards(handcards);
+                        deleteonclicklistenerofallelements();
+                        currentplaceholder=null;
+                        currentcard=null;
+                        v.setVisibility(View.INVISIBLE);
+                        break;
+
                     }
                 }
             }
@@ -106,7 +97,7 @@ public class MainGame extends AppCompatActivity {
             cards.get(i).setVisibility(View.VISIBLE);
         }
     }
-    public void fillplaceholder(){
+    public void fillplaceholderimageviewarray(){
 
         View firstrow = findViewById(R.id.firstrow);
         placeholder.add(firstrow.findViewById(R.id.rowcard1));
@@ -133,8 +124,7 @@ public class MainGame extends AppCompatActivity {
 
     }
 
-    public void addonclicklistenerfordetailedcardview(ArrayList<Card> handcards){
-        int numberofhandcards=handcards.size();
+    public void addonclicklistenerfortothrowcardintoplaceholder(ArrayList<Card> handcards){
         for(int i=0; i<10; i++){
             cards.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,6 +133,7 @@ public class MainGame extends AppCompatActivity {
                         currentplaceholder.setImageResource(R.drawable.card_back);
                         currentcard.setVisibility(View.VISIBLE);
                     }
+                    activatedonebutton();
                     currentcard = (ImageView) v;
                     activateplaceholders();
                     activateonclicklistenertoplaceholders();
@@ -152,6 +143,18 @@ public class MainGame extends AppCompatActivity {
         }
 
 
+
+    }
+    public void deleteonclicklistenerofallelements(){
+        for(ImageView card:cards){
+            card.setOnClickListener(null);
+        }
+        for(ImageView placeholder: placeholder){
+            placeholder.setOnClickListener(null);
+            if(placeholder.getTag()!="full"){
+                placeholder.setVisibility(View.INVISIBLE);
+            }
+        }
 
     }
 
@@ -171,10 +174,8 @@ public class MainGame extends AppCompatActivity {
                     ImageView test = (ImageView) v ;
                     currentplaceholder = test;
                     currentplaceholder.setImageResource((Integer) currentcard.getTag());
+
                     currentcard.setVisibility(View.INVISIBLE);
-
-
-
                 }
             }
             );

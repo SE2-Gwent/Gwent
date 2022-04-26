@@ -9,7 +9,19 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/backgroundmainboard" />
+        android:background="@drawable/backgroundmainboard">
+
+        <Button
+            android:id="@+id/testbutton"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="Done"
+            android:visibility="invisible"/>
+
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/boardview"
@@ -17,11 +29,7 @@
         android:layout_height="64dp"
         android:orientation="horizontal">
 
-        <include
-            layout="@layout/sidebar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/sidebar"/>
+
 
     </LinearLayout>
 
@@ -81,7 +89,7 @@
 
         <include
             android:id="@+id/handdeckenemy"
-            layout="@layout/carddeck"
+            layout="@layout/carddeckenemy"
             android:layout_width="34dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
@@ -93,13 +101,8 @@
     <LinearLayout
         android:id="@+id/upper"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="82dp"
         android:orientation="horizontal">
-
-        <include
-            layout="@layout/sidebar"
-            android:layout_width="match_parent"
-            android:layout_height="94dp" />
 
     </LinearLayout>
 </RelativeLayout>
