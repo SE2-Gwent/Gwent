@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,11 +60,16 @@ public class GameLogicTest {
 
   @Test
   public void testPerformActionWithWrongParams() {
-    CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
+    HashMap<CardAction, ActionParams> testData = new HashMap<>();
+    testData.put(new CardAction(CardAction.ActionType.DEPLOY), new AttackParams());
+    // add other actions here to test
 
-    sut.performAction(action, new AttackParams());
+    for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
+      sut.performAction(entry.getKey(), entry.getValue());
 
-    assertFalse(action.isPerformed());
+      assertFalse(entry.getKey().isPerformed());
+      verifyNoInteractions(mockCallback);
+    }
   }
 
   @Test
