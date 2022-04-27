@@ -64,6 +64,19 @@
             android:textSize="4sp"
             tools:ignore="RtlCompat" />
 
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="72.5dp"
+            android:fontFamily="sans-serif-black"
+            android:text="7"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textColorLink="#FFFFFF"
+            android:textSize="4sp"
+            tools:ignore="RtlCompat" />
+
 
     </androidx.cardview.widget.CardView>
 
