@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/spielkarte"
+        android:id="@+id/playingcardBasic"
         android:layout_width="50dp"
         android:layout_height="80dp"
         android:src="@color/purple_500"
@@ -61,7 +61,8 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textColorLink="#FFFFFF"
-            android:textSize="4sp" />
+            android:textSize="4sp"
+            tools:ignore="RtlCompat" />
 
 
     </androidx.cardview.widget.CardView>

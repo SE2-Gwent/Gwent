@@ -37,11 +37,11 @@ public class StartFragment extends Fragment {
             Log.v(TAG, "DidClick StartGame");
           }
         });
-    binding.spielkarte.setOnLongClickListener(
+    binding.playingcardBasic.setOnLongClickListener(
         new View.OnLongClickListener() {
           @Override
           public boolean onLongClick(View v) {
-            Intent i = new Intent(getContext(), Spielkarte_Detailed.class);
+            Intent i = new Intent(getContext(), PlayingCardDetailed.class);
             startActivity(i);
             return true;
           }

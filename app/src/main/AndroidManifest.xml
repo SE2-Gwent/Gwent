@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gwent">
         <activity
-            android:name=".Spielkarte_Detailed"
+            android:name=".PlayingCardDetailed"
             android:screenOrientation="landscape"
             android:exported="false" />
         <activity

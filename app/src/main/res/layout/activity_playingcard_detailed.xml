@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Default_Background_Detailed"
+    android:id="@+id/DefaultBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Spielkarte_Detailed">
+    tools:context=".PlayingCardDetailed">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/spielkarte_detailed"
+        android:id="@+id/playingCardDetailed"
         android:layout_width="504dp"
         android:layout_height="287dp"
         android:layout_marginStart="114dp"
