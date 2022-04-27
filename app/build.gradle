@@ -45,6 +45,7 @@ android {
             testCoverageEnabled true
         }
         release {
+            testCoverageEnabled false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -69,15 +70,6 @@ spotless {
         googleJavaFormat()
         importOrder 'java', 'javax', 'org', 'com', ''
         removeUnusedImports() // removes any unused imports
-    }
-}
-
-afterEvaluate {
-    def spotless = tasks.findByName('spotlessApply')
-    if (spotless) {
-        tasks.withType(JavaCompile) {
-            finalizedBy(spotless)
-        }
     }
 }
 
@@ -132,6 +124,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation project(path: ':gamelogic')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
