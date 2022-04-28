@@ -19,5 +19,11 @@
         android:id="@+id/detailed_card"
         android:name="at.aau.se2.gwent.views.detailedcard.DetailedCardFragment"
         android:label="@string/action_detailed_card"
-        tools:layout="@layout/detailed_card_fragment" />
+        tools:layout="@layout/detailed_card_fragment" >
+        <argument
+            android:name="cardId"
+            app:argType="integer"
+            android:defaultValue="0"
+        />
+    </fragment>
 </navigation>
