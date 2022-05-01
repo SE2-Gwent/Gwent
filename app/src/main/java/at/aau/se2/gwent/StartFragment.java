@@ -14,6 +14,7 @@ import at.aau.se2.gamelogic.CardAction;
 import at.aau.se2.gamelogic.CardActionCallback;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.CardDecks;
+import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
@@ -25,7 +26,9 @@ public class StartFragment extends Fragment implements CardActionCallback {
 
   private FragmentStartBinding binding;
   private GameLogic gameLogic =
-      new GameLogic(Player.INITIATOR, new CardDecks(new ArrayList<>(), new ArrayList<>()));
+      new GameLogic(
+          new Player(1, InitialPlayer.INITIATOR),
+          new CardDecks(new ArrayList<>(), new ArrayList<>()));
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {

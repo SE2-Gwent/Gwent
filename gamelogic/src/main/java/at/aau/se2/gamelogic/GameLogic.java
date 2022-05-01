@@ -4,17 +4,19 @@ import java.util.ArrayList;
 
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
+import at.aau.se2.gamelogic.models.GameFieldRows;
+import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
-import at.aau.se2.gamelogic.models.cardactions.GameFieldRows;
 import at.aau.se2.gamelogic.util.Log;
 
 public class GameLogic {
   private Player me;
+  private Player opponent;
   private CardDecks cardDecks;
   private GameFieldRows gameFieldRows = new GameFieldRows();
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
@@ -74,10 +76,10 @@ public class GameLogic {
   }
 
   private Player getOpponent() {
-    if (me == Player.INITIATOR) {
-      return Player.OPPONENT;
+    if (me.getInitialPlayerInformation() == InitialPlayer.INITIATOR) {
+      return opponent;
     }
-    return Player.INITIATOR;
+    return me;
   }
 
   private void notifyCardActionCallbacks(CardAction action, ActionParams params) {
