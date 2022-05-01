@@ -17,6 +17,7 @@ import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
+import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gwent.databinding.FragmentStartBinding;
@@ -63,7 +64,8 @@ public class StartFragment extends Fragment implements CardActionCallback {
           @Override
           public void onClick(View view) {
             gameLogic.performAction(
-                new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(0, Row.MELEE, 0));
+                new CardAction(CardAction.ActionType.DEPLOY),
+                new DeployParams(0, new Row(1, RowType.MELEE), 0));
           }
         });
   }

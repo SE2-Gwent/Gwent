@@ -64,7 +64,7 @@ public class GameLogic {
   private void deployCard(Card card, Row row, int position) {
     ArrayList<Card> cardRow = null;
 
-    switch (row) {
+    switch (row.getRowType()) {
       case MELEE:
         cardRow = gameFieldRows.meleeRowFor(me);
         break;

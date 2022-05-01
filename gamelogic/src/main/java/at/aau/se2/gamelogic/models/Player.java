@@ -11,6 +11,7 @@ public class Player {
   public Player(int id, InitialPlayer initialPlayerInformation) {
     this.id = id;
     this.initialPlayerInformation = initialPlayerInformation;
+    this.currentMatchPoints = 0;
   }
 
   public int getId() {

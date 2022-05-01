@@ -24,6 +24,7 @@ import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
+import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
@@ -34,6 +35,7 @@ public class GameLogicTest {
   private CardDecks cardDecks;
   private GameLogic sut;
   private Player currentPlayer;
+  private Row meleeRow;
 
   CardActionCallback mockCallback;
 
@@ -43,6 +45,7 @@ public class GameLogicTest {
     testCards.add(new Card(2, "TestCard 2", 3, 0, "This is another test Card"));
     cardDecks = new CardDecks(testCards, testCards);
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
+    meleeRow = new Row(1, RowType.MELEE);
     sut = new GameLogic(currentPlayer, cardDecks);
     mockCallback = mock(CardActionCallback.class);
     sut.registerCardActionCallback(mockCallback);
@@ -51,11 +54,11 @@ public class GameLogicTest {
   @Test
   public void testPerformActionMappings() {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
-    testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, Row.MELEE, 0));
+    testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, meleeRow, 0));
     testData.put(
         new CardAction(CardAction.ActionType.ATTACK),
         new AttackParams(0, new ArrayList<Integer>(Arrays.asList(1, 2))));
-    testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(Row.MELEE));
+    testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(meleeRow));
     // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
@@ -72,7 +75,7 @@ public class GameLogicTest {
     testData.put(
         new CardAction(CardAction.ActionType.DEPLOY),
         new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
-    testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(Row.MELEE));
+    testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(meleeRow));
     testData.put(
         new CardAction(CardAction.ActionType.FOG),
         new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
@@ -91,8 +94,8 @@ public class GameLogicTest {
     CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
     CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
 
-    sut.performAction(action, new DeployParams(1, Row.MELEE, 0));
-    sut.performAction(action2, new DeployParams(2, Row.MELEE, 0));
+    sut.performAction(action, new DeployParams(1, meleeRow, 0));
+    sut.performAction(action2, new DeployParams(2, meleeRow, 0));
 
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).size());
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());
