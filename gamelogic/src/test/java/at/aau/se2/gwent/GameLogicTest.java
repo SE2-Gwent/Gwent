@@ -37,8 +37,8 @@ public class GameLogicTest {
 
   @Before
   public void setup() {
-    testCards.add(new Card(1));
-    testCards.add(new Card(2));
+    testCards.add(new Card(1, "TestCard 1", 1, 0, "This is a test Card"));
+    testCards.add(new Card(2, "TestCard 2", 3, 0, "This is another test Card"));
     cardDecks = new CardDecks(testCards, testCards);
     sut = new GameLogic(Player.INITIATOR, cardDecks);
 
