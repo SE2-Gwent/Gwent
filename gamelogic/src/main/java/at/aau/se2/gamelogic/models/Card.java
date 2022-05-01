@@ -1,18 +1,34 @@
 package at.aau.se2.gamelogic.models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import at.aau.se2.gamelogic.models.cardactions.ActionParams;
+
 public class Card {
   private int id;
   private String name;
   private int power;
   private int powerDiff;
   private String cardText;
+  private ArrayList<ActionParams> cardActions;
+  private Map<ActionParams, Integer> currentActionCooldown;
 
-  public Card(int id, String name, int power, int powerDiff, String cardText) {
+  public Card(
+      int id,
+      String name,
+      int power,
+      int powerDiff,
+      String cardText,
+      ArrayList<ActionParams> cardActions) {
     this.id = id;
     this.name = name;
     this.power = power;
     this.powerDiff = powerDiff;
     this.cardText = cardText;
+    this.cardActions = cardActions;
+    this.currentActionCooldown = new HashMap<>();
   }
 
   public int getId() {
@@ -53,5 +69,21 @@ public class Card {
 
   public void setCardText(String cardText) {
     this.cardText = cardText;
+  }
+
+  public ArrayList<ActionParams> getCardActions() {
+    return cardActions;
+  }
+
+  public void setCardActions(ArrayList<ActionParams> cardActions) {
+    this.cardActions = cardActions;
+  }
+
+  public Map<ActionParams, Integer> getCurrentActionCooldown() {
+    return currentActionCooldown;
+  }
+
+  public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
+    this.currentActionCooldown = currentActionCooldown;
   }
 }

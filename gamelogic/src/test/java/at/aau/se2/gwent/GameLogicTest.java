@@ -41,8 +41,11 @@ public class GameLogicTest {
 
   @Before
   public void setup() {
-    testCards.add(new Card(1, "TestCard 1", 1, 0, "This is a test Card"));
-    testCards.add(new Card(2, "TestCard 2", 3, 0, "This is another test Card"));
+    testCards.add(
+        new Card(1, "TestCard 1", 1, 0, "This is a test Card", new ArrayList<ActionParams>()));
+    testCards.add(
+        new Card(
+            2, "TestCard 2", 3, 0, "This is another test Card", new ArrayList<ActionParams>()));
     cardDecks = new CardDecks(testCards, testCards);
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
     meleeRow = new Row(1, RowType.MELEE);
