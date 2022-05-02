@@ -49,12 +49,12 @@ jobs:
           FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
         run: echo $FIREBASE_CONFIG > app/google-services.json
       - name: Run unit tests
-        run: ./gradlew test --stacktrace
+        run: ./gradlew clean :app:jacocoTestReportDebug :gamelogic:jacocoTestReport mergeJacocoReports jacocoTestReportMerged
       - name: Upload Results
         uses: actions/upload-artifact@v2
         with:
           name: test-results
-          path: app/build/reports
+          path: build/reports/jacoco
           if-no-files-found: ignore
       - name: Generate code coverage reports
         run: ./gradlew createDebugCoverageReport
@@ -62,7 +62,7 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1.2
         with:
-          paths: ${{ github.workspace }}/app/build/reports/coverage/androidTest/debug/report.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/jacoco.xml
           token: ${{ secrets.ACCESS_TOKEN }}
           min-coverage-overall: 0
           min-coverage-changed-files: 0
