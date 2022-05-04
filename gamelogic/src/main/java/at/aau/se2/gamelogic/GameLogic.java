@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
+import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.GameFieldRows;
+import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
@@ -15,15 +17,16 @@ import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.util.Log;
 
 public class GameLogic {
-  private Player me;
-  private Player opponent;
-  private CardDecks cardDecks;
-  private GameFieldRows gameFieldRows = new GameFieldRows();
+  private GameField gameField;
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
 
-  public GameLogic(Player player, CardDecks cardDecks) {
-    this.me = player;
-    this.cardDecks = cardDecks;
+  public GameLogic(Player currentPlayer, CardDecks cardDecks) {
+    GameFieldRows gameFieldRows = new GameFieldRows();
+    ArrayList<Hero> heroes = new ArrayList<>();
+    // TODO: Initialize Gamefield with data(Cards, heroes, ..)
+    gameField =
+        new GameField(
+            gameFieldRows, currentPlayer, new Player(2, InitialPlayer.OPPONENT), cardDecks, heroes);
   }
 
   public void performAction(CardAction action, ActionParams params) {
@@ -37,7 +40,10 @@ public class GameLogic {
         DeployParams deployParams = (params instanceof DeployParams ? (DeployParams) params : null);
         if (deployParams == null) return;
 
-        Card card = cardDecks.getCard(deployParams.getCardUUID(), me);
+        Card card =
+            gameField
+                .getCardDecks()
+                .getCard(deployParams.getCardUUID(), gameField.getCurrentPlayer());
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
         break;
 
@@ -66,20 +72,20 @@ public class GameLogic {
 
     switch (row.getRowType()) {
       case MELEE:
-        cardRow = gameFieldRows.meleeRowFor(me);
+        cardRow = gameField.getRows().meleeRowFor(gameField.getCurrentPlayer());
         break;
       case RANGED:
-        cardRow = gameFieldRows.rangedRowFor(me);
+        cardRow = gameField.getRows().rangedRowFor(gameField.getCurrentPlayer());
         break;
     }
     cardRow.add(position, card);
   }
 
   private Player getOpponent() {
-    if (me.getInitialPlayerInformation() == InitialPlayer.INITIATOR) {
-      return opponent;
+    if (gameField.getCurrentPlayer().getInitialPlayerInformation() == InitialPlayer.INITIATOR) {
+      return gameField.getOpponent();
     }
-    return me;
+    return gameField.getCurrentPlayer();
   }
 
   private void notifyCardActionCallbacks(CardAction action, ActionParams params) {
@@ -89,7 +95,7 @@ public class GameLogic {
   }
 
   public GameFieldRows getGameFieldRows() {
-    return gameFieldRows;
+    return gameField.getRows();
   }
 
   public void registerCardActionCallback(CardActionCallback callback) {
