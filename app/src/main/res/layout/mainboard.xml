@@ -16,22 +16,47 @@
             android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="300dp"
             android:text="Done"
             android:visibility="invisible" />
 
+        <EditText
+            android:id="@+id/Pointsfromplayer"
+            android:layout_width="103dp"
+            android:layout_height="96dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="198dp"
+            android:ems="10"
+            android:inputType="number"
+            android:text="6"
+            android:textAlignment="center"
+            android:textSize="34sp" />
+
+        <EditText
+            android:id="@+id/editTextNumber4"
+            android:layout_width="105dp"
+            android:layout_height="94dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="106dp"
+            android:ems="10"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            tools:text="0" />
+
+        <Button
+            android:id="@+id/activatehero"
+            android:layout_width="wrap_content"
+            android:layout_height="91dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="321dp"
+            android:layout_marginBottom="70dp"
+            android:rotation="90"
+            android:text="Activate my hero" />
+
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/boardview"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal">
-
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,10 +88,10 @@
             layout="@layout/cardarea"
             android:layout_width="82dp"
             android:layout_height="704dp"
+            android:layout_marginLeft="0dp"
             android:layout_weight="10"
             android:orientation="horizontal"
-            android:visibility="visible"
-            android:layout_marginLeft="0dp"/>
+            android:visibility="visible" />
 
         <include
             android:id="@+id/secondrowenemy"
@@ -98,12 +123,5 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/upper"
-        android:layout_width="match_parent"
-        android:layout_height="82dp"
-        android:orientation="horizontal">
-
-    </LinearLayout>
 </RelativeLayout>
 
