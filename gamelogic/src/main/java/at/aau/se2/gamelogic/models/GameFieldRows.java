@@ -1,9 +1,6 @@
-package at.aau.se2.gamelogic.models.cardactions;
+package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
-
-import at.aau.se2.gamelogic.models.Card;
-import at.aau.se2.gamelogic.models.Player;
 
 public class GameFieldRows {
   private ArrayList<Card> p1MeleeRow = new ArrayList<>();
@@ -13,7 +10,7 @@ public class GameFieldRows {
 
   // Still wrong, because we dont know who is me.
   public ArrayList<Card> meleeRowFor(Player player) {
-    switch (player) {
+    switch (player.getInitialPlayerInformation()) {
       case INITIATOR:
         return p1MeleeRow;
       case OPPONENT:
@@ -24,7 +21,7 @@ public class GameFieldRows {
   }
 
   public ArrayList<Card> rangedRowFor(Player player) {
-    switch (player) {
+    switch (player.getInitialPlayerInformation()) {
       case INITIATOR:
         return p1RangeRow;
       case OPPONENT:
