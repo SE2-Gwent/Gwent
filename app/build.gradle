@@ -5,7 +5,6 @@ plugins {
 }
 
 apply plugin: 'com.diffplug.spotless'
-apply plugin: 'jacoco'
 
 // Read signing.properties file for safe signing inside github action
 Properties signingProps = new Properties()
@@ -42,7 +41,9 @@ android {
     }
     buildTypes {
         debug {
-            testCoverageEnabled true
+            // https://github.com/vanniktech/gradle-android-junit-jacoco-plugin/issues/194
+            // must be false, or jacoco task gets skipped
+            testCoverageEnabled false
         }
         release {
             testCoverageEnabled false
@@ -79,38 +80,6 @@ tasks.register('bumpBuildNumber') {
         versionProps['buildnumber'] = versionBuild.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
     }
-}
-
-tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports for the test build."
-
-    reports {
-        html.enabled = true
-        xml.enabled = true
-    }
-
-    def excludes = [
-            '**/*Test*.*',
-            '**/actions/*.*',
-            '**/core/*.*',
-            '**/markers/*.*',
-            '**/services/**/*.*',
-            '**/toolwindow/*.*',
-            '**/utils/*.*'
-    ]
-
-    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
-    def kotlinClasses = fileTree(dir: "${buildDir}/classes/kotlin/main", excludes: excludes)
-    classDirectories.from = files([javaClasses, kotlinClasses])
-
-    sourceDirectories.from = files([
-            "$project.projectDir/src/main/java",
-            "$project.projectDir/src/main/kotlin",
-            "$buildDir/generated/source/kapt/test"
-    ])
-
-    executionData.from = files("${project.buildDir}/jacoco/test.exec")
 }
 
 dependencies {
