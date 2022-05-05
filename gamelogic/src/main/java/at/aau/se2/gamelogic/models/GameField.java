@@ -3,11 +3,11 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 
 public class GameField {
-  private GameFieldRows rows;
+  private final GameFieldRows rows;
   private Player currentPlayer;
   private Player opponent;
-  private CardDecks cardDecks;
-  private ArrayList<Hero> heroes;
+  private final CardDecks cardDecks;
+  private final ArrayList<Hero> heroes;
 
   public GameField(
       GameFieldRows rows,
@@ -24,10 +24,6 @@ public class GameField {
 
   public GameFieldRows getRows() {
     return rows;
-  }
-
-  public void setRows(GameFieldRows rows) {
-    this.rows = rows;
   }
 
   public Player getCurrentPlayer() {
@@ -50,15 +46,8 @@ public class GameField {
     return cardDecks;
   }
 
-  public void setCardDecks(CardDecks cardDecks) {
-    this.cardDecks = cardDecks;
-  }
-
   public ArrayList<Hero> getHeroes() {
     return heroes;
   }
 
-  public void setHeroes(ArrayList<Hero> heroes) {
-    this.heroes = heroes;
-  }
 }
