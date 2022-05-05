@@ -2,9 +2,14 @@ package at.aau.se2.gwent;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 
@@ -62,6 +67,8 @@ public class MainGame extends AppCompatActivity {
     }
 
     public void activatedonebutton(){
+        View testview = findViewById(R.id.testview);
+
         //Aus View holen
         Button test = findViewById(R.id.testbutton);
         //Sichtbargemacht weil durchsichtig
@@ -70,6 +77,7 @@ public class MainGame extends AppCompatActivity {
             //Wenn man draufklickt - ist eine Karte ausgewählt?
             @Override
             public void onClick(View v) {
+                showPopupWindow(testview);
                 //Wenn man keine Karte ausspielen möchte
                 if (currentcard == null){
                     deleteonclicklistenerofallelements();
@@ -95,6 +103,34 @@ public class MainGame extends AppCompatActivity {
                         }
                     }
                 }
+            }
+        });
+    }
+
+    public void showPopupWindow(View view) {
+
+        // Layout vom Popupwindow wird freigegeben (Platz)
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_maingame, null);
+
+        // Erstellt das Popupfenster
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        //lässt Taps außerhalb des Popupwindows schließen
+        boolean focusable = true
+
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // Zeigt das Popupwindow
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        // Wenn das Popupwindow gedürckt wird verschwindet es 
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindow.dismiss();
+                return true;
             }
         });
     }
