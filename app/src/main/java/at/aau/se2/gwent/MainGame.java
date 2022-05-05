@@ -10,24 +10,37 @@ import java.util.ArrayList;
 
 public class MainGame extends AppCompatActivity {
 
+    //ToDo Karten die angecklickt wurden markieren
+    //PopUp Fenster bei Heroaktivity spotten oder bei sofortigem passen
 
-    //TODO: wenn Karte angedrückt wird automatisch ins erste freie feld
+    //Handkarte, Karten, Platzhalter erstellt
 
     ArrayList<Card> handcards = new ArrayList<Card>(8);
     ArrayList<ImageView> cards = new ArrayList<ImageView>(10);
     ArrayList<ImageView> placeholder = new ArrayList<ImageView>(18);
+    //Zwischenspeicher für Kartenauswahl auf dem Feld
     ImageView currentcard;
     ImageView currentplaceholder;
+
+    //Wird aus MainActivity abgeleitet
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainboard);
+        //erzeugt Testkarten
         generatetestentities();
+        //Balken - mit Appnamen auf hidegesetzt
         getSupportActionBar().hide();
+        //Einzelne Imageviews holen
         fillhandcardarray();
+        //Nach dem holen der Imageview die Container mit Bildern befüllen (Handkarten)
         showpicturesforhandcards(handcards);
+        //Hole mir die Imageviews für die Placeholder
         fillplaceholderimageviewarray();
+        //OnClickListener Aktivieren - Handkarten wird in Zwischenspeicher gespeichert um sie dann durch einen Platzhalter auszutauschen
         addonclicklistenerforhandcards(handcards);
+        //Done Buttom - Damit der Zug beendet wird.
+        activatedonebutton();
 
     }
     //erzeugt die testkarten muss im weiteren verlauf ausgetauscht werden
@@ -47,24 +60,39 @@ public class MainGame extends AppCompatActivity {
         handcards.add(four);
         handcards.add(seven);
     }
+
     public void activatedonebutton(){
+        //Aus View holen
         Button test = findViewById(R.id.testbutton);
+        //Sichtbargemacht weil durchsichtig
         test.setVisibility(View.VISIBLE);
         test.setOnClickListener(new View.OnClickListener() {
+            //Wenn man draufklickt - ist eine Karte ausgewählt?
             @Override
             public void onClick(View v) {
-                currentplaceholder.setTag("full");
-                for(int i=0; i<handcards.size(); i++) {
-                    if (cards.get(i).getId() == currentcard.getId()) {
-                        handcards.remove(handcards.get(i));
-                        fillhandcardarray();
-                        showpicturesforhandcards(handcards);
-                        deleteonclicklistenerofallelements();
-                        currentplaceholder=null;
-                        currentcard=null;
-                        v.setVisibility(View.INVISIBLE);
-                        break;
+                //Wenn man keine Karte ausspielen möchte
+                if (currentcard == null){
+                    deleteonclicklistenerofallelements();
+                    v.setVisibility(View.INVISIBLE);
+                }
+                else if (currentcard != null) {
+                    //Placeholder ist belegt und kann damit kein weiteres Mal belegt werden.
+                    //setTag = Notiz
+                    currentplaceholder.setTag("full");
+                    //Aktualisert Handkarten, indem die Karten alle Optisch aufgerückt werden
+                    //Ebenso werden die Zwischenspeicher neu geordnet und alle wird gepasst
+                    for (int i = 0; i < handcards.size(); i++) {
+                        if (cards.get(i).getId() == currentcard.getId()) {
+                            handcards.remove(handcards.get(i));
+                            fillhandcardarray();
+                            showpicturesforhandcards(handcards);
+                            deleteonclicklistenerofallelements();
+                            currentplaceholder = null;
+                            currentcard = null;
+                            v.setVisibility(View.INVISIBLE);
+                            break;
 
+                        }
                     }
                 }
             }
@@ -72,7 +100,7 @@ public class MainGame extends AppCompatActivity {
     }
 
 
-
+    //Handkarten anzeigen
     public void showpicturesforhandcards(ArrayList<Card> handcards){
         for(int i = 0; i<handcards.size(); i++){
             cards.get(i).setImageResource(handcards.get(i).resource);
@@ -81,19 +109,22 @@ public class MainGame extends AppCompatActivity {
         }
     }
 
-
+    //Jede einzelne Handkarte bekommt einen OnClickListener
     public void addonclicklistenerforhandcards(ArrayList<Card> handcards){
         for(int i=0; i<10; i++){
             cards.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(currentcard!=null){
+                        //Holt das Bild
                         currentplaceholder.setImageResource(R.drawable.card_back);
                         currentcard.setVisibility(View.VISIBLE);
                     }
-                    findViewById(R.id.testbutton).setVisibility(View.INVISIBLE);
+
                     currentcard = (ImageView) v;
+                    //Platzhalter die Frei sind Sichtbarmachen und OnClick freigeben
                     activateplaceholders();
+
                     activateonclicklistenertoplaceholders();
                 }
             }
@@ -106,6 +137,7 @@ public class MainGame extends AppCompatActivity {
 
     //macht die freien kartenplätze ersichtlich
     public void activateplaceholders(){
+        //Placeholder werden sichtbar
         for(ImageView i:placeholder){
             i.setVisibility(View.VISIBLE);
         }
@@ -115,16 +147,18 @@ public class MainGame extends AppCompatActivity {
     public void activateonclicklistenertoplaceholders(){
         for(ImageView i:placeholder){
             i.setOnClickListener(new View.OnClickListener() {
+
+                //Bei Kartenwechsel unter den Placeholder wird die gewechselte Karte wieder mit einem Placeholder befüllt
                 @Override
                 public void onClick(View v) {
-                    activatedonebutton();
                     if(currentplaceholder!=null) {
                         currentplaceholder.setImageResource(R.drawable.card_back);
                     }
+                    //Beim Ersten Ausspielen wird der Placeholder mit der Handkarte ausgetauscht.
                     ImageView test = (ImageView) v ;
                     currentplaceholder = test;
                     currentplaceholder.setImageResource((Integer) currentcard.getTag());
-
+                    //ausgespielte Handkarte unsichtbar
                     currentcard.setVisibility(View.INVISIBLE);
                 }
             }
@@ -134,6 +168,7 @@ public class MainGame extends AppCompatActivity {
 
     }
 
+    //Done buttom entfernt alle OnClicklistener
     public void deleteonclicklistenerofallelements(){
         for(ImageView card:cards){
             card.setOnClickListener(null);
