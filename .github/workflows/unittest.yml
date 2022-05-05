@@ -49,7 +49,9 @@ jobs:
           FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
         run: echo $FIREBASE_CONFIG > app/google-services.json
       - name: Run unit tests
-        run: ./gradlew clean :app:jacocoTestReportDebug :gamelogic:jacocoTestReport mergeJacocoReports jacocoTestReportMerged
+        run: ./gradlew clean check
+      - name: Merge Jacoco Reports
+        run: ./gradlew :app:jacocoTestReportDebug :gamelogic:jacocoTestReport mergeJacocoReports jacocoTestReportMerged
       - name: Upload Results
         uses: actions/upload-artifact@v2
         with:
