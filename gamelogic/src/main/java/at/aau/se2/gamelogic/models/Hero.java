@@ -6,7 +6,7 @@ public class Hero {
   private int id;
   private String name;
   private HeroActionParams heroAction;
-  private int heroActionCoolDown;
+  private int heroActionCoolDown;   //Cooldown in Zuegen
 
   public Hero(int id, String name, HeroActionParams heroAction) {
     this.id = id;
