@@ -50,6 +50,9 @@ jobs:
         run: echo $FIREBASE_CONFIG > app/google-services.json
       - name: Run unit tests
         run: ./gradlew clean check
+
+        # Need to merge reports for following coverageReports task.
+        # Every java/android module creates own reports in build folder
       - name: Merge Jacoco Reports
         run: ./gradlew :app:jacocoTestReportDebug :gamelogic:jacocoTestReport mergeJacocoReports jacocoTestReportMerged
       - name: Upload Results
