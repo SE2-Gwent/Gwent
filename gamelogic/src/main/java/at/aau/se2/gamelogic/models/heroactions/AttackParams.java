@@ -2,10 +2,10 @@ package at.aau.se2.gamelogic.models.heroactions;
 
 import java.util.ArrayList;
 
-public class HeroDoDamageParams extends HeroActionParams {
+public class AttackParams extends HeroActionParams {
   private final ArrayList<Integer> attackedCardUUIDs;
 
-  public HeroDoDamageParams(ArrayList<Integer> attackedCardUUIDs) {
+  public AttackParams(ArrayList<Integer> attackedCardUUIDs) {
     this.attackedCardUUIDs = attackedCardUUIDs;
   }
 
