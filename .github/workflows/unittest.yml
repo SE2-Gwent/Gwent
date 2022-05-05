@@ -61,8 +61,6 @@ jobs:
           name: test-results
           path: build/reports/jacoco
           if-no-files-found: ignore
-      - name: Generate code coverage reports
-        run: ./gradlew createDebugCoverageReport
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.2
