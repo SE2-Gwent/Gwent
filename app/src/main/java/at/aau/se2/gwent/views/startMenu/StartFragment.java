@@ -1,4 +1,4 @@
-package at.aau.se2.gwent;
+package at.aau.se2.gwent.views.startMenu;
 
 import java.util.ArrayList;
 

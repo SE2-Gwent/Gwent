@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/StartFragment"
-        android:name="at.aau.se2.gwent.StartFragment"
+        android:name="at.aau.se2.gwent.views.startMenu.StartFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_start"/>
     <fragment
