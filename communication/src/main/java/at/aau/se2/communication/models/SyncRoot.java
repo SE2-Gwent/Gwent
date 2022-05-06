@@ -1,21 +1,16 @@
 package at.aau.se2.communication.models;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.Keep;
-import at.aau.se2.gamelogic.models.Player;
 
-public class Game {
-  ArrayList<Player> player;
+public class SyncRoot {
+  private String createdOn = new Date().toString();
 
   @Keep
-  public Game() {}
+  public SyncRoot() {}
 
-  public Game(ArrayList<Player> player) {
-    this.player = player;
-  }
-
-  public ArrayList<Player> getPlayer() {
-    return player;
+  public String getCreatedOn() {
+    return createdOn;
   }
 }
