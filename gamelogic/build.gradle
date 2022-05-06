@@ -14,11 +14,13 @@ spotless {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
     implementation 'junit:junit:4.12'
+    implementation 'androidx.annotation:annotation:1.2.0'
     testImplementation "org.mockito:mockito-core:3.+"
+
 }
