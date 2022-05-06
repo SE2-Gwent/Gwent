@@ -1,14 +1,5 @@
 package at.aau.se2.gwent;
 
-import java.util.ArrayList;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +11,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import at.aau.se2.communication.FirebaseConnector;
+import at.aau.se2.communication.Result;
+import at.aau.se2.communication.ResultObserver;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,28 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
   private AppBarConfiguration appBarConfiguration;
   private ActivityMainBinding binding;
-  private DatabaseReference databaseRef;
-  private ArrayList<String> messages = new ArrayList<>();
-
-  ValueEventListener postListener =
-      new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-          // Get Post object and use the values to update the UI
-          GenericTypeIndicator<ArrayList<String>> t =
-              new GenericTypeIndicator<ArrayList<String>>() {};
-          messages = dataSnapshot.getValue(t);
-          if (messages == null) {
-            messages = new ArrayList<>();
-          }
-          Log.v(TAG, "Messages: " + messages);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-          Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-        }
-      };
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,26 +36,30 @@ public class MainActivity extends AppCompatActivity {
         new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+    FirebaseConnector connector = new FirebaseConnector();
     binding.fab.setOnClickListener(
         view -> {
-          messages.add("Hello, World!");
-          databaseRef.setValue(messages);
+          connector.createGame(
+              new ResultObserver<Integer, Error>() {
+                @Override
+                public void finished(Result<Integer, Error> result) {
+                  switch (result.getType()) {
+                    case SUCCESS:
+                      Log.v(TAG, "Created game with id: " + result.getValue());
+                      break;
+                    case FAILURE:
+                      Log.e(TAG, result.getError().getMessage());
+                      break;
+                  }
+                }
+              });
         });
-
-    setupDatabaseReference();
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
-  }
-
-  private void setupDatabaseReference() {
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    databaseRef = database.getReference("messages");
-    database.getReference("messages").addValueEventListener(postListener);
-    databaseRef.setValue(messages);
   }
 
   @Override
