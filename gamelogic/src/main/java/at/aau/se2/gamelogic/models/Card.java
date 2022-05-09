@@ -9,6 +9,7 @@ import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 public class Card {
   private int id;
   private String name;
+  private ArrayList<CardType> types;
   private int power;
   private int powerDiff;
   private String cardText;
@@ -18,12 +19,14 @@ public class Card {
   public Card(
       int id,
       String name,
+      ArrayList <CardType> types,
       int power,
       int powerDiff,
       String cardText,
       ArrayList<ActionParams> cardActions) {
     this.id = id;
     this.name = name;
+    this.types = types;
     this.power = power;
     this.powerDiff = powerDiff;
     this.cardText = cardText;
