@@ -3,18 +3,27 @@ package at.aau.se2.gamelogic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import at.aau.se2.gamelogic.comunication.FirebaseConnector;
+import at.aau.se2.gamelogic.comunication.Result;
+import at.aau.se2.gamelogic.comunication.ResultObserver;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.InitialPlayer;
@@ -25,6 +34,7 @@ import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
+import at.aau.se2.gamelogic.state.GameState;
 
 public class GameLogicTest {
   private final ArrayList<Card> testCards = new ArrayList<>();
@@ -46,7 +56,7 @@ public class GameLogicTest {
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
     meleeRow = new Row(1, RowType.MELEE);
     sut = new GameLogic(currentPlayer, cardDecks);
-    mockCallback = Mockito.mock(CardActionCallback.class);
+    mockCallback = mock(CardActionCallback.class);
     sut.registerCardActionCallback(mockCallback);
   }
 
@@ -100,5 +110,69 @@ public class GameLogicTest {
 
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).size());
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());
+  }
+
+  // Interaction Test
+
+  @Test
+  public void testStartGameFails() {
+    FirebaseConnector mockConnector = mock(FirebaseConnector.class);
+    GameLogic gameLogic = new GameLogic(mockConnector);
+
+    // Capture the ResultObserver to call it later via Mockito
+    ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
+        ArgumentCaptor.forClass(ResultObserver.class);
+
+    gameLogic.startGame(
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            assertEquals(GameState.INITIALIZE, gameLogic.getCurrentGameState());
+            assertFalse(result.isSuccessful());
+            assertEquals(-1, gameLogic.getGameId());
+          }
+        });
+
+    // Save resultObserver
+    verify(mockConnector).createGame(observerCapture.capture());
+    // Call resultObserver
+    observerCapture.getValue().finished(Result.Failure(new Error()));
+    // Wait for gameLogic.startGame
+    verify(mockConnector, timeout(1000).atLeastOnce()).createGame(any());
+  }
+
+  @Test
+  public void testStartGame() throws InterruptedException {
+    FirebaseConnector mockConnector = mock(FirebaseConnector.class);
+    GameLogic gameLogic = new GameLogic(mockConnector);
+
+    ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
+        ArgumentCaptor.forClass(ResultObserver.class);
+    gameLogic.startGame(
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            assertEquals(GameState.START_GAME_ROUND, gameLogic.getCurrentGameState());
+            assertTrue(result.isSuccessful());
+            assertEquals(1, gameLogic.getGameId());
+          }
+        });
+
+    verify(mockConnector).createGame(observerCapture.capture());
+    observerCapture.getValue().finished(Result.Success(1));
+    verify(mockConnector, timeout(1000).atLeastOnce()).createGame(any());
+
+    // test duplicate call
+    CountDownLatch latch = new CountDownLatch(1);
+    gameLogic.startGame(
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            assertFalse(result.isSuccessful());
+            latch.countDown();
+          }
+        });
+
+    latch.await();
   }
 }

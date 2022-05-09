@@ -2,6 +2,11 @@ package at.aau.se2.gamelogic;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+import androidx.annotation.Nullable;
+import at.aau.se2.gamelogic.comunication.FirebaseConnector;
+import at.aau.se2.gamelogic.comunication.Result;
+import at.aau.se2.gamelogic.comunication.ResultObserver;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.GameField;
@@ -14,11 +19,19 @@ import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
-import at.aau.se2.gamelogic.util.Log;
+import at.aau.se2.gamelogic.state.GameState;
 
 public class GameLogic {
+  private static final String TAG = GameLogic.class.getSimpleName();
+  private int gameId = -1;
   private GameField gameField;
+  private FirebaseConnector connector;
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
+  private GameStateMachine gameStateMachine = new GameStateMachine();
+
+  public GameLogic(@Nullable FirebaseConnector connector) {
+    this.connector = (connector != null) ? connector : new FirebaseConnector();
+  }
 
   public GameLogic(Player currentPlayer, CardDecks cardDecks) {
     GameFieldRows gameFieldRows = new GameFieldRows();
@@ -31,7 +44,7 @@ public class GameLogic {
 
   public void performAction(CardAction action, ActionParams params) {
     if (action.performed) {
-      Log.w("Action is already performed.");
+      Log.w(TAG, "Action is already performed.");
       return;
     }
 
@@ -60,7 +73,7 @@ public class GameLogic {
         break;
 
       default:
-        Log.w("Action not in performAction implemented");
+        Log.w(TAG, "Action not in performAction implemented");
     }
 
     action.performed = true;
@@ -81,21 +94,10 @@ public class GameLogic {
     cardRow.add(position, card);
   }
 
-  private Player getOpponent() {
-    if (gameField.getCurrentPlayer().getInitialPlayerInformation() == InitialPlayer.INITIATOR) {
-      return gameField.getOpponent();
-    }
-    return gameField.getCurrentPlayer();
-  }
-
   private void notifyCardActionCallbacks(CardAction action, ActionParams params) {
     for (CardActionCallback callback : cardActionCallbacks) {
       callback.didPerformAction(action, params);
     }
-  }
-
-  public GameFieldRows getGameFieldRows() {
-    return gameField.getRows();
   }
 
   public void registerCardActionCallback(CardActionCallback callback) {
@@ -104,5 +106,49 @@ public class GameLogic {
     }
 
     cardActionCallbacks.add(callback);
+  }
+
+  public void startGame(ResultObserver<Integer, Error> observer) {
+    if (!gameStateMachine.canStartGame()) {
+      observer.finished(Result.Failure(new Error("Game already started.")));
+      return;
+    }
+
+    connector.createGame(
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            if (result.isSuccessful()) {
+              if (!gameStateMachine.startGame()) {
+                observer.finished(Result.Failure(new Error("Game already started.")));
+                return;
+              }
+              gameId = result.getValue();
+            }
+
+            observer.finished(result);
+          }
+        });
+  }
+
+  // Getters & Setters
+
+  public int getGameId() {
+    return gameId;
+  }
+
+  public GameState getCurrentGameState() {
+    return gameStateMachine.getCurrent();
+  }
+
+  public GameFieldRows getGameFieldRows() {
+    return gameField.getRows();
+  }
+
+  private Player getOpponent() {
+    if (gameField.getCurrentPlayer().getInitialPlayerInformation() == InitialPlayer.INITIATOR) {
+      return gameField.getOpponent();
+    }
+    return gameField.getCurrentPlayer();
   }
 }
