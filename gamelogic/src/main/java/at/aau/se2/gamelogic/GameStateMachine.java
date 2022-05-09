@@ -15,13 +15,34 @@ public class GameStateMachine {
     listener.gameStateChanged(current, null);
   }
 
-  public boolean canStartGame() {
-    return current == GameState.INITIALIZE;
+  public boolean stateEquals(GameState state) {
+    return current == state;
+  }
+
+  public boolean canProgressTo(GameState state) {
+    switch (state) {
+      case START_GAME_ROUND:
+        return current == GameState.INITIALIZE;
+      case DRAW_CARDS:
+        return current == GameState.START_GAME_ROUND;
+      default:
+        return false;
+    }
   }
 
   public boolean startGame() {
-    if (!canStartGame()) {
+    if (!canProgressTo(GameState.START_GAME_ROUND)) {
       Log.w("Cannot start game.");
+      return false;
+    }
+
+    changeState(GameState.START_GAME_ROUND);
+    return true;
+  }
+
+  public boolean joinGame() {
+    if (!canProgressTo(GameState.START_GAME_ROUND)) {
+      Log.w("Cannot join game.");
       return false;
     }
 
