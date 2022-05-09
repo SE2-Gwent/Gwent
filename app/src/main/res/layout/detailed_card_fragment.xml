@@ -40,56 +40,72 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineHorizontal3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintGuide_end="20dp" />
 
-        <!-- Name of the card -->
+
         <TextView
             android:id="@+id/cardName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/card_name"
+            android:textAlignment="center"
             android:textColor="@color/white"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guideLineVertical"
-            app:layout_constraintTop_toTopOf="@id/guideLineHorizontal1" />
+            app:layout_constraintTop_toBottomOf="@id/guideLineHorizontal1" />
 
-        <!-- Types of the card -->
-        <TextView
-            android:id="@+id/cardTypes"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/card_types"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
-            app:layout_constraintTop_toBottomOf="@id/cardName" />
 
-        <!-- Text of the card -->
         <TextView
             android:id="@+id/cardText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_related_margin"
+            android:layout_margin="30dp"
             android:text="@string/card_text"
             android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@id/guideLineHorizontal2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guideLineVertical"
-            app:layout_constraintTop_toBottomOf="@id/cardTypes" />
+            app:layout_constraintTop_toBottomOf="@id/cardName" />
 
-        <!-- Power of the card -->
+        <TextView
+            android:id="@+id/cardTypes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:text="@string/card_types"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@id/guideLineHorizontal3"
+            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
+            app:layout_constraintEnd_toStartOf="@id/cardPower"
+            app:layout_constraintTop_toBottomOf="@id/guideLineHorizontal2" />
+
+
         <TextView
             android:id="@+id/cardPower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="30dp"
             android:layout_marginTop="@dimen/default_related_margin"
             android:text="@string/card_power"
             android:textColor="@color/green"
             android:textSize="40sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/guideLineHorizontal2"
+            app:layout_constraintBottom_toBottomOf="@id/guideLineHorizontal3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideLineVertical" />
+            app:layout_constraintStart_toEndOf="@id/cardTypes"
+            app:layout_constraintTop_toBottomOf="@id/guideLineHorizontal2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
