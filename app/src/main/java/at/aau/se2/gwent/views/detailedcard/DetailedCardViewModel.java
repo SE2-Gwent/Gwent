@@ -3,76 +3,51 @@ package at.aau.se2.gwent.views.detailedcard;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import at.aau.se2.gamelogic.models.Card;
+
 public class DetailedCardViewModel extends ViewModel {
-  private String name;
-  private String type;
-  private String text;
-  private String flavorText;
-  private String power;
-  private int powerDiff;
+    private Card card;
+    private String imgResourceName;
 
-  private String imgResourceName;
+    private MutableLiveData<DetailedCardViewModel.ViewState> currentState =
+            new MutableLiveData<>(DetailedCardViewModel.ViewState.INITIAL);
 
-  private MutableLiveData<DetailedCardViewModel.ViewState> currentState =
-      new MutableLiveData<>(DetailedCardViewModel.ViewState.INITIAL);
+    enum ViewState {
+        INITIAL,
+        LOADED
+    }
 
-  enum ViewState {
-    INITIAL,
-    LOADED
-  }
+    public DetailedCardViewModel() {
 
-  public DetailedCardViewModel() {
+        // TODO: remove dummy card
+        int id = 0;
+        String name = "Ard Feainn Crossbow Man";
+        int power = 3;
+        int powerDiff = 0;
+        String cardText =
+                "Deploy: Damage an enemy unit by 2. Barricade: Damage a random enemy unit by 1 whenever you play a soldier.";
+        Card testCard = new Card(id, name, power, powerDiff, cardText, null);
+        this.card = testCard;
     /*
     TODO:
-    1) retrieve id of the card clicked by the user
-    2) parse json-card according to id (set attributes: cardName, cardTypes, etc.)
+    here we need a unique name which refers to the cardImage (large used for detailed card view)
+    i would suggest to use the cardName + postfix (large) (for this we would need a small function
+    which removes spaces from name and appends "large" to it afterwards
      */
+        imgResourceName = "detailed_card_test_to_load";
 
-    // TODO: Remove dummy-attributes
-    this.name = "Ard Feainn Crossbow Man";
-    this.type = "Human, Knight";
-    this.text =
-        "Deploy: Damage an enemy unit by 2. Barricade: Damage a random enemy unit by 1 whenever you play a soldier. Lorem ipsum, dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-    this.flavorText =
-        "Many thought that mounted crossbowman wouldn't work. Until they saw them in action.";
-    this.power = "3";
-    this.powerDiff = 1;
+        currentState.setValue(ViewState.LOADED);
+    }
 
-    imgResourceName = "detailed_card_test_to_load";
-    // End
+    public MutableLiveData<DetailedCardViewModel.ViewState> getCurrentState() {
+        return currentState;
+    }
 
-    currentState.setValue(ViewState.LOADED);
-  }
+    public Card getCard() {
+        return card;
+    }
 
-  public MutableLiveData<DetailedCardViewModel.ViewState> getCurrentState() {
-    return currentState;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getType() {
-    return type;
-  }
-
-  public String getText() {
-    return text;
-  }
-
-  public String getFlavorText() {
-    return flavorText;
-  }
-
-  public String getPower() {
-    return power;
-  }
-
-  public int getPowerDiff() {
-    return powerDiff;
-  }
-
-  public String getImgResourceName() {
-    return imgResourceName;
-  }
+    public String getImgResourceName() {
+        return imgResourceName;
+    }
 }

@@ -7,15 +7,13 @@
     android:layout_margin="@dimen/default_margin"
     tools:context=".views.detailedcard.DetailedCardFragment">
 
-
-
     <ImageButton
         android:id="@+id/backgroundImageButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
         android:padding="0dp"
+        android:scaleType="fitXY"
         android:src="@drawable/detailed_card_test_initial" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,6 +42,7 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_end="20dp" />
 
+        <!-- Name of the card -->
         <TextView
             android:id="@+id/cardName"
             android:layout_width="0dp"
@@ -55,6 +54,7 @@
             app:layout_constraintStart_toEndOf="@id/guideLineVertical"
             app:layout_constraintTop_toTopOf="@id/guideLineHorizontal1" />
 
+        <!-- Types of the card -->
         <TextView
             android:id="@+id/cardTypes"
             android:layout_width="0dp"
@@ -65,6 +65,7 @@
             app:layout_constraintStart_toEndOf="@id/guideLineVertical"
             app:layout_constraintTop_toBottomOf="@id/cardName" />
 
+        <!-- Text of the card -->
         <TextView
             android:id="@+id/cardText"
             android:layout_width="0dp"
@@ -76,20 +77,7 @@
             app:layout_constraintStart_toEndOf="@id/guideLineVertical"
             app:layout_constraintTop_toBottomOf="@id/cardTypes" />
 
-        <TextView
-            android:id="@+id/cardFlavortext"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_related_margin"
-            android:ellipsize="none"
-            android:scrollHorizontally="false"
-            android:text="@string/card_flavortext"
-            android:textColor="@color/white"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideLineVertical"
-            app:layout_constraintTop_toBottomOf="@id/cardText" />
-
+        <!-- Power of the card -->
         <TextView
             android:id="@+id/cardPower"
             android:layout_width="wrap_content"
@@ -99,20 +87,20 @@
             android:textColor="@color/green"
             android:textSize="40sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/guideLineHorizontal2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideLineVertical"
-            app:layout_constraintTop_toBottomOf="@id/cardFlavortext" />
+            app:layout_constraintStart_toStartOf="@id/guideLineVertical" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
 
-<!--
-Important notes:
--) We can adjust the displayed size of the fragment by altering the following:
-android:layout_margin:[insert margin here]
-within the relative layout (root)
--) The vertical guideline should help us, that the textViews are not overlapping the image.
-We can be more defensively by increasing the beginning of the guideline (lets say to 350dp)
--) The font could be change too to create a cooler look.
--->
+    <!--
+    Important notes:
+    -) We can adjust the displayed size of the fragment by altering the following:
+    android:layout_margin:[insert margin here]
+    within the relative layout (root)
+    -) The vertical guideline should help us, that the textViews are not overlapping the image.
+    We can be more defensively by increasing the beginning of the guideline (lets say to 350dp)
+    -) The font could be change too to create a cooler look.
+    -->
