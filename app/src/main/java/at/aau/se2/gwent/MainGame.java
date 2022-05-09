@@ -80,7 +80,7 @@ public class MainGame extends AppCompatActivity {
                 showPopupWindow(testview);
                 //Wenn man keine Karte ausspielen möchte
                 if (currentcard == null){
-                    deleteonclicklistenerofallelements();
+                    //deleteonclicklistenerofallelements();
                     v.setVisibility(View.INVISIBLE);
                 }
                 else if (currentcard != null) {
@@ -118,12 +118,32 @@ public class MainGame extends AppCompatActivity {
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         //lässt Taps außerhalb des Popupwindows schließen
-        boolean focusable = true
+        boolean focusable = true;
 
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         // Zeigt das Popupwindow
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        popupView.findViewById(R.id.yesbutton).setOnClickListener(new View.OnClickListener() {
+            //Wenn man draufklickt - ist eine Karte ausgewählt?
+        @Override
+        public void onClick(View v) {
+            System.out.println("Yes button wurde gedruckt");
+            deleteonclicklistenerofallelements();
+            popupWindow.dismiss();
+
+                                                                      }});
+        popupView.findViewById(R.id.nobutton).setOnClickListener(new View.OnClickListener() {
+            //Wenn man draufklickt - ist eine Karte ausgewählt?
+            @Override
+            public void onClick(View v) {
+                System.out.println("No button wurde gedruckt");
+                popupWindow.dismiss();
+                findViewById(R.id.testbutton).setVisibility(View.VISIBLE);
+
+            }});
+
 
         // Wenn das Popupwindow gedürckt wird verschwindet es 
         popupView.setOnTouchListener(new View.OnTouchListener() {
@@ -134,6 +154,8 @@ public class MainGame extends AppCompatActivity {
             }
         });
     }
+
+
 
 
     //Handkarten anzeigen
@@ -262,3 +284,12 @@ public class MainGame extends AppCompatActivity {
         }
     }
 }
+
+/*
+Popup Window - Wenn auf Yes gedrückt wird, dann verschwindet das Fenster und Zug wird normal fortgesetzt
+Wenn auf No gedrückt wird, wird der Donebuttom wieder sichtbar und alles ist so als wäre der Buttom nicht gedrückt worden.
+
+Karten - Wiederholung für alle weiteren Elemente
+
+
+ */
