@@ -1,11 +1,8 @@
-package at.aau.se2.gwent;
+package at.aau.se2.gamelogic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.ArrayList;
@@ -15,10 +12,9 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
-import at.aau.se2.gamelogic.CardAction;
-import at.aau.se2.gamelogic.CardActionCallback;
-import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.InitialPlayer;
@@ -50,7 +46,7 @@ public class GameLogicTest {
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
     meleeRow = new Row(1, RowType.MELEE);
     sut = new GameLogic(currentPlayer, cardDecks);
-    mockCallback = mock(CardActionCallback.class);
+    mockCallback = Mockito.mock(CardActionCallback.class);
     sut.registerCardActionCallback(mockCallback);
   }
 
@@ -68,7 +64,9 @@ public class GameLogicTest {
       sut.performAction(entry.getKey(), entry.getValue());
 
       assertTrue(entry.getKey().isPerformed());
-      verify(mockCallback).didPerformAction(eq(entry.getKey()), eq(entry.getValue()));
+      Mockito.verify(mockCallback)
+          .didPerformAction(
+              ArgumentMatchers.eq(entry.getKey()), ArgumentMatchers.eq(entry.getValue()));
     }
   }
 

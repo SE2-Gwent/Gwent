@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 rootProject.name = "Gwent"
 include ':app'
 include ':gamelogic'
-include ':communication'

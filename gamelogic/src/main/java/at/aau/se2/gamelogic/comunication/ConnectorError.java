@@ -1,4 +1,4 @@
-package at.aau.se2.communication;
+package at.aau.se2.gamelogic.comunication;
 
 public class ConnectorError extends Error {
   public ConnectorError(String s) {

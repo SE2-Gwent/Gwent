@@ -1,4 +1,4 @@
-package at.aau.se2.communication;
+package at.aau.se2.gamelogic.comunication;
 
 import java.util.Random;
 
@@ -10,7 +10,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
-import at.aau.se2.communication.models.SyncRoot;
 
 public class FirebaseConnector {
   private static final int MIN_ID = 1000;
@@ -59,7 +58,7 @@ public class FirebaseConnector {
     SyncRoot syncRoot = new SyncRoot();
 
     gameRef = databaseRef.child(childId).getRef();
-    databaseRef.child(childId).setValue(syncRoot);
+    databaseRef.child(childId).setValue(syncRoot, null);
     databaseRef.child(childId).addValueEventListener(postListener);
 
     observer.finished(Result.Success(id));

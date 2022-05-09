@@ -1,4 +1,4 @@
-package at.aau.se2.communication;
+package at.aau.se2.gamelogic.comunication;
 
 public class Result<T, U> {
   public enum Type {
@@ -34,6 +34,10 @@ public class Result<T, U> {
 
   public Type getType() {
     return type;
+  }
+
+  public boolean isSuccessful() {
+    return value != null;
   }
 
   interface Functional<T, U> {

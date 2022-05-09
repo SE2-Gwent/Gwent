@@ -1,4 +1,4 @@
-package at.aau.se2.communication.models;
+package at.aau.se2.gamelogic.comunication;
 
 import java.util.Date;
 
