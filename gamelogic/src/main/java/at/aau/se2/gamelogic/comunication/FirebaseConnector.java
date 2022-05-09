@@ -1,5 +1,6 @@
 package at.aau.se2.gamelogic.comunication;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.google.firebase.database.DataSnapshot;
@@ -9,7 +10,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import android.util.Log;
 import androidx.annotation.NonNull;
 import at.aau.se2.gamelogic.models.GameField;
 
@@ -19,13 +19,16 @@ public class FirebaseConnector {
   private static final int MAX_ID = 8000;
   private DatabaseReference databaseRef;
   private DatabaseReference gameRef = null;
+  private final ArrayList<CommuncationObserver> communicationObservers = new ArrayList<>();
 
   ValueEventListener postListener =
       new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
           SyncRoot update = dataSnapshot.getValue(SyncRoot.class);
-          Log.v(TAG, "Synced");
+          for (CommuncationObserver observer : communicationObservers) {
+            observer.didUpdateGameField(update.getGameField());
+          }
         }
 
         @Override
@@ -110,5 +113,10 @@ public class FirebaseConnector {
             observer.finished(Result.Failure(error));
           }
         });
+  }
+
+  public void addListener(CommuncationObserver listener) {
+    if (communicationObservers.contains(listener)) return;
+    communicationObservers.add(listener);
   }
 }

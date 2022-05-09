@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.util.Log;
 import androidx.annotation.Nullable;
+import at.aau.se2.gamelogic.comunication.CommuncationObserver;
 import at.aau.se2.gamelogic.comunication.FirebaseConnector;
 import at.aau.se2.gamelogic.comunication.Result;
 import at.aau.se2.gamelogic.comunication.ResultObserver;
@@ -30,17 +31,25 @@ public class GameLogic {
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
 
+  private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
+  private CommuncationObserver communcationObserver =
+      gameField -> {
+        for (GameFieldObserver observers : gameFieldObservers) {
+          observers.updateGameField(gameField);
+        }
+      };
+
   public GameLogic(
       @Nullable FirebaseConnector connector, @Nullable GameStateMachine gameStateMachine) {
     this.connector = (connector != null) ? connector : new FirebaseConnector();
     this.gameStateMachine = (gameStateMachine != null) ? gameStateMachine : new GameStateMachine();
+    this.connector.addListener(communcationObserver);
   }
 
   public void registerCardActionCallback(CardActionCallback callback) {
     if (cardActionCallbacks.contains(callback)) {
       return;
     }
-
     cardActionCallbacks.add(callback);
   }
 
@@ -175,6 +184,12 @@ public class GameLogic {
     }
   }
 
+  public void registerGameFieldListener(GameFieldObserver observer) {
+    if (gameFieldObservers.contains(observer)) return;
+    gameFieldObservers.add(observer);
+    observer.updateGameField(gameField);
+  }
+
   // Getters & Setters
 
   public int getGameId() {
@@ -198,6 +213,10 @@ public class GameLogic {
 
   public GameField getGameField() {
     return gameField;
+  }
+
+  public GameStateMachine getGameStateMachine() {
+    return gameStateMachine;
   }
 
   public GameState getCurrentGameState() {

@@ -1,7 +1,6 @@
 package at.aau.se2.gwent;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -11,9 +10,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import at.aau.se2.communication.FirebaseConnector;
-import at.aau.se2.communication.Result;
-import at.aau.se2.communication.ResultObserver;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,25 +31,6 @@ public class MainActivity extends AppCompatActivity {
     appBarConfiguration =
         new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
     NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-    FirebaseConnector connector = new FirebaseConnector();
-    binding.fab.setOnClickListener(
-        view -> {
-          connector.createGame(
-              new ResultObserver<Integer, Error>() {
-                @Override
-                public void finished(Result<Integer, Error> result) {
-                  switch (result.getType()) {
-                    case SUCCESS:
-                      Log.v(TAG, "Created game with id: " + result.getValue());
-                      break;
-                    case FAILURE:
-                      Log.e(TAG, result.getError().getMessage());
-                      break;
-                  }
-                }
-              });
-        });
   }
 
   @Override
