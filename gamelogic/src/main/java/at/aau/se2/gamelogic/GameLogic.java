@@ -25,24 +25,62 @@ public class GameLogic {
   private static final String TAG = GameLogic.class.getSimpleName();
   private int gameId = -1;
   private GameField gameField;
+  private InitialPlayer whoAmI;
   private FirebaseConnector connector;
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
 
-  public GameLogic(@Nullable FirebaseConnector connector) {
+  public GameLogic(
+      @Nullable FirebaseConnector connector, @Nullable GameStateMachine gameStateMachine) {
     this.connector = (connector != null) ? connector : new FirebaseConnector();
+    this.gameStateMachine = (gameStateMachine != null) ? gameStateMachine : new GameStateMachine();
   }
 
-  public GameLogic(Player currentPlayer, CardDecks cardDecks) {
-    GameFieldRows gameFieldRows = new GameFieldRows();
-    ArrayList<Hero> heroes = new ArrayList<>();
-    // TODO: Initialize Gamefield with data(Cards, heroes, ..)
+  public void registerCardActionCallback(CardActionCallback callback) {
+    if (cardActionCallbacks.contains(callback)) {
+      return;
+    }
+
+    cardActionCallbacks.add(callback);
+  }
+
+  // GameState Manipulation
+
+  public void startGame(ResultObserver<Integer, Error> observer) {
+    if (!gameStateMachine.canProgressTo(GameState.START_GAME_ROUND)) {
+      observer.finished(Result.Failure(new Error("Game already started.")));
+      return;
+    }
+
+    connector.createGame(
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            if (result.isSuccessful()) {
+              if (!gameStateMachine.startGame()) {
+                observer.finished(Result.Failure(new Error("Game already started.")));
+                return;
+              }
+              gameId = result.getValue();
+              whoAmI = InitialPlayer.INITIATOR;
+            }
+
+            observer.finished(result);
+          }
+        });
+  }
     gameField =
         new GameField(
             gameFieldRows, currentPlayer, new Player(2, InitialPlayer.OPPONENT), cardDecks, heroes);
   }
 
+  // Card Actions
+
   public void performAction(CardAction action, ActionParams params) {
+    if (!gameStateMachine.stateEquals(GameState.START_GAME_ROUND)) {
+      return;
+    }
+
     if (action.performed) {
       Log.w(TAG, "Action is already performed.");
       return;
@@ -98,37 +136,6 @@ public class GameLogic {
     for (CardActionCallback callback : cardActionCallbacks) {
       callback.didPerformAction(action, params);
     }
-  }
-
-  public void registerCardActionCallback(CardActionCallback callback) {
-    if (cardActionCallbacks.contains(callback)) {
-      return;
-    }
-
-    cardActionCallbacks.add(callback);
-  }
-
-  public void startGame(ResultObserver<Integer, Error> observer) {
-    if (!gameStateMachine.canStartGame()) {
-      observer.finished(Result.Failure(new Error("Game already started.")));
-      return;
-    }
-
-    connector.createGame(
-        new ResultObserver<Integer, Error>() {
-          @Override
-          public void finished(Result<Integer, Error> result) {
-            if (result.isSuccessful()) {
-              if (!gameStateMachine.startGame()) {
-                observer.finished(Result.Failure(new Error("Game already started.")));
-                return;
-              }
-              gameId = result.getValue();
-            }
-
-            observer.finished(result);
-          }
-        });
   }
 
   // Getters & Setters

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 
 import at.aau.se2.gamelogic.comunication.FirebaseConnector;
 import at.aau.se2.gamelogic.comunication.Result;
@@ -34,7 +34,6 @@ import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
-import at.aau.se2.gamelogic.state.GameState;
 
 public class GameLogicTest {
   private final ArrayList<Card> testCards = new ArrayList<>();
@@ -42,6 +41,8 @@ public class GameLogicTest {
   private GameLogic sut;
   private Player currentPlayer;
   private Row meleeRow;
+  private FirebaseConnector mockConnector;
+  private GameStateMachine mockGameStateMachine;
 
   CardActionCallback mockCallback;
 
@@ -55,13 +56,20 @@ public class GameLogicTest {
     cardDecks = new CardDecks(testCards, testCards);
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
     meleeRow = new Row(1, RowType.MELEE);
-    sut = new GameLogic(currentPlayer, cardDecks);
+
+    mockConnector = mock(FirebaseConnector.class);
+    mockGameStateMachine = mock(GameStateMachine.class);
+    sut = new GameLogic(mockConnector, mockGameStateMachine);
     mockCallback = mock(CardActionCallback.class);
     sut.registerCardActionCallback(mockCallback);
   }
 
   @Test
   public void testPerformActionMappings() {
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
+    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, meleeRow, 0));
     testData.put(
@@ -74,7 +82,7 @@ public class GameLogicTest {
       sut.performAction(entry.getKey(), entry.getValue());
 
       assertTrue(entry.getKey().isPerformed());
-      Mockito.verify(mockCallback)
+      verify(mockCallback)
           .didPerformAction(
               ArgumentMatchers.eq(entry.getKey()), ArgumentMatchers.eq(entry.getValue()));
     }
@@ -82,6 +90,9 @@ public class GameLogicTest {
 
   @Test
   public void testPerformActionWithWrongParams() {
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(
         new CardAction(CardAction.ActionType.DEPLOY),
@@ -102,6 +113,10 @@ public class GameLogicTest {
 
   @Test
   public void testPerformDeployCardActionResults() {
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
+    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+
     CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
     CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
 
@@ -112,24 +127,21 @@ public class GameLogicTest {
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());
   }
 
-  // Interaction Test
-
   @Test
   public void testStartGameFails() {
-    FirebaseConnector mockConnector = mock(FirebaseConnector.class);
-    GameLogic gameLogic = new GameLogic(mockConnector);
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    when(mockGameStateMachine.startGame()).thenReturn(false);
 
     // Capture the ResultObserver to call it later via Mockito
     ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
         ArgumentCaptor.forClass(ResultObserver.class);
 
-    gameLogic.startGame(
+    sut.startGame(
         new ResultObserver<Integer, Error>() {
           @Override
           public void finished(Result<Integer, Error> result) {
-            assertEquals(GameState.INITIALIZE, gameLogic.getCurrentGameState());
             assertFalse(result.isSuccessful());
-            assertEquals(-1, gameLogic.getGameId());
+            assertEquals(-1, sut.getGameId());
           }
         });
 
@@ -143,28 +155,32 @@ public class GameLogicTest {
 
   @Test
   public void testStartGame() throws InterruptedException {
-    FirebaseConnector mockConnector = mock(FirebaseConnector.class);
-    GameLogic gameLogic = new GameLogic(mockConnector);
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    when(mockGameStateMachine.startGame()).thenReturn(true);
 
     ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
         ArgumentCaptor.forClass(ResultObserver.class);
-    gameLogic.startGame(
+    sut.startGame(
         new ResultObserver<Integer, Error>() {
           @Override
           public void finished(Result<Integer, Error> result) {
-            assertEquals(GameState.START_GAME_ROUND, gameLogic.getCurrentGameState());
             assertTrue(result.isSuccessful());
-            assertEquals(1, gameLogic.getGameId());
+            assertEquals(1, sut.getGameId());
           }
         });
 
     verify(mockConnector).createGame(observerCapture.capture());
     observerCapture.getValue().finished(Result.Success(1));
     verify(mockConnector, timeout(1000).atLeastOnce()).createGame(any());
+  }
 
-    // test duplicate call
+  @Test
+  public void testStartGameAlreadyExecuted() throws InterruptedException {
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(false);
+
     CountDownLatch latch = new CountDownLatch(1);
-    gameLogic.startGame(
+
+    sut.startGame(
         new ResultObserver<Integer, Error>() {
           @Override
           public void finished(Result<Integer, Error> result) {
