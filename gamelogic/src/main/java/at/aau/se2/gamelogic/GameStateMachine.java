@@ -62,6 +62,16 @@ public class GameStateMachine {
     return true;
   }
 
+  public boolean roundCanStart() {
+    if (!canProgressTo(GameState.DRAW_CARDS)) {
+      Log.w("Cannot wait for opponent.");
+      return false;
+    }
+
+    changeState(GameState.DRAW_CARDS);
+    return true;
+  }
+
   private void changeState(GameState newState) {
     GameState old = current;
     current = newState;

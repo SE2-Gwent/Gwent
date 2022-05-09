@@ -20,14 +20,16 @@ public class FirebaseConnector {
   private DatabaseReference databaseRef;
   private DatabaseReference gameRef = null;
   private final ArrayList<CommuncationObserver> communicationObservers = new ArrayList<>();
+  private SyncRoot syncRoot;
 
   ValueEventListener postListener =
       new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
           SyncRoot update = dataSnapshot.getValue(SyncRoot.class);
+          syncRoot = update;
           for (CommuncationObserver observer : communicationObservers) {
-            observer.didUpdateGameField(update.getGameField());
+            observer.didSyncChanges(update);
           }
         }
 
@@ -101,6 +103,11 @@ public class FirebaseConnector {
     gameRef.addValueEventListener(postListener);
 
     observer.finished(Result.Success(id));
+  }
+
+  public void sendSyncAction(SyncAction action) {
+    syncRoot.addAction(action);
+    gameRef.setValue(syncRoot);
   }
 
   private void setupDatabaseReference() {

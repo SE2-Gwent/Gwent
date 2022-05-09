@@ -8,12 +8,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -25,6 +27,8 @@ import org.mockito.ArgumentCaptor;
 import at.aau.se2.gamelogic.comunication.FirebaseConnector;
 import at.aau.se2.gamelogic.comunication.Result;
 import at.aau.se2.gamelogic.comunication.ResultObserver;
+import at.aau.se2.gamelogic.comunication.SyncAction;
+import at.aau.se2.gamelogic.comunication.SyncRoot;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.GameField;
@@ -37,6 +41,7 @@ import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
+import at.aau.se2.gamelogic.state.GameState;
 
 public class GameLogicTest {
   private final ArrayList<Card> testCards = new ArrayList<>();
@@ -235,5 +240,36 @@ public class GameLogicTest {
     verify(mockConnector).joinGame(eq(1), observerCapture.capture());
     observerCapture.getValue().finished(Result.Success(new GameField()));
     verify(mockConnector, timeout(1000).atLeastOnce()).joinGame(eq(1), any());
+  }
+
+  @Test
+  public void testHandleGameSyncUpdatesOpponentJoined() {
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    gameField.setOpponent(currentPlayer);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.WAIT_FOR_OPPONENT);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockGameStateMachine).opponentJoined();
+    ArgumentCaptor<SyncAction> captor = ArgumentCaptor.forClass(SyncAction.class);
+    verify(mockConnector, times(1)).sendSyncAction(captor.capture());
+    assertEquals(SyncAction.Type.STARTING_PLAYER, captor.getValue().getType());
+  }
+
+  @Test
+  public void testHandleGameSyncUpdatesStartingPlayer() {
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    SyncAction startingSyncAction =
+        new SyncAction(SyncAction.Type.STARTING_PLAYER, InitialPlayer.OPPONENT.name());
+    when(mockSyncRoot.getLastActions())
+        .thenReturn(new ArrayList(Collections.singletonList(startingSyncAction)));
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
+    when(mockGameStateMachine.roundCanStart()).thenReturn(true);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    assertEquals(InitialPlayer.OPPONENT, sut.getStartingPlayer());
   }
 }

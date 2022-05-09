@@ -1,6 +1,7 @@
 package at.aau.se2.gamelogic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -8,6 +9,8 @@ import at.aau.se2.gamelogic.comunication.CommuncationObserver;
 import at.aau.se2.gamelogic.comunication.FirebaseConnector;
 import at.aau.se2.gamelogic.comunication.Result;
 import at.aau.se2.gamelogic.comunication.ResultObserver;
+import at.aau.se2.gamelogic.comunication.SyncAction;
+import at.aau.se2.gamelogic.comunication.SyncRoot;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
 import at.aau.se2.gamelogic.models.GameField;
@@ -21,6 +24,7 @@ import at.aau.se2.gamelogic.models.cardactions.AttackParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
+import at.aau.se2.gamelogic.util.SyncActionUtil;
 
 public class GameLogic {
   private static final String TAG = GameLogic.class.getSimpleName();
@@ -30,14 +34,16 @@ public class GameLogic {
   private FirebaseConnector connector;
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
+  private InitialPlayer startingPlayer;
 
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
-      gameField -> {
-        handleGameFieldChanges(gameField);
+      sync -> {
+        this.gameField = sync.getGameField();
+        handleGameSyncUpdates(sync);
 
         for (GameFieldObserver observers : gameFieldObservers) {
-          observers.updateGameField(gameField);
+          observers.updateGameField(sync.getGameField());
         }
       };
 
@@ -116,6 +122,15 @@ public class GameLogic {
         });
   }
 
+  private void firstGameSetup() {
+    Random random = new Random();
+    InitialPlayer startingPlayer =
+        (random.nextInt(2) == 1) ? InitialPlayer.INITIATOR : InitialPlayer.OPPONENT;
+
+    connector.sendSyncAction(
+        new SyncAction(SyncAction.Type.STARTING_PLAYER, startingPlayer.name()));
+  }
+
   private void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
     if (!gameStateMachine.stateEquals(GameState.WAIT_FOR_OPPONENT)) {
       return;
@@ -126,14 +141,26 @@ public class GameLogic {
     connector.syncGameField(gameField);
   }
 
-  private void handleGameFieldChanges(GameField gameField) {
-    if (gameField == null) return;
+  protected void handleGameSyncUpdates(SyncRoot syncRoot) {
+    if (syncRoot == null) return;
+
+    ArrayList<SyncAction> newSyncActions = syncRoot.getLastActions();
 
     switch (gameStateMachine.getCurrent()) {
       case WAIT_FOR_OPPONENT:
-        if (gameField.getOpponent() != null) {
+        if (syncRoot.getGameField().getOpponent() != null) {
           // Somebody joined the game
           gameStateMachine.opponentJoined();
+          firstGameSetup();
+        }
+        break;
+
+      case START_GAME_ROUND:
+        InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
+        if (startingPlayer != null) {
+          if (gameStateMachine.roundCanStart()) {
+            this.startingPlayer = startingPlayer;
+          }
         }
         break;
 
@@ -247,5 +274,9 @@ public class GameLogic {
 
   public GameState getCurrentGameState() {
     return gameStateMachine.getCurrent();
+  }
+
+  public InitialPlayer getStartingPlayer() {
+    return startingPlayer;
   }
 }
