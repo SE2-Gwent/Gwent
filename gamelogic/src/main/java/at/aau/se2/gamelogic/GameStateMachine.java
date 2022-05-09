@@ -21,8 +21,10 @@ public class GameStateMachine {
 
   public boolean canProgressTo(GameState state) {
     switch (state) {
-      case START_GAME_ROUND:
+      case WAIT_FOR_OPPONENT:
         return current == GameState.INITIALIZE;
+      case START_GAME_ROUND:
+        return current == GameState.WAIT_FOR_OPPONENT || current == GameState.INITIALIZE;
       case DRAW_CARDS:
         return current == GameState.START_GAME_ROUND;
       default:
@@ -31,8 +33,18 @@ public class GameStateMachine {
   }
 
   public boolean startGame() {
-    if (!canProgressTo(GameState.START_GAME_ROUND)) {
+    if (!canProgressTo(GameState.WAIT_FOR_OPPONENT)) {
       Log.w("Cannot start game.");
+      return false;
+    }
+
+    changeState(GameState.WAIT_FOR_OPPONENT);
+    return true;
+  }
+
+  public boolean joinGame() {
+    if (!canProgressTo(GameState.START_GAME_ROUND)) {
+      Log.w("Cannot join game.");
       return false;
     }
 
@@ -40,9 +52,9 @@ public class GameStateMachine {
     return true;
   }
 
-  public boolean joinGame() {
+  public boolean opponentJoined() {
     if (!canProgressTo(GameState.START_GAME_ROUND)) {
-      Log.w("Cannot join game.");
+      Log.w("Cannot wait for opponent.");
       return false;
     }
 

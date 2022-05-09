@@ -1,6 +1,5 @@
 package at.aau.se2.gwent;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import android.app.AlertDialog;
@@ -21,11 +20,6 @@ import androidx.navigation.Navigation;
 import at.aau.se2.gamelogic.CardAction;
 import at.aau.se2.gamelogic.CardActionCallback;
 import at.aau.se2.gamelogic.GameLogic;
-import at.aau.se2.gamelogic.comunication.Result;
-import at.aau.se2.gamelogic.comunication.ResultObserver;
-import at.aau.se2.gamelogic.models.CardDecks;
-import at.aau.se2.gamelogic.models.InitialPlayer;
-import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
@@ -72,8 +66,6 @@ public class StartFragment extends Fragment implements CardActionCallback {
                               Toast.LENGTH_SHORT)
                           .show();
 
-                      initializeGameField();
-
                       NavController controller =
                           Navigation.findNavController(
                               Objects.requireNonNull(getActivity()),
@@ -104,13 +96,6 @@ public class StartFragment extends Fragment implements CardActionCallback {
                 new DeployParams(0, new Row(1, RowType.MELEE), 0));
           }
         });
-  }
-
-  private void initializeGameField() {
-    gameLogic.initializeGame(
-        new Player(1, InitialPlayer.INITIATOR),
-        new CardDecks(new ArrayList<>(), new ArrayList<>()),
-        new ArrayList<>());
   }
 
   @Override
@@ -144,15 +129,12 @@ public class StartFragment extends Fragment implements CardActionCallback {
                     String gameId = String.valueOf(taskEditText.getText());
                     gameLogic.joinGame(
                         Integer.parseInt(gameId),
-                        new ResultObserver<Integer, Error>() {
-                          @Override
-                          public void finished(Result<Integer, Error> result) {
-                            NavController controller =
-                                Navigation.findNavController(
-                                    Objects.requireNonNull(getActivity()),
-                                    R.id.nav_host_fragment_content_main);
-                            controller.navigate(R.id.action_StartFragment_to_gameDebugFragment);
-                          }
+                        result -> {
+                          NavController controller =
+                              Navigation.findNavController(
+                                  Objects.requireNonNull(getActivity()),
+                                  R.id.nav_host_fragment_content_main);
+                          controller.navigate(R.id.action_StartFragment_to_gameDebugFragment);
                         });
                   }
                 })

@@ -59,7 +59,7 @@ public class FirebaseConnector {
         });
   }
 
-  public void joinGame(int id, ResultObserver<Integer, Error> observer) {
+  public void joinGame(int id, ResultObserver<GameField, Error> observer) {
     gameExists(
         id,
         result -> {
@@ -67,7 +67,17 @@ public class FirebaseConnector {
             case SUCCESS:
               gameRef = databaseRef.child(String.valueOf(id)).getRef();
               gameRef.addValueEventListener(postListener);
-              observer.finished(Result.Success(id));
+              gameRef.addListenerForSingleValueEvent(
+                  new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                      SyncRoot update = snapshot.getValue(SyncRoot.class);
+                      observer.finished(Result.Success(update.getGameField()));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                  });
               break;
 
             case FAILURE:

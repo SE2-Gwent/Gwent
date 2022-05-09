@@ -3,11 +3,12 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 
 import androidx.annotation.Keep;
+import androidx.annotation.Nullable;
 
 public class GameField {
   private GameFieldRows rows;
-  private Player currentPlayer;
-  private Player opponent;
+  @Nullable private Player currentPlayer;
+  @Nullable private Player opponent;
   private CardDecks cardDecks;
   private ArrayList<Hero> heroes;
 
@@ -31,19 +32,21 @@ public class GameField {
     return rows;
   }
 
+  @Nullable
   public Player getCurrentPlayer() {
     return currentPlayer;
   }
 
-  public void setCurrentPlayer(Player currentPlayer) {
+  public void setCurrentPlayer(@Nullable Player currentPlayer) {
     this.currentPlayer = currentPlayer;
   }
 
+  @Nullable
   public Player getOpponent() {
     return opponent;
   }
 
-  public void setOpponent(Player opponent) {
+  public void setOpponent(@Nullable Player opponent) {
     this.opponent = opponent;
   }
 

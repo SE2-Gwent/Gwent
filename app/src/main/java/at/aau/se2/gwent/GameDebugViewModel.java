@@ -9,6 +9,7 @@ import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.GameStateCallback;
 import at.aau.se2.gamelogic.models.GameField;
+import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.state.GameState;
 
 public class GameDebugViewModel extends ViewModel implements GameStateCallback, GameFieldObserver {
@@ -35,8 +36,8 @@ public class GameDebugViewModel extends ViewModel implements GameStateCallback, 
     ViewState newState =
         new ViewState(
             String.valueOf(gameLogic.getGameId()),
-            gameLogic.getCurrentGameState().name(),
-            gameLogic.getWhoAmI().name());
+            gameLogic.getCurrentGameState(),
+            gameLogic.getWhoAmI());
     state.setValue(newState);
   }
 
@@ -45,10 +46,10 @@ public class GameDebugViewModel extends ViewModel implements GameStateCallback, 
     private String state;
     private String player;
 
-    public ViewState(String gameId, String state, String player) {
+    public ViewState(String gameId, GameState state, @Nullable InitialPlayer player) {
       this.gameId = gameId;
-      this.state = state;
-      this.player = player;
+      this.state = state.name();
+      this.player = player == null ? "Not Set" : player.name();
     }
 
     public String getGameId() {

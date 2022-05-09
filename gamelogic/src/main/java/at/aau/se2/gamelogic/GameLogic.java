@@ -34,6 +34,8 @@ public class GameLogic {
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
       gameField -> {
+        handleGameFieldChanges(gameField);
+
         for (GameFieldObserver observers : gameFieldObservers) {
           observers.updateGameField(gameField);
         }
@@ -56,7 +58,7 @@ public class GameLogic {
   // GameState Manipulation
 
   public void startGame(ResultObserver<Integer, Error> observer) {
-    if (!gameStateMachine.canProgressTo(GameState.START_GAME_ROUND)) {
+    if (!gameStateMachine.canProgressTo(GameState.WAIT_FOR_OPPONENT)) {
       observer.finished(Result.Failure(new Error("Game already started.")));
       return;
     }
@@ -72,6 +74,11 @@ public class GameLogic {
               }
               gameId = result.getValue();
               whoAmI = InitialPlayer.INITIATOR;
+
+              initializeGame(
+                  new Player(1, InitialPlayer.INITIATOR),
+                  new CardDecks(new ArrayList<>(), new ArrayList<>()),
+                  new ArrayList<>());
             }
 
             observer.finished(result);
@@ -79,7 +86,7 @@ public class GameLogic {
         });
   }
 
-  public void joinGame(int id, ResultObserver<Integer, Error> observer) {
+  public void joinGame(int id, ResultObserver<GameField, Error> observer) {
     if (!gameStateMachine.canProgressTo(GameState.START_GAME_ROUND)) {
       observer.finished(Result.Failure(new Error("Game already started.")));
       return;
@@ -87,15 +94,20 @@ public class GameLogic {
 
     connector.joinGame(
         id,
-        new ResultObserver<Integer, Error>() {
+        new ResultObserver<GameField, Error>() {
           @Override
-          public void finished(Result<Integer, Error> result) {
+          public void finished(Result<GameField, Error> result) {
             if (result.isSuccessful()) {
               if (!gameStateMachine.joinGame()) {
                 observer.finished(Result.Failure(new Error("Game already started.")));
                 return;
               }
-              gameId = result.getValue();
+
+              gameId = id;
+              gameField = result.getValue();
+              gameField.setOpponent(new Player(2, InitialPlayer.OPPONENT));
+              connector.syncGameField(gameField);
+
               whoAmI = InitialPlayer.OPPONENT;
             }
 
@@ -104,26 +116,36 @@ public class GameLogic {
         });
   }
 
-  public void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
-    if (!gameStateMachine.canProgressTo(GameState.DRAW_CARDS)) {
+  private void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
+    if (!gameStateMachine.stateEquals(GameState.WAIT_FOR_OPPONENT)) {
       return;
     }
 
-    gameField =
-        new GameField(
-            new GameFieldRows(),
-            currentPlayer,
-            new Player(2, InitialPlayer.OPPONENT),
-            cardDecks,
-            heroes);
+    gameField = new GameField(new GameFieldRows(), currentPlayer, null, cardDecks, heroes);
 
     connector.syncGameField(gameField);
+  }
+
+  private void handleGameFieldChanges(GameField gameField) {
+    if (gameField == null) return;
+
+    switch (gameStateMachine.getCurrent()) {
+      case WAIT_FOR_OPPONENT:
+        if (gameField.getOpponent() != null) {
+          // Somebody joined the game
+          gameStateMachine.opponentJoined();
+        }
+        break;
+
+      default:
+        break;
+    }
   }
 
   // Card Actions
 
   public void performAction(CardAction action, ActionParams params) {
-    if (!gameStateMachine.stateEquals(GameState.START_GAME_ROUND)) {
+    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) {
       return;
     }
 
@@ -209,6 +231,10 @@ public class GameLogic {
       return gameField.getOpponent();
     }
     return gameField.getCurrentPlayer();
+  }
+
+  protected void setGameField(GameField gameField) {
+    this.gameField = gameField;
   }
 
   public GameField getGameField() {

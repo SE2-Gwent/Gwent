@@ -27,6 +27,8 @@ import at.aau.se2.gamelogic.comunication.Result;
 import at.aau.se2.gamelogic.comunication.ResultObserver;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
+import at.aau.se2.gamelogic.models.GameField;
+import at.aau.se2.gamelogic.models.GameFieldRows;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
@@ -69,7 +71,13 @@ public class GameLogicTest {
   public void testPerformActionMappings() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
     when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
-    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+    sut.setGameField(
+        new GameField(
+            new GameFieldRows(),
+            currentPlayer,
+            new Player(2, InitialPlayer.OPPONENT),
+            cardDecks,
+            new ArrayList<>()));
 
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, meleeRow, 0));
@@ -90,7 +98,13 @@ public class GameLogicTest {
   @Test
   public void testPerformActionWithWrongParams() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
-    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+    sut.setGameField(
+        new GameField(
+            new GameFieldRows(),
+            currentPlayer,
+            new Player(2, InitialPlayer.OPPONENT),
+            cardDecks,
+            new ArrayList<>()));
 
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(
@@ -114,7 +128,13 @@ public class GameLogicTest {
   public void testPerformDeployCardActionResults() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
     when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
-    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+    sut.setGameField(
+        new GameField(
+            new GameFieldRows(),
+            currentPlayer,
+            new Player(2, InitialPlayer.OPPONENT),
+            cardDecks,
+            new ArrayList<>()));
 
     CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
     CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
@@ -155,6 +175,7 @@ public class GameLogicTest {
   @Test
   public void testStartGame() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
     when(mockGameStateMachine.startGame()).thenReturn(true);
 
     ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
@@ -166,6 +187,7 @@ public class GameLogicTest {
             assertTrue(result.isSuccessful());
             assertEquals(1, sut.getGameId());
             assertEquals(InitialPlayer.INITIATOR, sut.getWhoAmI());
+            assertNotNull(sut.getGameField());
           }
         });
 
@@ -193,36 +215,25 @@ public class GameLogicTest {
   }
 
   @Test
-  public void testInitializeGame() {
-    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
-
-    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
-
-    assertNotNull(sut.getGameField());
-    verify(mockConnector).syncGameField(any());
-  }
-
-  @Test
   public void testJoinGame() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
     when(mockGameStateMachine.joinGame()).thenReturn(true);
 
-    ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
+    ArgumentCaptor<ResultObserver<GameField, Error>> observerCapture =
         ArgumentCaptor.forClass(ResultObserver.class);
 
     sut.joinGame(
         1,
-        new ResultObserver<Integer, Error>() {
+        new ResultObserver<GameField, Error>() {
           @Override
-          public void finished(Result<Integer, Error> result) {
+          public void finished(Result<GameField, Error> result) {
             assertTrue(result.isSuccessful());
-            assertEquals(1, sut.getGameId());
             assertEquals(InitialPlayer.OPPONENT, sut.getWhoAmI());
           }
         });
 
     verify(mockConnector).joinGame(eq(1), observerCapture.capture());
-    observerCapture.getValue().finished(Result.Success(1));
+    observerCapture.getValue().finished(Result.Success(new GameField()));
     verify(mockConnector, timeout(1000).atLeastOnce()).joinGame(eq(1), any());
   }
 }
