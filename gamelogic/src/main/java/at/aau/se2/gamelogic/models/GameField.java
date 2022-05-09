@@ -2,12 +2,17 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
+
 public class GameField {
-  private final GameFieldRows rows;
+  private GameFieldRows rows;
   private Player currentPlayer;
   private Player opponent;
-  private final CardDecks cardDecks;
-  private final ArrayList<Hero> heroes;
+  private CardDecks cardDecks;
+  private ArrayList<Hero> heroes;
+
+  @Keep
+  public GameField() {}
 
   public GameField(
       GameFieldRows rows,
@@ -49,5 +54,4 @@ public class GameField {
   public ArrayList<Hero> getHeroes() {
     return heroes;
   }
-
 }

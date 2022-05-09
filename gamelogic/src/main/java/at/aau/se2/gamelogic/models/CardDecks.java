@@ -3,9 +3,14 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.annotation.Keep;
+
 public class CardDecks {
   private HashMap<Integer, Card> p1Deck = new HashMap<>();
   private HashMap<Integer, Card> p2Deck = new HashMap<>();
+
+  @Keep
+  public CardDecks() {}
 
   public CardDecks(ArrayList<Card> p1Deck, ArrayList<Card> p2Deck) {
     for (Card c : p1Deck) this.p1Deck.put(c.getId(), c);
@@ -22,5 +27,13 @@ public class CardDecks {
       default:
         return null;
     }
+  }
+
+  public HashMap<Integer, Card> getP1Deck() {
+    return p1Deck;
+  }
+
+  public HashMap<Integer, Card> getP2Deck() {
+    return p2Deck;
   }
 }

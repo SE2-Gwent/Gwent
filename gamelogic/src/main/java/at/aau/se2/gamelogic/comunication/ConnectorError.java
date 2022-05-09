@@ -8,4 +8,8 @@ public class ConnectorError extends Error {
   static ConnectorError GameCreationFailed() {
     return new ConnectorError("Could not create game, please try again later.");
   }
+
+  static ConnectorError GameNotFound() {
+    return new ConnectorError("Could not find game, please try again later.");
+  }
 }

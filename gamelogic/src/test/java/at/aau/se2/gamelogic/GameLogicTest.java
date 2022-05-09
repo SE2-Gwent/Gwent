@@ -2,6 +2,7 @@ package at.aau.se2.gamelogic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -190,5 +191,15 @@ public class GameLogicTest {
         });
 
     latch.await();
+  }
+
+  @Test
+  public void testInitializeGame() {
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+
+    sut.initializeGame(currentPlayer, cardDecks, new ArrayList<>());
+
+    assertNotNull(sut.getGameField());
+    verify(mockConnector).syncGameField(any());
   }
 }

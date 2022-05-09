@@ -9,9 +9,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
+import at.aau.se2.gamelogic.models.GameField;
 
 public class FirebaseConnector {
+  private static final String TAG = FirebaseConnector.class.getSimpleName();
   private static final int MIN_ID = 1000;
   private static final int MAX_ID = 8000;
   private DatabaseReference databaseRef;
@@ -22,6 +25,7 @@ public class FirebaseConnector {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
           SyncRoot update = dataSnapshot.getValue(SyncRoot.class);
+          Log.v(TAG, "Synced");
         }
 
         @Override
@@ -52,14 +56,19 @@ public class FirebaseConnector {
         });
   }
 
+
+  public void syncGameField(GameField gameField) {
+    gameRef.child("gameField").setValue(gameField);
+  }
+
   private void createNewGameNode(int id, ResultObserver<Integer, Error> observer) {
     String childId = String.valueOf(id);
 
     SyncRoot syncRoot = new SyncRoot();
 
     gameRef = databaseRef.child(childId).getRef();
-    databaseRef.child(childId).setValue(syncRoot, null);
-    databaseRef.child(childId).addValueEventListener(postListener);
+    gameRef.setValue(syncRoot, null);
+    gameRef.addValueEventListener(postListener);
 
     observer.finished(Result.Success(id));
   }

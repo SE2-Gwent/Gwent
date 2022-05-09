@@ -69,9 +69,20 @@ public class GameLogic {
           }
         });
   }
+  public void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
+    if (!gameStateMachine.canProgressTo(GameState.DRAW_CARDS)) {
+      return;
+    }
+
     gameField =
         new GameField(
-            gameFieldRows, currentPlayer, new Player(2, InitialPlayer.OPPONENT), cardDecks, heroes);
+            new GameFieldRows(),
+            currentPlayer,
+            new Player(2, InitialPlayer.OPPONENT),
+            cardDecks,
+            heroes);
+
+    connector.syncGameField(gameField);
   }
 
   // Card Actions
