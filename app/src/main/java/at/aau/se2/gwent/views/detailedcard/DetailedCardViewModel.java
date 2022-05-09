@@ -1,8 +1,12 @@
 package at.aau.se2.gwent.views.detailedcard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import at.aau.se2.gamelogic.models.Card;
+import at.aau.se2.gamelogic.models.CardType;
 
 public class DetailedCardViewModel extends ViewModel {
   private Card card;
@@ -18,14 +22,22 @@ public class DetailedCardViewModel extends ViewModel {
 
   public DetailedCardViewModel() {
 
-    // TODO: remove dummy card
+    // TODO: remove dummy card load from clicked card
     int id = 0;
     String name = "Ard Feainn Crossbow Man";
     int power = 3;
     int powerDiff = 0;
     String cardText =
         "Deploy: Damage an enemy unit by 2. Barricade: Damage a random enemy unit by 1 whenever you play a soldier.";
-    Card testCard = new Card(id, name, power, powerDiff, cardText, null);
+    Card testCard =
+        new Card(
+            id,
+            name,
+            new ArrayList<>(Arrays.asList(CardType.ELF, CardType.HUMAN)),
+            power,
+            powerDiff,
+            cardText,
+            null);
     this.card = testCard;
 
     setImgResourceName();
