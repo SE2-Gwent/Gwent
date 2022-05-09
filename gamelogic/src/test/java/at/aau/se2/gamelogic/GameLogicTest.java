@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -20,7 +21,6 @@ import java.util.concurrent.CountDownLatch;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
 
 import at.aau.se2.gamelogic.comunication.FirebaseConnector;
 import at.aau.se2.gamelogic.comunication.Result;
@@ -83,9 +83,7 @@ public class GameLogicTest {
       sut.performAction(entry.getKey(), entry.getValue());
 
       assertTrue(entry.getKey().isPerformed());
-      verify(mockCallback)
-          .didPerformAction(
-              ArgumentMatchers.eq(entry.getKey()), ArgumentMatchers.eq(entry.getValue()));
+      verify(mockCallback).didPerformAction(eq(entry.getKey()), eq(entry.getValue()));
     }
   }
 
@@ -155,7 +153,7 @@ public class GameLogicTest {
   }
 
   @Test
-  public void testStartGame() throws InterruptedException {
+  public void testStartGame() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
     when(mockGameStateMachine.startGame()).thenReturn(true);
 
@@ -167,6 +165,7 @@ public class GameLogicTest {
           public void finished(Result<Integer, Error> result) {
             assertTrue(result.isSuccessful());
             assertEquals(1, sut.getGameId());
+            assertEquals(InitialPlayer.INITIATOR, sut.getWhoAmI());
           }
         });
 
@@ -201,5 +200,29 @@ public class GameLogicTest {
 
     assertNotNull(sut.getGameField());
     verify(mockConnector).syncGameField(any());
+  }
+
+  @Test
+  public void testJoinGame() {
+    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
+    when(mockGameStateMachine.joinGame()).thenReturn(true);
+
+    ArgumentCaptor<ResultObserver<Integer, Error>> observerCapture =
+        ArgumentCaptor.forClass(ResultObserver.class);
+
+    sut.joinGame(
+        1,
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            assertTrue(result.isSuccessful());
+            assertEquals(1, sut.getGameId());
+            assertEquals(InitialPlayer.OPPONENT, sut.getWhoAmI());
+          }
+        });
+
+    verify(mockConnector).joinGame(eq(1), observerCapture.capture());
+    observerCapture.getValue().finished(Result.Success(1));
+    verify(mockConnector, timeout(1000).atLeastOnce()).joinGame(eq(1), any());
   }
 }

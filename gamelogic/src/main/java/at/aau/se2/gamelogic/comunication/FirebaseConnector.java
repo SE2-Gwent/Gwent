@@ -56,6 +56,23 @@ public class FirebaseConnector {
         });
   }
 
+  public void joinGame(int id, ResultObserver<Integer, Error> observer) {
+    gameExists(
+        id,
+        result -> {
+          switch (result.getType()) {
+            case SUCCESS:
+              gameRef = databaseRef.child(String.valueOf(id)).getRef();
+              gameRef.addValueEventListener(postListener);
+              observer.finished(Result.Success(id));
+              break;
+
+            case FAILURE:
+              observer.finished(Result.Failure(ConnectorError.GameNotFound()));
+              break;
+          }
+        });
+  }
 
   public void syncGameField(GameField gameField) {
     gameRef.child("gameField").setValue(gameField);

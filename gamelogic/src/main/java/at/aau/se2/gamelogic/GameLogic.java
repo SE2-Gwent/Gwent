@@ -69,6 +69,32 @@ public class GameLogic {
           }
         });
   }
+
+  public void joinGame(int id, ResultObserver<Integer, Error> observer) {
+    if (!gameStateMachine.canProgressTo(GameState.START_GAME_ROUND)) {
+      observer.finished(Result.Failure(new Error("Game already started.")));
+      return;
+    }
+
+    connector.joinGame(
+        id,
+        new ResultObserver<Integer, Error>() {
+          @Override
+          public void finished(Result<Integer, Error> result) {
+            if (result.isSuccessful()) {
+              if (!gameStateMachine.joinGame()) {
+                observer.finished(Result.Failure(new Error("Game already started.")));
+                return;
+              }
+              gameId = result.getValue();
+              whoAmI = InitialPlayer.OPPONENT;
+            }
+
+            observer.finished(result);
+          }
+        });
+  }
+
   public void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
     if (!gameStateMachine.canProgressTo(GameState.DRAW_CARDS)) {
       return;
@@ -155,8 +181,8 @@ public class GameLogic {
     return gameId;
   }
 
-  public GameState getCurrentGameState() {
-    return gameStateMachine.getCurrent();
+  public InitialPlayer getWhoAmI() {
+    return whoAmI;
   }
 
   public GameFieldRows getGameFieldRows() {
@@ -168,5 +194,13 @@ public class GameLogic {
       return gameField.getOpponent();
     }
     return gameField.getCurrentPlayer();
+  }
+
+  public GameField getGameField() {
+    return gameField;
+  }
+
+  public GameState getCurrentGameState() {
+    return gameStateMachine.getCurrent();
   }
 }
