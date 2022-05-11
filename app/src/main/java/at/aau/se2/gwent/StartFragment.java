@@ -1,8 +1,8 @@
 package at.aau.se2.gwent;
 
-import android.content.Intent;
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +67,8 @@ public class StartFragment extends Fragment implements CardActionCallback {
             Intent i = new Intent(getContext(), PlayingCardDetailed.class);
             startActivity(i);
             return true;
+          }
+        });
 
     binding.deployButton.setOnClickListener(
         new View.OnClickListener() {
