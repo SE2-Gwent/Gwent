@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.DetailedCardFragmentBinding;
 
@@ -42,7 +42,8 @@ public class DetailedCardFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    Objects.requireNonNull(getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    Objects.requireNonNull(getActivity())
+        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     binding = DetailedCardFragmentBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
@@ -54,15 +55,17 @@ public class DetailedCardFragment extends Fragment {
     // this should destroy the fragment if the button is clicked
     binding.backgroundImageButton.setOnClickListener(
         view -> {
-          FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-          fragmentManager.beginTransaction().remove(this).commit();
+          Navigation.findNavController(
+                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+              .popBackStack();
         });
   }
 
   @Override
   public void onStop() {
     super.onStop();
-    Objects.requireNonNull(getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    Objects.requireNonNull(getActivity())
+        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
   }
 
   private void updateUI(CardDetails.ViewState state) {
