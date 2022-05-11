@@ -2,6 +2,7 @@ package at.aau.se2.gwent.views.detailedcard;
 
 import java.util.Objects;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class DetailedCardFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+    Objects.requireNonNull(getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     binding = DetailedCardFragmentBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
@@ -55,6 +57,12 @@ public class DetailedCardFragment extends Fragment {
           FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
           fragmentManager.beginTransaction().remove(this).commit();
         });
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    Objects.requireNonNull(getActivity()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
   }
 
   private void updateUI(CardDetails.ViewState state) {
