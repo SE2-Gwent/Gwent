@@ -7,96 +7,94 @@ import java.util.Map;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
 public class Card {
-    private int id;
-    private String name;
-    private ArrayList<CardType> types;
-    private int power;
-    private int powerDiff;
-    private String cardText;
-    private ArrayList<ActionParams> cardActions;
-    private Map<ActionParams, Integer> currentActionCooldown;
+  private int id;
+  private String name;
+  private ArrayList<CardType> types;
+  private int power;
+  private int powerDiff;
+  private String cardText;
+  private ArrayList<ActionParams> cardActions;
+  private Map<ActionParams, Integer> currentActionCooldown;
 
-    public Card(
-            int id,
-            String name,
-            ArrayList<CardType> types,
-            int power,
-            int powerDiff,
-            String cardText,
-            ArrayList<ActionParams> cardActions) {
-        this.id = id;
-        this.name = name;
-        this.types = types;
-        this.power = power;
-        this.powerDiff = powerDiff;
-        this.cardText = cardText;
-        this.cardActions = cardActions;
-        this.currentActionCooldown = new HashMap<>();
-    }
+  public Card(
+      int id,
+      String name,
+      ArrayList<CardType> types,
+      int power,
+      int powerDiff,
+      String cardText,
+      ArrayList<ActionParams> cardActions) {
+    this.id = id;
+    this.name = name;
+    this.types = types;
+    this.power = power;
+    this.powerDiff = powerDiff;
+    this.cardText = cardText;
+    this.cardActions = cardActions;
+    this.currentActionCooldown = new HashMap<>();
+  }
 
+  public int getId() {
+    return id;
+  }
 
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public ArrayList<CardType> getTypes() {
+    return types;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setTypes(ArrayList<CardType> types) {
+    this.types = types;
+  }
 
-    public ArrayList<CardType> getTypes() {
-        return types;
-    }
+  public int getPower() {
+    return power;
+  }
 
-    public void setTypes(ArrayList<CardType> types) {
-        this.types = types;
-    }
+  public void setPower(int power) {
+    this.power = power;
+  }
 
-    public int getPower() {
-        return power;
-    }
+  public int getPowerDiff() {
+    return powerDiff;
+  }
 
-    public void setPower(int power) {
-        this.power = power;
-    }
+  public void setPowerDiff(int powerDiff) {
+    this.powerDiff = powerDiff;
+  }
 
-    public int getPowerDiff() {
-        return powerDiff;
-    }
+  public String getCardText() {
+    return cardText;
+  }
 
-    public void setPowerDiff(int powerDiff) {
-        this.powerDiff = powerDiff;
-    }
+  public void setCardText(String cardText) {
+    this.cardText = cardText;
+  }
 
-    public String getCardText() {
-        return cardText;
-    }
+  public ArrayList<ActionParams> getCardActions() {
+    return cardActions;
+  }
 
-    public void setCardText(String cardText) {
-        this.cardText = cardText;
-    }
+  public void setCardActions(ArrayList<ActionParams> cardActions) {
+    this.cardActions = cardActions;
+  }
 
-    public ArrayList<ActionParams> getCardActions() {
-        return cardActions;
-    }
+  public Map<ActionParams, Integer> getCurrentActionCooldown() {
+    return currentActionCooldown;
+  }
 
-    public void setCardActions(ArrayList<ActionParams> cardActions) {
-        this.cardActions = cardActions;
-    }
-
-    public Map<ActionParams, Integer> getCurrentActionCooldown() {
-        return currentActionCooldown;
-    }
-
-    public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
-        this.currentActionCooldown = currentActionCooldown;
-    }
+  public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
+    this.currentActionCooldown = currentActionCooldown;
+  }
 }

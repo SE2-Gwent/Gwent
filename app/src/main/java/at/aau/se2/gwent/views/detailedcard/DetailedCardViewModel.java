@@ -9,70 +9,85 @@ import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardType;
 
 public class DetailedCardViewModel extends ViewModel {
-  private Card card;
-  private String imgResourceName;
+  private CardDetails card;
 
-  private MutableLiveData<DetailedCardViewModel.ViewState> currentState =
-      new MutableLiveData<>(DetailedCardViewModel.ViewState.INITIAL);
-
-  enum ViewState {
-    INITIAL,
-    LOADED
-  }
+  private MutableLiveData<CardDetails.ViewState> currentState =
+      new MutableLiveData<>(CardDetails.ViewState.INITIAL);
 
   public DetailedCardViewModel() {
 
-    // TODO: remove dummy card load from clicked card
-    int id = 0;
+    // -- START REMOVE -- (this will be replaced with a pointer to the clicked card)
     String name = "Ard Feainn Crossbow Man";
+    ArrayList<CardType> types = new ArrayList<>(Arrays.asList(CardType.ELF, CardType.HUMAN));
     int power = 3;
     int powerDiff = 0;
     String cardText =
         "Deploy: Damage an enemy unit by 2. Barricade: Damage a random enemy unit by 1 whenever you play a soldier.";
     Card testCard =
         new Card(
-            id,
+            0,
             name,
             new ArrayList<>(Arrays.asList(CardType.ELF, CardType.HUMAN)),
             power,
             powerDiff,
             cardText,
             null);
-    this.card = testCard;
+    // -- END REMOVE --
 
-    setImgResourceName();
-
-    currentState.setValue(ViewState.LOADED);
+    this.card =
+        new CardDetails(
+            testCard.getName(),
+            convertTypesToString(testCard.getTypes()),
+            testCard.getPower(),
+            testCard.getPowerDiff(),
+            testCard.getCardText(),
+            generateImgResName(testCard.getName()));
+    currentState.setValue(CardDetails.ViewState.LOADED);
   }
 
-  public MutableLiveData<DetailedCardViewModel.ViewState> getCurrentState() {
+  public MutableLiveData<CardDetails.ViewState> getCurrentState() {
     return currentState;
   }
 
-  public Card getCard() {
+  public void setCurrentState(MutableLiveData<CardDetails.ViewState> currentState) {
+    this.currentState = currentState;
+  }
+
+  public CardDetails getCard() {
     return card;
   }
 
-  public String getImgResourceName() {
-    return imgResourceName;
-  }
-
   /*
-  this function is used to set the resource name of the image to load
+  generate res-string by using the name of the card
   we reference resources according to detailed-card-view by taking the name of the card
   first we replace all spaces by an underscore
   second we convert the string to lowercase
-  third we append '_detail to it'
+  third we append '_detail' to it
 
   for example:
   Ard Feainn Crossbow Man -> ard_feainn_crossbow_man_detail
+
+  NOTE: we can add a property to class Card, which refers to the Res
    */
-  private void setImgResourceName() {
-    String imageResourceName = "";
+  private String generateImgResName(String cardName) {
+    String imgResName = "";
 
-    imageResourceName += card.getName().replaceAll(" ", "_").toLowerCase();
-    imageResourceName += "_detail";
+    imgResName += cardName.replaceAll(" ", "_").toLowerCase();
+    imgResName += "_detail";
 
-    this.imgResourceName = imageResourceName;
+    return imgResName;
+  }
+
+  // set textView cardTypes (convert Array of enums to string)
+  private String convertTypesToString(ArrayList<CardType> types) {
+    String res = "";
+    for (int i = 0; i < types.size(); i++) {
+      String tmp = types.get(i).toString();
+      res += tmp.charAt(0) + tmp.substring(1).toLowerCase();
+      if (i != types.size() - 1) {
+        res += ", ";
+      }
+    }
+    return res;
   }
 }
