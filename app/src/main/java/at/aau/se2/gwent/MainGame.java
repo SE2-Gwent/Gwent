@@ -92,21 +92,6 @@ public class MainGame extends AppCompatActivity {
               // Aktualisert Handkarten, indem die Karten alle Optisch aufgerückt werden
               // Ebenso werden die Zwischenspeicher neu geordnet und alle wird gepasst
 
-              /*for (int i = 0; i < handcards.size(); i++) {
-                if (cards.get(i).getId() == currentcard.getId()) {
-                  handcards.remove(handcards.get(i));
-                  fillhandcardarray();
-                  showpicturesforhandcards(handcards);
-                  // deleteonclicklistenerofallelements();
-                  // currentplaceholder = null;
-                  // currentcard = null;
-                  // v.setVisibility(View.INVISIBLE);
-                  break;
-                }
-              }
-
-               */
-
             }
           }
         });
