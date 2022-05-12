@@ -8,10 +8,7 @@
         android:icon="@mipmap/ic_launcher_gwent"
         android:supportsRtl="true"
         android:theme="@style/Theme.Gwent">
-        <activity
-            android:name=".PlayingCardDetailed"
-            android:screenOrientation="landscape"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
