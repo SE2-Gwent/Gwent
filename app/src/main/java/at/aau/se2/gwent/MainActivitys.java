@@ -41,7 +41,7 @@ public class MainActivitys extends AppCompatActivity {
           if (messages == null) {
             messages = new ArrayList<>();
           }
-          Log.v(TAG, "Messages: " + messages);
+          Log.v(TAG, "Messages: Max " + messages);
         }
 
         @Override
@@ -92,6 +92,10 @@ public class MainActivitys extends AppCompatActivity {
       case R.id.action_settings:
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
             .navigate(R.id.settings);
+        return true;
+      case R.id.action_detailed_card:
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+            .navigate(R.id.detailed_card);
         return true;
       default:
         return super.onOptionsItemSelected(item);

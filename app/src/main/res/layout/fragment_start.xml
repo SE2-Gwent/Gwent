@@ -53,4 +53,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/cardView"
+        android:layout_width="50dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/purple_500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </at.aau.se2.gwent.views.common.CardView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
