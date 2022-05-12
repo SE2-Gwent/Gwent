@@ -1,6 +1,7 @@
 package at.aau.se2.gwent;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import at.aau.se2.gamelogic.CardAction;
 import at.aau.se2.gamelogic.CardActionCallback;
 import at.aau.se2.gamelogic.GameLogic;
@@ -51,11 +53,22 @@ public class StartFragment extends Fragment implements CardActionCallback {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
+    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
     binding.buttonFirst.setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
             Log.v(TAG, "DidClick StartGame");
+          }
+        });
+    binding.cardView.setOnLongClickListener(
+        new View.OnLongClickListener() {
+          @Override
+          public boolean onLongClick(View v) {
+            Navigation.findNavController(
+                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                .navigate(R.id.detailed_card);
+            return true;
           }
         });
 
