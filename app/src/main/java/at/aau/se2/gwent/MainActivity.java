@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
   private static final String TAG = MainActivity.class.getSimpleName();
 
   private AppBarConfiguration appBarConfiguration;
@@ -105,7 +104,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
     return navController.navigateUp();
   }
-
-  @Override
-  public void onClick(View v) {}
 }

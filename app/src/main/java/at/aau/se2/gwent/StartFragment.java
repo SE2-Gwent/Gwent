@@ -64,7 +64,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
         new View.OnLongClickListener() {
           @Override
           public boolean onLongClick(View v) {
-            Intent i = new Intent(getContext(), PlayingCardDetailed.class);
+            Intent i = new Intent(getContext(), CardDetails.class);
             startActivity(i);
             return true;
           }
