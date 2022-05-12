@@ -22,8 +22,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
-  private static final String TAG = MainActivity.class.getSimpleName();
+public class MainActivitys extends AppCompatActivity {
+  private static final String TAG = MainActivitys.class.getSimpleName();
 
   private AppBarConfiguration appBarConfiguration;
   private ActivityMainBinding binding;

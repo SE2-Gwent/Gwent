@@ -49,5 +49,4 @@ public class GameField {
   public ArrayList<Hero> getHeroes() {
     return heroes;
   }
-
 }

@@ -2,6 +2,7 @@ package at.aau.se2.gwent;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +67,16 @@ public class StartFragment extends Fragment implements CardActionCallback {
             gameLogic.performAction(
                 new CardAction(CardAction.ActionType.DEPLOY),
                 new DeployParams(0, new Row(1, RowType.MELEE), 0));
+          }
+        });
+
+    // Set onclicklistener to start the Boardview (Intent?)
+    binding.buttonFirst.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Intent myIntent = new Intent(view.getContext(), MainGame.class);
+            startActivity(myIntent);
           }
         });
   }
