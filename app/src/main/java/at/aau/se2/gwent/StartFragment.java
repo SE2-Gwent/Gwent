@@ -1,8 +1,8 @@
 package at.aau.se2.gwent;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import at.aau.se2.gamelogic.CardAction;
 import at.aau.se2.gamelogic.CardActionCallback;
 import at.aau.se2.gamelogic.GameLogic;
@@ -64,8 +65,9 @@ public class StartFragment extends Fragment implements CardActionCallback {
         new View.OnLongClickListener() {
           @Override
           public boolean onLongClick(View v) {
-            Intent i = new Intent(getContext(), CardDetails.class);
-            startActivity(i);
+            Navigation.findNavController(
+                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                .navigate(R.id.detailed_card);
             return true;
           }
         });
