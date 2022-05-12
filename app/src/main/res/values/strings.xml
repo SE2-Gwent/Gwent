@@ -9,4 +9,15 @@
 
     <string name="hello_first_fragment">Gwent</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Sample card for detailedcard - TODO: remove -->
+    <string name="card_name">Rainfarn of Attre</string>
+    <string name="card_types">Human, Knight</string>
+    <string name="card_text">Deploy: Damage an enemy unit by 2. Conspiracy: Increase damage by 2.</string>
+    <string name="card_flavortext">When Cintra fell, Attre followed, leaving its defenders a choice: accept the Nilfgaardian leash or die.</string>
+    <string name="card_power">5</string>
+    <string name="activate_ability">Ability</string>
+    <string name="action_detailed_card">Detailed card</string>
+    <string name="close">Close</string>
+
 </resources>
