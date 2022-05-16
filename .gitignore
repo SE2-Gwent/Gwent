@@ -14,3 +14,5 @@ app/gwent-keystore
 app/signing.properties
 app/keystore_base64_encoded.txt
 app/release
+
+.idea/misc.xml
