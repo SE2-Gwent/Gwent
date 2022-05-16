@@ -10,7 +10,7 @@
         android:theme="@style/Theme.Gwent">
 
         <activity
-            android:name=".MainGame"
+            android:name=".MainGameActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

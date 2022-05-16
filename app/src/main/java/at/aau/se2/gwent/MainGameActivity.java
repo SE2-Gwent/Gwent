@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainGame extends AppCompatActivity {
+public class MainGameActivity extends AppCompatActivity {
 
   // ToDo Karten die angecklickt wurden markieren
   // PopUp Fenster bei Heroaktivity spotten oder bei sofortigem passen
@@ -33,7 +33,7 @@ public class MainGame extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Intent intent = getIntent();
-    setContentView(R.layout.mainboard);
+    setContentView(R.layout.activity_main_game);
     // erzeugt Testkarten
     generatetestentities();
     // Balken - mit Appnamen auf hidegesetzt

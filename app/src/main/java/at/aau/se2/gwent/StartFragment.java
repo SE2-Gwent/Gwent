@@ -58,7 +58,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            Intent myIntent = new Intent(view.getContext(), MainGame.class);
+            Intent myIntent = new Intent(view.getContext(), MainGameActivity.class);
             startActivity(myIntent);
           }
         });
