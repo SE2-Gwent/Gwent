@@ -50,6 +50,7 @@ public class MainGameActivity extends AppCompatActivity {
     // Done Buttom - Damit der Zug beendet wird.
     activatedonebutton();
   }
+
   // erzeugt die testkarten muss im weiteren verlauf ausgetauscht werden
   public void generatetestentities() {
     Card one = new Card(1, R.drawable.hearts2);
@@ -69,10 +70,10 @@ public class MainGameActivity extends AppCompatActivity {
   }
 
   public void activatedonebutton() {
-    View testview = findViewById(R.id.testview);
+    View testview = findViewById(R.id.cardRowsLayout);
 
     // Aus View holen
-    Button test = findViewById(R.id.testbutton);
+    Button test = findViewById(R.id.roundDoneButton);
     // Sichtbargemacht weil durchsichtig
     test.setVisibility(View.VISIBLE);
     test.setOnClickListener(
@@ -102,7 +103,7 @@ public class MainGameActivity extends AppCompatActivity {
     // Layout vom Popupwindow wird freigegeben (Platz)
     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
     View popupView = inflater.inflate(R.layout.popup_maingame, null);
-    View testbutton = findViewById(R.id.testbutton);
+    View testbutton = findViewById(R.id.roundDoneButton);
 
     // Erstellt das Popupfenster
     int width = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -159,7 +160,7 @@ public class MainGameActivity extends AppCompatActivity {
               public void onClick(View v) {
                 System.out.println("No button wurde gedruckt");
                 popupWindow.dismiss();
-                findViewById(R.id.testbutton).setVisibility(View.VISIBLE);
+                findViewById(R.id.roundDoneButton).setVisibility(View.VISIBLE);
               }
             });
 
