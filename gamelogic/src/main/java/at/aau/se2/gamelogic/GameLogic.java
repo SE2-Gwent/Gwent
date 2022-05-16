@@ -148,7 +148,7 @@ public class GameLogic {
 
     switch (gameStateMachine.getCurrent()) {
       case WAIT_FOR_OPPONENT:
-        if (syncRoot.getGameField().getOpponent() != null) {
+        if (syncRoot.getGameField() != null && syncRoot.getGameField().getOpponent() != null) {
           // Somebody joined the game
           gameStateMachine.opponentJoined();
           firstGameSetup();

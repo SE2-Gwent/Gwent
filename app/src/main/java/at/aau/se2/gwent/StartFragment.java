@@ -82,6 +82,19 @@ public class StartFragment extends Fragment implements CardActionCallback {
           }
         });
 
+    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
+
+    binding.cardView.setOnLongClickListener(
+        new View.OnLongClickListener() {
+          @Override
+          public boolean onLongClick(View v) {
+            Navigation.findNavController(
+                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                .navigate(R.id.detailed_card);
+            return true;
+          }
+        });
+
     binding.joinGameButton.setOnClickListener(
         button -> {
           showJoinDialog(getContext());
