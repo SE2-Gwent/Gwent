@@ -88,12 +88,12 @@
             layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_related_margin"
             android:layout_marginBottom="32dp"
             android:orientation="horizontal"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/secondrow"
+            app:layout_constraintStart_toStartOf="@+id/secondrow"
             app:layout_constraintTop_toBottomOf="@+id/secondrow" />
 
         <include
@@ -101,12 +101,25 @@
             layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_related_margin"
             android:orientation="horizontal"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/firstrow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/firstrowenemy"
+            app:layout_constraintStart_toStartOf="@+id/firstrowenemy"
             app:layout_constraintTop_toBottomOf="@+id/firstrowenemy" />
+
+        <include
+            android:id="@+id/firstrowenemy"
+            layout="@layout/cardarea"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_related_margin"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/secondrow"
+            app:layout_constraintEnd_toEndOf="@+id/secondrowenemy"
+            app:layout_constraintStart_toStartOf="@+id/secondrowenemy"
+            app:layout_constraintTop_toBottomOf="@+id/secondrowenemy" />
 
         <include
             android:id="@+id/secondrowenemy"
@@ -119,17 +132,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/firstrowenemy"
-            layout="@layout/cardarea"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/secondrow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/secondrowenemy" />
 
         <include
             android:id="@+id/handdeckenemy"
