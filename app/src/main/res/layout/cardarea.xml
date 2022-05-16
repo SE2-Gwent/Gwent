@@ -2,36 +2,33 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:clipChildren="false"
     android:layout_width="wrap_content"
     android:layout_height="match_parent">
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
             android:alpha="0.4"
-            android:scaleType="centerInside"
             android:layout_marginEnd="@dimen/default_related_margin"
             app:layout_constraintEnd_toStartOf="@+id/rowcard2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
             android:alpha="0.4"
-            android:scaleType="centerInside"
             android:layout_marginEnd="@dimen/default_related_margin"
             app:layout_constraintEnd_toStartOf="@+id/rowcard3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/rowcard1"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -44,7 +41,7 @@
             app:layout_constraintStart_toEndOf="@+id/rowcard2"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -57,7 +54,7 @@
             app:layout_constraintStart_toEndOf="@+id/rowcard3"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard5"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -70,7 +67,7 @@
             app:layout_constraintStart_toEndOf="@+id/rowcard4"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard6"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -83,7 +80,7 @@
             app:layout_constraintStart_toEndOf="@+id/rowcard5"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard7"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -96,7 +93,7 @@
             app:layout_constraintStart_toEndOf="@+id/rowcard6"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard8"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -109,7 +106,7 @@
             app:layout_constraintStart_toEndOf="@+id/rowcard7"
             app:srcCompat="@drawable/card_background" />
 
-        <ImageView
+        <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard9"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
