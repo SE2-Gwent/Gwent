@@ -54,14 +54,17 @@ public class StartFragment extends Fragment implements CardActionCallback {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
-    binding.buttonFirst.setOnClickListener(
+    binding.startButton.setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            Log.v(TAG, "DidClick StartGame");
+            Intent myIntent = new Intent(view.getContext(), MainGame.class);
+            startActivity(myIntent);
           }
         });
+
+    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
+
     binding.cardView.setOnLongClickListener(
         new View.OnLongClickListener() {
           @Override
@@ -80,16 +83,6 @@ public class StartFragment extends Fragment implements CardActionCallback {
             gameLogic.performAction(
                 new CardAction(CardAction.ActionType.DEPLOY),
                 new DeployParams(0, new Row(1, RowType.MELEE), 0));
-          }
-        });
-
-    // Set onclicklistener to start the Boardview (Intent?)
-    binding.buttonFirst.setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            Intent myIntent = new Intent(view.getContext(), MainGame.class);
-            startActivity(myIntent);
           }
         });
   }
