@@ -1,8 +1,9 @@
 package at.aau.se2.gwent.views.settings;
 
+import com.google.firebase.appcheck.interop.BuildConfig;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import at.aau.se2.gwent.BuildConfig;
 
 public class SettingsViewModel extends ViewModel {
   public String getVersionName() {

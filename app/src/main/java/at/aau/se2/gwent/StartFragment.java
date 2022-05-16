@@ -3,6 +3,7 @@ package at.aau.se2.gwent;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,14 +54,17 @@ public class StartFragment extends Fragment implements CardActionCallback {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
-    binding.buttonFirst.setOnClickListener(
+    binding.startButton.setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            Log.v(TAG, "DidClick StartGame");
+            Intent myIntent = new Intent(view.getContext(), MainGameActivity.class);
+            startActivity(myIntent);
           }
         });
+
+    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
+
     binding.cardView.setOnLongClickListener(
         new View.OnLongClickListener() {
           @Override

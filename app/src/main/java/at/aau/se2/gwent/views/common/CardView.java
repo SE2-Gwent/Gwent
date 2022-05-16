@@ -82,4 +82,8 @@ public class CardView extends FrameLayout {
     animation.setDuration(500);
     startAnimation(animation);
   }
+
+  public ImageView getCardImageView() {
+    return cardImageView;
+  }
 }
