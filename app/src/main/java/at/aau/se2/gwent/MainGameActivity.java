@@ -9,10 +9,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import androidx.appcompat.app.AppCompatActivity;
+import at.aau.se2.gamelogic.models.Card;
+import at.aau.se2.gwent.views.common.CardView;
 
 public class MainGameActivity extends AppCompatActivity {
 
@@ -22,11 +23,11 @@ public class MainGameActivity extends AppCompatActivity {
   // Handkarte, Karten, Platzhalter erstellt
 
   ArrayList<Card> handcards = new ArrayList<Card>(8);
-  ArrayList<ImageView> cards = new ArrayList<ImageView>(10);
-  ArrayList<ImageView> placeholder = new ArrayList<ImageView>(18);
+  ArrayList<CardView> cards = new ArrayList<CardView>(10);
+  ArrayList<CardView> placeholder = new ArrayList<CardView>(18);
   // Zwischenspeicher für Kartenauswahl auf dem Feld
-  ImageView currentcard;
-  ImageView currentplaceholder;
+  CardView currentcard;
+  CardView currentplaceholder;
 
   // Wird aus MainActivity abgeleitet
   @Override
@@ -35,30 +36,31 @@ public class MainGameActivity extends AppCompatActivity {
     Intent intent = getIntent();
     setContentView(R.layout.activity_main_game);
     // erzeugt Testkarten
-    generatetestentities();
+    generateTestEntities();
     // Balken - mit Appnamen auf hidegesetzt
     getSupportActionBar().hide();
     // Einzelne Imageviews holen
-    fillhandcardarray();
+    fillHandCardArray();
     // Nach dem holen der Imageview die Container mit Bildern befüllen (Handkarten)
-    showpicturesforhandcards(handcards);
+    showPicturesForHandCards(handcards);
     // Hole mir die Imageviews für die Placeholder
-    fillplaceholderimageviewarray();
+    fillPlaceholderImageviewArray();
     // OnClickListener Aktivieren - Handkarten wird in Zwischenspeicher gespeichert um sie dann
     // durch einen Platzhalter auszutauschen
-    addonclicklistenerforhandcards(handcards);
+    addOnClickListenerForHandCards(handcards);
     // Done Buttom - Damit der Zug beendet wird.
-    activatedonebutton();
+    activateDoneButton();
   }
 
   // erzeugt die testkarten muss im weiteren verlauf ausgetauscht werden
-  public void generatetestentities() {
-    Card one = new Card(1, R.drawable.hearts2);
-    Card two = new Card(2, R.drawable.hearts3);
-    Card three = new Card(3, R.drawable.hearts4);
-    Card four = new Card(4, R.drawable.hearts5);
-    Card six = new Card(6, R.drawable.hearts7);
-    Card seven = new Card(7, R.drawable.hearts7);
+  public void generateTestEntities() {
+    Card one = new Card(1);
+    Card two = new Card(2);
+    Card three = new Card(3);
+    Card four = new Card(4);
+    Card six = new Card(6);
+    Card seven = new Card(7);
+
     handcards.add(one);
     handcards.add(four);
     handcards.add(six);
@@ -69,7 +71,7 @@ public class MainGameActivity extends AppCompatActivity {
     handcards.add(seven);
   }
 
-  public void activatedonebutton() {
+  public void activateDoneButton() {
     View testview = findViewById(R.id.cardRowsLayout);
 
     // Aus View holen
@@ -124,7 +126,7 @@ public class MainGameActivity extends AppCompatActivity {
               @Override
               public void onClick(View v) {
                 System.out.println("Yes button wurde gedruckt");
-                deleteonclicklistenerofallelements();
+                deleteOnClickListenerOfAllElements();
                 popupWindow.dismiss();
 
                 if (currentcard != null) {
@@ -132,9 +134,9 @@ public class MainGameActivity extends AppCompatActivity {
                   for (int i = 0; i < handcards.size(); i++) {
                     if (cards.get(i).getId() == currentcard.getId()) {
                       handcards.remove(handcards.get(i));
-                      fillhandcardarray();
-                      showpicturesforhandcards(handcards);
-                      deleteonclicklistenerofallelements();
+                      fillHandCardArray();
+                      showPicturesForHandCards(handcards);
+                      deleteOnClickListenerOfAllElements();
                       currentplaceholder = null;
                       currentcard = null;
                       v.setVisibility(View.INVISIBLE);
@@ -176,16 +178,14 @@ public class MainGameActivity extends AppCompatActivity {
   }
 
   // Handkarten anzeigen
-  public void showpicturesforhandcards(ArrayList<Card> handcards) {
+  public void showPicturesForHandCards(ArrayList<Card> handcards) {
     for (int i = 0; i < handcards.size(); i++) {
-      cards.get(i).setImageResource(handcards.get(i).resource);
-      cards.get(i).setTag(handcards.get(i).resource);
       cards.get(i).setVisibility(View.VISIBLE);
     }
   }
 
   // Jede einzelne Handkarte bekommt einen OnClickListener
-  public void addonclicklistenerforhandcards(ArrayList<Card> handcards) {
+  public void addOnClickListenerForHandCards(ArrayList<Card> handcards) {
     for (int i = 0; i < 10; i++) {
       cards
           .get(i)
@@ -195,30 +195,32 @@ public class MainGameActivity extends AppCompatActivity {
                 public void onClick(View v) {
                   if (currentcard != null) {
                     // Holt das Bild
-                    currentplaceholder.setImageResource(R.drawable.card_back);
+                    currentplaceholder
+                        .getCardImageView()
+                        .setImageResource(R.drawable.card_background);
                     currentcard.setVisibility(View.VISIBLE);
                   }
 
-                  currentcard = (ImageView) v;
+                  currentcard = (CardView) v;
                   // Platzhalter die Frei sind Sichtbarmachen und OnClick freigeben
-                  activateplaceholders();
+                  activatePlaceholders();
 
-                  activateonclicklistenertoplaceholders();
+                  activateOnClickListenerToPlaceholders();
                 }
               });
     }
   }
 
   // macht die freien kartenplätze ersichtlich
-  public void activateplaceholders() {
+  public void activatePlaceholders() {
     // Placeholder werden sichtbar
-    for (ImageView i : placeholder) {
+    for (CardView i : placeholder) {
       i.setVisibility(View.VISIBLE);
     }
   }
 
-  public void activateonclicklistenertoplaceholders() {
-    for (ImageView i : placeholder) {
+  public void activateOnClickListenerToPlaceholders() {
+    for (CardView i : placeholder) {
       i.setOnClickListener(
           new View.OnClickListener() {
 
@@ -226,13 +228,16 @@ public class MainGameActivity extends AppCompatActivity {
             // Placeholder befüllt
             @Override
             public void onClick(View v) {
-              if (currentplaceholder != null) {
-                currentplaceholder.setImageResource(R.drawable.card_back);
-              }
+              if (currentplaceholder == null) return;
+
+              currentplaceholder.getCardImageView().setImageResource(R.drawable.card_background);
+
               // Beim Ersten Ausspielen wird der Placeholder mit der Handkarte ausgetauscht.
-              ImageView test = (ImageView) v;
+              CardView test = (CardView) v;
               currentplaceholder = test;
-              currentplaceholder.setImageResource((Integer) currentcard.getTag());
+              currentplaceholder
+                  .getCardImageView()
+                  .setImageResource((Integer) currentcard.getTag());
               // ausgespielte Handkarte unsichtbar
               currentcard.setVisibility(View.INVISIBLE);
             }
@@ -241,11 +246,11 @@ public class MainGameActivity extends AppCompatActivity {
   }
 
   // Done buttom entfernt alle OnClicklistener
-  public void deleteonclicklistenerofallelements() {
-    for (ImageView card : cards) {
+  public void deleteOnClickListenerOfAllElements() {
+    for (CardView card : cards) {
       card.setOnClickListener(null);
     }
-    for (ImageView placeholder : placeholder) {
+    for (CardView placeholder : placeholder) {
       placeholder.setOnClickListener(null);
       if (placeholder.getTag() != "full") {
         placeholder.setVisibility(View.INVISIBLE);
@@ -253,9 +258,8 @@ public class MainGameActivity extends AppCompatActivity {
     }
   }
 
-  public void fillplaceholderimageviewarray() {
-
-    View firstrow = findViewById(R.id.firstrow);
+  public void fillPlaceholderImageviewArray() {
+    View firstrow = findViewById(R.id.playersRangeRowLayout);
     placeholder.add(firstrow.findViewById(R.id.rowcard1));
     placeholder.add(firstrow.findViewById(R.id.rowcard2));
     placeholder.add(firstrow.findViewById(R.id.rowcard3));
@@ -265,7 +269,7 @@ public class MainGameActivity extends AppCompatActivity {
     placeholder.add(firstrow.findViewById(R.id.rowcard7));
     placeholder.add(firstrow.findViewById(R.id.rowcard8));
     placeholder.add(firstrow.findViewById(R.id.rowcard9));
-    View secondrow = findViewById(R.id.secondrow);
+    View secondrow = findViewById(R.id.playersMeleeRowLayout);
     placeholder.add(secondrow.findViewById(R.id.rowcard1));
     placeholder.add(secondrow.findViewById(R.id.rowcard2));
     placeholder.add(secondrow.findViewById(R.id.rowcard3));
@@ -277,8 +281,8 @@ public class MainGameActivity extends AppCompatActivity {
     placeholder.add(secondrow.findViewById(R.id.rowcard9));
   }
 
-  public void fillhandcardarray() {
-    View include = findViewById(R.id.handdeck);
+  public void fillHandCardArray() {
+    View include = findViewById(R.id.playersHandLayout);
     cards.add(include.findViewById(R.id.card1));
     cards.add(include.findViewById(R.id.card2));
     cards.add(include.findViewById(R.id.card3));
@@ -289,9 +293,5 @@ public class MainGameActivity extends AppCompatActivity {
     cards.add(include.findViewById(R.id.card8));
     cards.add(include.findViewById(R.id.card9));
     cards.add(include.findViewById(R.id.card10));
-
-    for (ImageView i : cards) {
-      i.setVisibility(View.INVISIBLE);
-    }
   }
 }
