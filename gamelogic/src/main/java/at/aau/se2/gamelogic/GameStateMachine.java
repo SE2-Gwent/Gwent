@@ -27,6 +27,10 @@ public class GameStateMachine {
         return current == GameState.WAIT_FOR_OPPONENT || current == GameState.INITIALIZE;
       case DRAW_CARDS:
         return current == GameState.START_GAME_ROUND;
+      case MULLIGAN_CARDS:
+        return current == GameState.DRAW_CARDS;
+      case START_PLAYER_TURN:
+        return current == GameState.MULLIGAN_CARDS;
       default:
         return false;
     }
