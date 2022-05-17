@@ -27,7 +27,6 @@ import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
-// TODO: Draw 10 Cards
 // TODO: Mulligan 3 / 1 Cards
 // TODO: End Round / Let player pass
 // TODO: Handle Card Actions
@@ -42,6 +41,7 @@ public class GameLogic {
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
+  private int cardMulligansLeft = 0;
 
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
@@ -128,6 +128,30 @@ public class GameLogic {
         });
   }
 
+  public void mulliganCard(int cardId) {
+    if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return;
+    if (cardMulligansLeft == 0) {
+      Log.w(TAG, "There are no mulligans left this round");
+      return;
+    }
+
+    ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
+    HashMap<Integer, Card> playingCards = gameField.getPlayingCards(whoAmI);
+
+    playingCards.remove(cardId);
+
+    Random random = new Random();
+    while (playingCards.size() < 10) {
+      int randomIndex = random.nextInt(cards.size());
+      Card card = cards.get(randomIndex);
+      playingCards.put(card.getId(), card);
+    }
+
+    gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(playingCards.values()));
+    connector.syncGameField(gameField);
+    cardMulligansLeft -= 1;
+  }
+
   private void firstGameSetup() {
     Random random = new Random();
     InitialPlayer startingPlayer =
@@ -148,12 +172,7 @@ public class GameLogic {
   }
 
   private void drawCards() {
-    ArrayList<Card> cards;
-    if (whoAmI == InitialPlayer.INITIATOR) {
-      cards = new ArrayList<>(gameField.getCardDecks().getP1Deck().values());
-    } else {
-      cards = new ArrayList<>(gameField.getCardDecks().getP2Deck().values());
-    }
+    ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
 
     Random random = new Random();
     // 10 random unique cards from set cardDecks
@@ -189,16 +208,22 @@ public class GameLogic {
 
       case START_GAME_ROUND:
         InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
-        if (startingPlayer != null) {
-          if (gameStateMachine.roundCanStart()) {
-            this.startingPlayer = startingPlayer;
-          }
+        if (startingPlayer == null || gameField == null) return;
+
+        cardMulligansLeft = (gameField.getRoundNumber() == 0) ? 3 : 1;
+
+        if (gameStateMachine.roundCanStart()) {
+          this.startingPlayer = startingPlayer;
         }
         break;
 
       case DRAW_CARDS:
         if (gameField == null || gameField.getCurrentPlayer() == null) return;
         drawCards();
+
+      case MULLIGAN_CARDS:
+        if (cardMulligansLeft > 0) return;
+        gameStateMachine.cardsChanged();
 
       default:
         break;
@@ -275,6 +300,17 @@ public class GameLogic {
     observer.updateGameField(gameField);
   }
 
+  public ArrayList<Card> getCardsToMulligan() {
+    if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return null;
+
+    ArrayList<Card> cardsToMulligan = new ArrayList<>();
+    ArrayList<Card> playingCards = new ArrayList<>(gameField.getPlayingCards(whoAmI).values());
+    for (int i = 0; i < 6; i++) {
+      cardsToMulligan.add(playingCards.get(i));
+    }
+    return cardsToMulligan;
+  }
+
   // Getters & Setters
 
   public int getGameId() {
@@ -318,5 +354,13 @@ public class GameLogic {
 
   protected void setWhoAmI(InitialPlayer player) {
     this.whoAmI = player;
+  }
+
+  public int getCardMulligansLeft() {
+    return cardMulligansLeft;
+  }
+
+  protected void setCardMulligansLeft(int left) {
+    this.cardMulligansLeft = left;
   }
 }

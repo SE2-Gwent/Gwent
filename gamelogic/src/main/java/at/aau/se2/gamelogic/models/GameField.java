@@ -1,6 +1,7 @@
 package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
@@ -27,6 +28,11 @@ public class GameField {
     this.opponent = opponent;
     this.cardDecks = cardDecks;
     this.heroes = heroes;
+  }
+
+  public int getRoundNumber() {
+    if (currentPlayer == null || opponent == null) return 0;
+    return currentPlayer.getCurrentMatchPoints() + opponent.getCurrentMatchPoints();
   }
 
   public void setPlayingCardsFor(InitialPlayer player, ArrayList<Card> cards) {
@@ -57,6 +63,16 @@ public class GameField {
 
   public CardDecks getCardDecks() {
     return cardDecks;
+  }
+
+  public HashMap<Integer, Card> getCardDeck(InitialPlayer initialPlayer) {
+    return initialPlayer == InitialPlayer.INITIATOR ? cardDecks.getP1Deck() : cardDecks.getP2Deck();
+  }
+
+  public HashMap<Integer, Card> getPlayingCards(InitialPlayer initialPlayer) {
+    return initialPlayer == InitialPlayer.INITIATOR
+        ? playingCards.getP1Deck()
+        : playingCards.getP2Deck();
   }
 
   public ArrayList<Hero> getHeroes() {

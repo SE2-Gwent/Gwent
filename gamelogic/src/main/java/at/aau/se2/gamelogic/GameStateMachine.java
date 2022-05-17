@@ -82,6 +82,16 @@ public class GameStateMachine {
     return true;
   }
 
+  public boolean cardsChanged() {
+    if (!canProgressTo(GameState.START_PLAYER_TURN)) {
+      Log.w("Cannot start game round.");
+      return false;
+    }
+
+    changeState(GameState.START_PLAYER_TURN);
+    return true;
+  }
+
   private void changeState(GameState newState) {
     GameState old = current;
     current = newState;

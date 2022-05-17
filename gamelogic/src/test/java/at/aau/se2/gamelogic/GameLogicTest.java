@@ -3,6 +3,7 @@ package at.aau.se2.gamelogic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -243,6 +244,7 @@ public class GameLogicTest {
   public void testHandleGameSyncUpdatesOpponentJoined() {
     SyncRoot mockSyncRoot = mock(SyncRoot.class);
     GameField gameField = new GameField();
+    gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(currentPlayer);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.WAIT_FOR_OPPONENT);
@@ -260,6 +262,11 @@ public class GameLogicTest {
     SyncRoot mockSyncRoot = mock(SyncRoot.class);
     SyncAction startingSyncAction =
         new SyncAction(SyncAction.Type.STARTING_PLAYER, InitialPlayer.OPPONENT.name());
+
+    GameField gameField = new GameField();
+    gameField.setCurrentPlayer(currentPlayer);
+    gameField.setOpponent(currentPlayer);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockSyncRoot.getLastActions())
         .thenReturn(new ArrayList(Collections.singletonList(startingSyncAction)));
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
@@ -268,6 +275,7 @@ public class GameLogicTest {
     sut.handleGameSyncUpdates(mockSyncRoot);
 
     assertEquals(InitialPlayer.OPPONENT, sut.getStartingPlayer());
+    assertEquals(3, sut.getCardMulligansLeft());
   }
 
   @Test
@@ -290,10 +298,110 @@ public class GameLogicTest {
     assertEquals(10, captor.getValue().getPlayingCards().getP1Deck().size());
   }
 
+  @Test
+  public void testMulliganCards() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+    sut.setCardMulligansLeft(3);
+
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+
+    verify(mockConnector).syncGameField(any());
+    assertEquals(2, sut.getCardMulligansLeft());
+  }
+
+  @Test
+  public void testMulliganCardsMultipleTimes() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+    sut.setCardMulligansLeft(3);
+
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+
+    verify(mockConnector, times(3)).syncGameField(any());
+    assertEquals(0, sut.getCardMulligansLeft());
+  }
+
+  @Test
+  public void testHandleGameSyncUpdatesMulliganCards() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.MULLIGAN_CARDS);
+    when(mockGameStateMachine.cardsChanged()).thenReturn(true);
+
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockGameStateMachine).cardsChanged();
+  }
+
+  @Test
+  public void testGetCardsToMulligan() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+
+    ArrayList<Card> cards = sut.getCardsToMulligan();
+
+    assertEquals(6, cards.size());
+  }
+
+  @Test
+  public void testGetCardsToMulliganFailed() {
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(false);
+
+    ArrayList<Card> cards = sut.getCardsToMulligan();
+
+    assertNull(cards);
+  }
+
   // Helper Methods
 
+  private ArrayList<Card> playerCardsFrom(ArrayList<Card> cards) {
+    ArrayList<Card> playerCards = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      playerCards.add(cards.get(i));
+    }
+
+    return playerCards;
+  }
+
   private void setupTestCards() {
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= 20; i++) {
       testCards.add(
           new Card(
               i,
