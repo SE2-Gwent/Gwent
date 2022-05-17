@@ -367,18 +367,19 @@ public class GameLogic {
 
     int roundNumber = gameField.getRoundNumber(); // 0, 1, or 2
     InitialPlayer startingPlayer = this.startingPlayer;
+    InitialPlayer otherPlayer =
+        startingPlayer == InitialPlayer.INITIATOR
+            ? InitialPlayer.OPPONENT
+            : InitialPlayer.INITIATOR;
 
     if (roundNumber == 0) {
-      return gameField.getPlayer(startingPlayer).isHasLastPlayed()
-          ? InitialPlayer.OPPONENT
-          : InitialPlayer.INITIATOR;
+      return gameField.getPlayer(startingPlayer).isHasLastPlayed() ? otherPlayer : startingPlayer;
     }
 
     boolean startingPlayerHasWonLastRound = gameField.getPlayer(startingPlayer).isHasLastRoundWon();
     InitialPlayer roundStartingPlayer =
-        startingPlayerHasWonLastRound ? InitialPlayer.OPPONENT : InitialPlayer.INITIATOR;
-    InitialPlayer roundSecondPlayer =
-        startingPlayerHasWonLastRound ? InitialPlayer.INITIATOR : InitialPlayer.OPPONENT;
+        startingPlayerHasWonLastRound ? otherPlayer : startingPlayer;
+    InitialPlayer roundSecondPlayer = startingPlayerHasWonLastRound ? startingPlayer : otherPlayer;
 
     return gameField.getPlayer(roundSecondPlayer).isHasLastPlayed()
         ? roundSecondPlayer
