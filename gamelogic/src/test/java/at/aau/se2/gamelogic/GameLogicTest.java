@@ -376,6 +376,9 @@ public class GameLogicTest {
 
     verify(mockConnector, times(3)).syncGameField(any());
     assertEquals(0, sut.getCardMulligansLeft());
+    ArgumentCaptor<SyncAction> captor = ArgumentCaptor.forClass(SyncAction.class);
+    verify(mockConnector, times(1)).sendSyncAction(captor.capture());
+    assertEquals(SyncAction.Type.MULLIGAN_COMPLETE, captor.getValue().getType());
   }
 
   @Test
@@ -393,9 +396,20 @@ public class GameLogicTest {
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.MULLIGAN_CARDS);
     when(mockGameStateMachine.cardsChanged()).thenReturn(true);
 
-    sut.mulliganCard(initialPlayerCards.get(0).getId());
-    sut.mulliganCard(initialPlayerCards.get(0).getId());
-    sut.mulliganCard(initialPlayerCards.get(0).getId());
+    when(mockSyncRoot.getLastActions())
+        .thenReturn(
+            new ArrayList<>(
+                Arrays.asList(
+                    new SyncAction(
+                        SyncAction.Type.MULLIGAN_COMPLETE, InitialPlayer.INITIATOR.name()))));
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    when(mockSyncRoot.getLastActions())
+        .thenReturn(
+            new ArrayList<>(
+                Arrays.asList(
+                    new SyncAction(
+                        SyncAction.Type.MULLIGAN_COMPLETE, InitialPlayer.OPPONENT.name()))));
     sut.handleGameSyncUpdates(mockSyncRoot);
 
     verify(mockGameStateMachine).cardsChanged();

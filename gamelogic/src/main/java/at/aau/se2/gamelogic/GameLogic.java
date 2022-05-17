@@ -41,6 +41,7 @@ public class GameLogic {
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
   private int cardMulligansLeft = 0;
+  private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
@@ -58,6 +59,9 @@ public class GameLogic {
     this.connector = (connector != null) ? connector : new FirebaseConnector();
     this.gameStateMachine = (gameStateMachine != null) ? gameStateMachine : new GameStateMachine();
     this.connector.addListener(communcationObserver);
+
+    playerHasMulliganedCards.put(InitialPlayer.INITIATOR, false);
+    playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
   }
 
   public void registerCardActionCallback(CardActionCallback callback) {
@@ -155,10 +159,15 @@ public class GameLogic {
     gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(playingCards.values()));
     connector.syncGameField(gameField);
     cardMulligansLeft -= 1;
+
+    if (cardMulligansLeft == 0) {
+      connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
+    }
   }
 
-  private void abortMulliganCards() {
+  public void abortMulliganCards() {
     cardMulligansLeft = 0;
+    connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
   }
 
   private void firstGameSetup() {
@@ -202,7 +211,6 @@ public class GameLogic {
     }
   }
 
-  // TODO: Test
   // Need to do it person per person to prevent race-condidition, where both players
   // update gamefield and delete others player input
   private void requestCardDeck() {
@@ -261,7 +269,11 @@ public class GameLogic {
         drawCards();
 
       case MULLIGAN_CARDS:
-        if (cardMulligansLeft > 0) return;
+        InitialPlayer mulliganedPlayer = SyncActionUtil.findPlayerHasMulliganed(newSyncActions);
+        if (mulliganedPlayer == null) return;
+        playerHasMulliganedCards.put(mulliganedPlayer, true);
+
+        if (!bothPlayerHaveMulliganed()) return;
         gameStateMachine.cardsChanged();
 
       default:
@@ -373,6 +385,10 @@ public class GameLogic {
         : roundStartingPlayer;
   }
 
+  private boolean bothPlayerHaveMulliganed() {
+    return playerHasMulliganedCards.get(InitialPlayer.INITIATOR)
+        && playerHasMulliganedCards.get(InitialPlayer.OPPONENT);
+  }
   // Getters & Setters
 
   public int getGameId() {
