@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_start" />
     <fragment
         android:id="@+id/settings"
-        android:name="at.aau.se2.gwent.views.settings.SettingsFragment"
-        android:label="settings_fragment"
-        tools:layout="@layout/settings_fragment" />
+        android:name="at.aau.se2.gwent.BoardFragment"
+        android:label="Board"
+        tools:layout="@layout/mainboard" />
     <fragment
         android:id="@+id/detailed_card"
         android:name="at.aau.se2.gwent.views.detailedcard.DetailedCardFragment"
@@ -26,4 +26,9 @@
             android:defaultValue="0"
         />
     </fragment>
+    <fragment
+        android:id="@+id/MainGame"
+        android:name="at.aau.se2.gwent.BoardFragment"
+        android:label="Game"
+        tools:layout="@layout/mainboard" />
 </navigation>

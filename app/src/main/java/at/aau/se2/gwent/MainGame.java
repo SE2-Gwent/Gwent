@@ -2,7 +2,6 @@ package at.aau.se2.gwent;
 
 import java.util.ArrayList;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,7 +31,7 @@ public class MainGame extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Intent intent = getIntent();
+
     setContentView(R.layout.mainboard);
     // erzeugt Testkarten
     generatetestentities();
@@ -275,7 +274,7 @@ public class MainGame extends AppCompatActivity {
     placeholder.add(secondrow.findViewById(R.id.rowcard8));
     placeholder.add(secondrow.findViewById(R.id.rowcard9));
   }
-
+  // erledigt
   public void fillhandcardarray() {
     View include = findViewById(R.id.handdeck);
     cards.add(include.findViewById(R.id.card1));
