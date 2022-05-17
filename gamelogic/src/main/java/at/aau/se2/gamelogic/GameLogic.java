@@ -27,7 +27,6 @@ import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
-// TODO: Mulligan 3 / 1 Cards
 // TODO: End Round / Let player pass
 // TODO: Handle Card Actions
 // TODO: SyncAction for CardActions (opt)
@@ -311,6 +310,29 @@ public class GameLogic {
     return cardsToMulligan;
   }
 
+  public InitialPlayer getPlayerToTurn() {
+    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) return null;
+
+    int roundNumber = gameField.getRoundNumber(); // 0, 1, or 2
+    InitialPlayer startingPlayer = this.startingPlayer;
+
+    if (roundNumber == 0) {
+      return gameField.getPlayer(startingPlayer).isHasLastPlayed()
+          ? InitialPlayer.OPPONENT
+          : InitialPlayer.INITIATOR;
+    }
+
+    boolean startingPlayerHasWonLastRound = gameField.getPlayer(startingPlayer).isHasLastRoundWon();
+    InitialPlayer roundStartingPlayer =
+        startingPlayerHasWonLastRound ? InitialPlayer.OPPONENT : InitialPlayer.INITIATOR;
+    InitialPlayer roundSecondPlayer =
+        startingPlayerHasWonLastRound ? InitialPlayer.INITIATOR : InitialPlayer.OPPONENT;
+
+    return gameField.getPlayer(roundSecondPlayer).isHasLastPlayed()
+        ? roundSecondPlayer
+        : roundStartingPlayer;
+  }
+
   // Getters & Setters
 
   public int getGameId() {
@@ -350,6 +372,10 @@ public class GameLogic {
 
   public InitialPlayer getStartingPlayer() {
     return startingPlayer;
+  }
+
+  protected void setStartingPlayer(InitialPlayer player) {
+    this.startingPlayer = player;
   }
 
   protected void setWhoAmI(InitialPlayer player) {

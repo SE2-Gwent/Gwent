@@ -61,6 +61,10 @@ public class GameField {
     this.opponent = opponent;
   }
 
+  public Player getPlayer(InitialPlayer initialPlayer) {
+    return initialPlayer == InitialPlayer.INITIATOR ? currentPlayer : opponent;
+  }
+
   public CardDecks getCardDecks() {
     return cardDecks;
   }
