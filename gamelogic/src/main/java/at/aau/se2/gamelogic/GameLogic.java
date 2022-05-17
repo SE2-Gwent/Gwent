@@ -147,7 +147,7 @@ public class GameLogic {
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
     HashMap<String, Card> playingCards = gameField.getPlayingCards(whoAmI);
 
-    playingCards.remove(cardId);
+    playingCards.remove(cardId + "_card");
 
     Random random = new Random();
     while (playingCards.size() < 10) {
