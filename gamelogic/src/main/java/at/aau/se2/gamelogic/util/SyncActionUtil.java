@@ -16,4 +16,14 @@ public class SyncActionUtil {
 
     return null;
   }
+
+  public static @Nullable InitialPlayer findPlayerHasMulliganed(ArrayList<SyncAction> actions) {
+    for (SyncAction action : actions) {
+      if (action.getType() == SyncAction.Type.MULLIGAN_COMPLETE) {
+        return InitialPlayer.valueOf(action.getMessage());
+      }
+    }
+
+    return null;
+  }
 }

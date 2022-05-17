@@ -4,7 +4,8 @@ import java.util.Objects;
 
 public class SyncAction {
   public enum Type {
-    STARTING_PLAYER
+    STARTING_PLAYER,
+    MULLIGAN_COMPLETE
   }
 
   private Type type;
