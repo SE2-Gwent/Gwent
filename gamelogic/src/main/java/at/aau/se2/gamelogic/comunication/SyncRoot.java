@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.google.firebase.database.Exclude;
+
 import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.GameField;
 
@@ -22,6 +24,7 @@ public class SyncRoot {
     syncActions.put(newKey + "_key", action);
   }
 
+  @Exclude
   public ArrayList<SyncAction> getLastActions() {
     ArrayList<SyncAction> lastActions = new ArrayList<>();
     if (syncActions.isEmpty()) return lastActions;

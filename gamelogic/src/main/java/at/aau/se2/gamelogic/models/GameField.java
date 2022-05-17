@@ -3,6 +3,8 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.firebase.database.Exclude;
+
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
@@ -30,6 +32,7 @@ public class GameField {
     this.heroes = heroes;
   }
 
+  @Exclude
   public int getRoundNumber() {
     if (currentPlayer == null || opponent == null) return 0;
     return currentPlayer.getCurrentMatchPoints() + opponent.getCurrentMatchPoints();
