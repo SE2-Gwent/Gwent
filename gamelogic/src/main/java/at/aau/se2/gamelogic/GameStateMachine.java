@@ -30,7 +30,9 @@ public class GameStateMachine {
       case MULLIGAN_CARDS:
         return current == GameState.DRAW_CARDS;
       case START_PLAYER_TURN:
-        return current == GameState.MULLIGAN_CARDS;
+        return current == GameState.MULLIGAN_CARDS || current == GameState.END_PLAYER_TURN;
+      case END_PLAYER_TURN:
+        return current == GameState.START_PLAYER_TURN;
       default:
         return false;
     }
@@ -93,6 +95,20 @@ public class GameStateMachine {
     }
 
     changeState(GameState.START_PLAYER_TURN);
+    return true;
+  }
+
+  public boolean restartTurns() {
+    return cardsChanged();
+  }
+
+  public boolean endPlayerTurns() {
+    if (!canProgressTo(GameState.END_PLAYER_TURN)) {
+      Log.w("Cannot start game round.");
+      return false;
+    }
+
+    changeState(GameState.END_PLAYER_TURN);
     return true;
   }
 

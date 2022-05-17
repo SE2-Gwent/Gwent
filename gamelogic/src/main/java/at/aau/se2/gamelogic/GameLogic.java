@@ -170,6 +170,21 @@ public class GameLogic {
     connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
   }
 
+  public void endTurn() {
+    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) {
+      Log.w(TAG, "Wrong state to end round");
+      return;
+    }
+
+    if (!isMyTurn()) {
+      Log.w(TAG, "It is not your turn, cannot end turn");
+      return;
+    }
+
+    gameField.getPlayer(whoAmI).setHasLastPlayed(true);
+    connector.syncGameField(gameField);
+  }
+
   private void firstGameSetup() {
     Random random = new Random();
     InitialPlayer startingPlayer =
@@ -267,6 +282,7 @@ public class GameLogic {
       case DRAW_CARDS:
         if (gameField == null || gameField.getCurrentPlayer() == null) return;
         drawCards();
+        break;
 
       case MULLIGAN_CARDS:
         InitialPlayer mulliganedPlayer = SyncActionUtil.findPlayerHasMulliganed(newSyncActions);
@@ -275,6 +291,26 @@ public class GameLogic {
 
         if (!bothPlayerHaveMulliganed()) return;
         gameStateMachine.cardsChanged();
+        break;
+
+      case START_PLAYER_TURN:
+        if (!bothPlayerHavePlayed()) {
+          Log.w(TAG, "Not both players played");
+          return;
+        }
+
+        gameStateMachine.endPlayerTurns();
+        handleGameSyncUpdates(syncRoot);
+        break;
+
+      case END_PLAYER_TURN:
+        // TODO: cleanup actions
+        // TODO: check if game ended? // no cards or both player passed
+        // TODO: else reset players played && go back
+        gameField.getOpponent().setHasLastPlayed(false);
+        gameField.getCurrentPlayer().setHasLastPlayed(false);
+        gameStateMachine.restartTurns();
+        connector.syncGameField(gameField);
 
       default:
         break;
@@ -396,6 +432,12 @@ public class GameLogic {
     return playerHasMulliganedCards.get(InitialPlayer.INITIATOR)
         && playerHasMulliganedCards.get(InitialPlayer.OPPONENT);
   }
+
+  private boolean bothPlayerHavePlayed() {
+    return gameField.getCurrentPlayer().isHasLastPlayed()
+        && gameField.getOpponent().isHasLastPlayed();
+  }
+
   // Getters & Setters
 
   public int getGameId() {
