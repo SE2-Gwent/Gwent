@@ -135,7 +135,7 @@ public class GameLogic {
     }
 
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
-    HashMap<Integer, Card> playingCards = gameField.getPlayingCards(whoAmI);
+    HashMap<String, Card> playingCards = gameField.getPlayingCards(whoAmI);
 
     playingCards.remove(cardId);
 
@@ -143,7 +143,7 @@ public class GameLogic {
     while (playingCards.size() < 10) {
       int randomIndex = random.nextInt(cards.size());
       Card card = cards.get(randomIndex);
-      playingCards.put(card.getId(), card);
+      playingCards.put(String.valueOf(card.getId() + "_card"), card);
     }
 
     gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(playingCards.values()));

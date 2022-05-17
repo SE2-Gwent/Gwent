@@ -16,6 +16,9 @@ public class Card {
   private ArrayList<ActionParams> cardActions;
   private Map<ActionParams, Integer> currentActionCooldown;
 
+  @Keep
+  public Card() {}
+
   // TODO: tmp, please delete when boardView connected to GameLogic
   public Card(int id) {
     this.id = id;

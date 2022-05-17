@@ -6,8 +6,8 @@ import java.util.HashMap;
 import androidx.annotation.Keep;
 
 public class CardDecks {
-  private HashMap<Integer, Card> p1Deck = new HashMap<>();
-  private HashMap<Integer, Card> p2Deck = new HashMap<>();
+  private HashMap<String, Card> p1Deck = new HashMap<>();
+  private HashMap<String, Card> p2Deck = new HashMap<>();
 
   @Keep
   public CardDecks() {}
@@ -29,17 +29,17 @@ public class CardDecks {
   }
 
   public void setDeck(InitialPlayer player, ArrayList<Card> cards) {
-    HashMap<Integer, Card> destination = player == InitialPlayer.INITIATOR ? p1Deck : p2Deck;
+    HashMap<String, Card> destination = player == InitialPlayer.INITIATOR ? p1Deck : p2Deck;
     for (Card c : cards) {
-      destination.put(c.getId(), c);
+      destination.put(String.valueOf(c.getId()) + "_card", c);
     }
   }
 
-  public HashMap<Integer, Card> getP1Deck() {
+  public HashMap<String, Card> getP1Deck() {
     return p1Deck;
   }
 
-  public HashMap<Integer, Card> getP2Deck() {
+  public HashMap<String, Card> getP2Deck() {
     return p2Deck;
   }
 }

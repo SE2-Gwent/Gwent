@@ -10,7 +10,7 @@ public class GameField {
   private GameFieldRows rows;
   @Nullable private Player currentPlayer;
   @Nullable private Player opponent;
-  private CardDecks cardDecks;
+  private CardDecks cardDecks = new CardDecks();
   private CardDecks playingCards = new CardDecks();
   private ArrayList<Hero> heroes;
 
@@ -37,6 +37,10 @@ public class GameField {
 
   public void setPlayingCardsFor(InitialPlayer player, ArrayList<Card> cards) {
     playingCards.setDeck(player, cards);
+  }
+
+  public void setCardDeckFor(InitialPlayer player, ArrayList<Card> cards) {
+    cardDecks.setDeck(player, cards);
   }
 
   public GameFieldRows getRows() {
@@ -69,11 +73,11 @@ public class GameField {
     return cardDecks;
   }
 
-  public HashMap<Integer, Card> getCardDeck(InitialPlayer initialPlayer) {
+  public HashMap<String, Card> getCardDeck(InitialPlayer initialPlayer) {
     return initialPlayer == InitialPlayer.INITIATOR ? cardDecks.getP1Deck() : cardDecks.getP2Deck();
   }
 
-  public HashMap<Integer, Card> getPlayingCards(InitialPlayer initialPlayer) {
+  public HashMap<String, Card> getPlayingCards(InitialPlayer initialPlayer) {
     return initialPlayer == InitialPlayer.INITIATOR
         ? playingCards.getP1Deck()
         : playingCards.getP2Deck();
