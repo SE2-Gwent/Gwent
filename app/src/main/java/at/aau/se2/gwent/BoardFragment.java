@@ -2,7 +2,6 @@ package at.aau.se2.gwent;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -66,8 +65,12 @@ public class BoardFragment extends Fragment {
         break;
       case CARDCLICKED:
         showplaceholders();
+        setonclicklistener();
         break;
       case DONE:
+        loadhandcards();
+        setonclicklistener();
+
     }
   }
 
@@ -85,6 +88,13 @@ public class BoardFragment extends Fragment {
     binding.handdeck.card10.setImageResource(0);
   }
   public void setonclicklistener(){
+    if(viewModel.getCurrentState().equals(Board.State.INITIAL)){
+      //onclickaufhandkarten
+    }else if(viewModel.getCurrentState().equals(Board.State.CARDCLICKED)){
+      //onclickvonhandkartenweg, onclickaufplaceholder
+    }else{
+      //alleonclicklistenerweg
+    }
 
   }
 
