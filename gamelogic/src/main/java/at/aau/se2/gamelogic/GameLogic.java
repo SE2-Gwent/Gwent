@@ -1,6 +1,7 @@
 package at.aau.se2.gamelogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import android.util.Log;
@@ -26,6 +27,12 @@ import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
+// TODO: Draw 10 Cards
+// TODO: Mulligan 3 / 1 Cards
+// TODO: End Round / Let player pass
+// TODO: Handle Card Actions
+// TODO: SyncAction for CardActions (opt)
+
 public class GameLogic {
   private static final String TAG = GameLogic.class.getSimpleName();
   private int gameId = -1;
@@ -39,7 +46,6 @@ public class GameLogic {
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
       sync -> {
-        this.gameField = sync.getGameField();
         handleGameSyncUpdates(sync);
 
         for (GameFieldObserver observers : gameFieldObservers) {
@@ -141,8 +147,34 @@ public class GameLogic {
     connector.syncGameField(gameField);
   }
 
+  private void drawCards() {
+    ArrayList<Card> cards;
+    if (whoAmI == InitialPlayer.INITIATOR) {
+      cards = new ArrayList<>(gameField.getCardDecks().getP1Deck().values());
+    } else {
+      cards = new ArrayList<>(gameField.getCardDecks().getP2Deck().values());
+    }
+
+    Random random = new Random();
+    // 10 random unique cards from set cardDecks
+    HashMap<Integer, Card> drawnCards = new HashMap<>();
+    while (drawnCards.size() < 10) {
+      int randomIndex = random.nextInt(cards.size());
+      Card card = cards.get(randomIndex);
+      drawnCards.put(card.getId(), card);
+    }
+
+    gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(drawnCards.values()));
+
+    if (gameStateMachine.cardsDrawn()) {
+      connector.syncGameField(gameField);
+    }
+  }
+
   protected void handleGameSyncUpdates(SyncRoot syncRoot) {
     if (syncRoot == null) return;
+
+    this.gameField = syncRoot.getGameField();
 
     ArrayList<SyncAction> newSyncActions = syncRoot.getLastActions();
 
@@ -163,6 +195,10 @@ public class GameLogic {
           }
         }
         break;
+
+      case DRAW_CARDS:
+        if (gameField == null || gameField.getCurrentPlayer() == null) return;
+        drawCards();
 
       default:
         break;
@@ -278,5 +314,9 @@ public class GameLogic {
 
   public InitialPlayer getStartingPlayer() {
     return startingPlayer;
+  }
+
+  protected void setWhoAmI(InitialPlayer player) {
+    this.whoAmI = player;
   }
 }

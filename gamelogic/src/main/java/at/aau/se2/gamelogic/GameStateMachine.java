@@ -72,6 +72,16 @@ public class GameStateMachine {
     return true;
   }
 
+  public boolean cardsDrawn() {
+    if (!canProgressTo(GameState.MULLIGAN_CARDS)) {
+      Log.w("Cannot draw cards.");
+      return false;
+    }
+
+    changeState(GameState.MULLIGAN_CARDS);
+    return true;
+  }
+
   private void changeState(GameState newState) {
     GameState old = current;
     current = newState;

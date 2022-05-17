@@ -13,9 +13,8 @@ public class CardDecks {
   public CardDecks() {}
 
   public CardDecks(ArrayList<Card> p1Deck, ArrayList<Card> p2Deck) {
-    for (Card c : p1Deck) this.p1Deck.put(c.getId(), c);
-
-    for (Card c : p2Deck) this.p2Deck.put(c.getId(), c);
+    setDeck(InitialPlayer.INITIATOR, p1Deck);
+    setDeck(InitialPlayer.OPPONENT, p2Deck);
   }
 
   public Card getCard(int cardId, Player player) {
@@ -26,6 +25,13 @@ public class CardDecks {
         return p2Deck.get(cardId);
       default:
         return null;
+    }
+  }
+
+  public void setDeck(InitialPlayer player, ArrayList<Card> cards) {
+    HashMap<Integer, Card> destination = player == InitialPlayer.INITIATOR ? p1Deck : p2Deck;
+    for (Card c : cards) {
+      destination.put(c.getId(), c);
     }
   }
 

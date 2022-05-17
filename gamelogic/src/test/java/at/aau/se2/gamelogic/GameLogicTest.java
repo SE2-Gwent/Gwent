@@ -31,6 +31,7 @@ import at.aau.se2.gamelogic.comunication.SyncAction;
 import at.aau.se2.gamelogic.comunication.SyncRoot;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardDecks;
+import at.aau.se2.gamelogic.models.CardType;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.GameFieldRows;
 import at.aau.se2.gamelogic.models.InitialPlayer;
@@ -56,11 +57,7 @@ public class GameLogicTest {
 
   @Before
   public void setup() {
-    testCards.add(
-        new Card(1, "TestCard 1", 1, 0, "This is a test Card", new ArrayList<ActionParams>()));
-    testCards.add(
-        new Card(
-            2, "TestCard 2", 3, 0, "This is another test Card", new ArrayList<ActionParams>()));
+    setupTestCards();
     cardDecks = new CardDecks(testCards, testCards);
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
     meleeRow = new Row(1, RowType.MELEE);
@@ -271,5 +268,41 @@ public class GameLogicTest {
     sut.handleGameSyncUpdates(mockSyncRoot);
 
     assertEquals(InitialPlayer.OPPONENT, sut.getStartingPlayer());
+  }
+
+  @Test
+  public void testHandleGameSyncUpdatesDrawCards() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.DRAW_CARDS);
+    when(mockGameStateMachine.cardsDrawn()).thenReturn(true);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockGameStateMachine).cardsDrawn();
+    ArgumentCaptor<GameField> captor = ArgumentCaptor.forClass(GameField.class);
+    verify(mockConnector, times(1)).syncGameField(captor.capture());
+    assertNotNull(captor.getValue().getPlayingCards());
+    assertEquals(10, captor.getValue().getPlayingCards().getP1Deck().size());
+  }
+
+  // Helper Methods
+
+  private void setupTestCards() {
+    for (int i = 1; i <= 10; i++) {
+      testCards.add(
+          new Card(
+              i,
+              "TestCard " + i,
+              new ArrayList<CardType>(),
+              i,
+              0,
+              "This is a test Card",
+              new ArrayList<ActionParams>()));
+    }
   }
 }

@@ -10,6 +10,7 @@ public class GameField {
   @Nullable private Player currentPlayer;
   @Nullable private Player opponent;
   private CardDecks cardDecks;
+  private CardDecks playingCards = new CardDecks();
   private ArrayList<Hero> heroes;
 
   @Keep
@@ -26,6 +27,10 @@ public class GameField {
     this.opponent = opponent;
     this.cardDecks = cardDecks;
     this.heroes = heroes;
+  }
+
+  public void setPlayingCardsFor(InitialPlayer player, ArrayList<Card> cards) {
+    playingCards.setDeck(player, cards);
   }
 
   public GameFieldRows getRows() {
@@ -56,5 +61,13 @@ public class GameField {
 
   public ArrayList<Hero> getHeroes() {
     return heroes;
+  }
+
+  public CardDecks getPlayingCards() {
+    return playingCards;
+  }
+
+  public void setCardDecks(CardDecks cardDecks) {
+    this.cardDecks = cardDecks;
   }
 }
