@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
 public class Card {

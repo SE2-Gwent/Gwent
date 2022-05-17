@@ -20,9 +20,9 @@ public class CardDecks {
   public Card getCard(int cardId, Player player) {
     switch (player.getInitialPlayerInformation()) {
       case INITIATOR:
-        return p1Deck.get(cardId);
+        return p1Deck.get(cardId + "_card");
       case OPPONENT:
-        return p2Deck.get(cardId);
+        return p2Deck.get(cardId + "_card");
       default:
         return null;
     }

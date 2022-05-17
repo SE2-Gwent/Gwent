@@ -266,6 +266,8 @@ public class GameLogicTest {
     GameField gameField = new GameField();
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(currentPlayer);
+    gameField.setCardDeckFor(InitialPlayer.INITIATOR, testCards);
+    gameField.setCardDeckFor(InitialPlayer.OPPONENT, testCards);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockSyncRoot.getLastActions())
         .thenReturn(new ArrayList(Collections.singletonList(startingSyncAction)));
