@@ -363,7 +363,7 @@ public class GameLogic {
   }
 
   public InitialPlayer getPlayerToTurn() {
-    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) return null;
+    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) return startingPlayer;
 
     int roundNumber = gameField.getRoundNumber(); // 0, 1, or 2
     InitialPlayer startingPlayer = this.startingPlayer;
@@ -383,6 +383,12 @@ public class GameLogic {
     return gameField.getPlayer(roundSecondPlayer).isHasLastPlayed()
         ? roundSecondPlayer
         : roundStartingPlayer;
+  }
+
+  public boolean isMyTurn() {
+    InitialPlayer playerToTurn = getPlayerToTurn();
+    if (whoAmI == null || playerToTurn == null) return false;
+    return playerToTurn.name().equals(whoAmI.name());
   }
 
   private boolean bothPlayerHaveMulliganed() {
