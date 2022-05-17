@@ -42,4 +42,8 @@ public class CardDecks {
   public HashMap<String, Card> getP2Deck() {
     return p2Deck;
   }
+
+  public boolean hasDecksForBothPlayers() {
+    return p1Deck.size() > 0 && p2Deck.size() > 0;
+  }
 }

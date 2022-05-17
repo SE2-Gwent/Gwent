@@ -281,6 +281,41 @@ public class GameLogicTest {
   }
 
   @Test
+  public void testHandleGameSyncStartGameCardDeckSetupForInnitiator() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    GameLogicDataProvider mockDataProvider = mock(GameLogicDataProvider.class);
+    sut.setGameLogicDataProvider(mockDataProvider);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    gameField.setCurrentPlayer(currentPlayer);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
+    when(mockGameStateMachine.cardsDrawn()).thenReturn(true);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockDataProvider).needsCardDeck();
+  }
+
+  @Test
+  public void testHandleGameSyncStartGameCardDeckSetupForOpponent() {
+    sut.setWhoAmI(InitialPlayer.OPPONENT);
+    GameLogicDataProvider mockDataProvider = mock(GameLogicDataProvider.class);
+    sut.setGameLogicDataProvider(mockDataProvider);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    gameField.setCurrentPlayer(currentPlayer);
+    gameField.setCardDeckFor(InitialPlayer.INITIATOR, testCards);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
+    when(mockGameStateMachine.cardsDrawn()).thenReturn(true);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockDataProvider).needsCardDeck();
+  }
+
+  @Test
   public void testHandleGameSyncUpdatesDrawCards() {
     sut.setWhoAmI(InitialPlayer.INITIATOR);
     SyncRoot mockSyncRoot = mock(SyncRoot.class);

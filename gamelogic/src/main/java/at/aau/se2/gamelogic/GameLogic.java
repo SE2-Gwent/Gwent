@@ -41,6 +41,7 @@ public class GameLogic {
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
   private int cardMulligansLeft = 0;
+  @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
@@ -127,6 +128,11 @@ public class GameLogic {
         });
   }
 
+  private void chooseCardDeck(ArrayList<Card> cards) {
+    gameField.setCardDeckFor(whoAmI, cards);
+    connector.syncGameField(gameField);
+  }
+
   public void mulliganCard(int cardId) {
     if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return;
     if (cardMulligansLeft == 0) {
@@ -151,6 +157,10 @@ public class GameLogic {
     cardMulligansLeft -= 1;
   }
 
+  private void abortMulliganCards() {
+    cardMulligansLeft = 0;
+  }
+
   private void firstGameSetup() {
     Random random = new Random();
     InitialPlayer startingPlayer =
@@ -172,6 +182,9 @@ public class GameLogic {
 
   private void drawCards() {
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
+    if (cards.size() < 10) {
+      Log.w(TAG, "CardDecks not setup");
+    }
 
     Random random = new Random();
     // 10 random unique cards from set cardDecks
@@ -186,6 +199,27 @@ public class GameLogic {
 
     if (gameStateMachine.cardsDrawn()) {
       connector.syncGameField(gameField);
+    }
+  }
+
+  // TODO: Test
+  // Need to do it person per person to prevent race-condidition, where both players
+  // update gamefield and delete others player input
+  private void requestCardDeck() {
+    boolean initiatorSet = gameField.getCardDeck(InitialPlayer.INITIATOR).size() > 0;
+
+    if (!initiatorSet && whoAmI == InitialPlayer.INITIATOR) {
+      if (gameLogicDataProvider == null) return;
+      ArrayList cardDeck = gameLogicDataProvider.needsCardDeck();
+      if (cardDeck == null) return;
+      chooseCardDeck(cardDeck);
+    }
+
+    if (initiatorSet && whoAmI == InitialPlayer.OPPONENT) {
+      if (gameLogicDataProvider == null) return;
+      ArrayList cardDeck = gameLogicDataProvider.needsCardDeck();
+      if (cardDeck == null) return;
+      chooseCardDeck(cardDeck);
     }
   }
 
@@ -206,11 +240,17 @@ public class GameLogic {
         break;
 
       case START_GAME_ROUND:
-        InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
-        if (startingPlayer == null || gameField == null) return;
+        if (gameField == null) return;
+
+        requestCardDeck();
+        if (!gameField.getCardDecks().hasDecksForBothPlayers()) {
+          Log.w(TAG, "Only one Player has choosen his deck");
+          return;
+        }
 
         cardMulligansLeft = (gameField.getRoundNumber() == 0) ? 3 : 1;
 
+        InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
         if (gameStateMachine.roundCanStart()) {
           this.startingPlayer = startingPlayer;
         }
@@ -388,5 +428,9 @@ public class GameLogic {
 
   protected void setCardMulligansLeft(int left) {
     this.cardMulligansLeft = left;
+  }
+
+  public void setGameLogicDataProvider(GameLogicDataProvider gameLogicDataProvider) {
+    this.gameLogicDataProvider = gameLogicDataProvider;
   }
 }
