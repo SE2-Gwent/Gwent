@@ -330,9 +330,14 @@ public class GameLogic {
         break;
 
       case END_PLAYER_TURN:
-        // TODO: check if game ended? // no cards
         if (bothPLayerHavePassed()) {
           Log.i(TAG, "Both players passed, round ends.");
+          gameStateMachine.endRound();
+          return;
+        }
+
+        if (bothPlayerOutOfCards()) {
+          Log.i(TAG, "Both players run out of cards, round ends.");
           gameStateMachine.endRound();
           return;
         }
@@ -488,6 +493,12 @@ public class GameLogic {
   private boolean bothPlayerHaveMulliganed() {
     return playerHasMulliganedCards.get(InitialPlayer.INITIATOR)
         && playerHasMulliganedCards.get(InitialPlayer.OPPONENT);
+  }
+
+  private boolean bothPlayerOutOfCards() {
+    CardDecks playingCards = gameField.getPlayingCards();
+
+    return playingCards.getP1Deck().isEmpty() && playingCards.getP2Deck().isEmpty();
   }
 
   private boolean bothPlayerHavePlayed() {
