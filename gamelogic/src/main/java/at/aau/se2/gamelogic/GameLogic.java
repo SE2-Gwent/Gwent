@@ -265,6 +265,13 @@ public class GameLogic {
     }
   }
 
+  private void turnReset() {
+    gameField.getOpponent().setHasLastPlayed(false);
+    gameField.getCurrentPlayer().setHasLastPlayed(false);
+  }
+
+  private void roundReset() {}
+
   protected void handleGameSyncUpdates(SyncRoot syncRoot) {
     if (syncRoot == null) return;
 
@@ -323,13 +330,24 @@ public class GameLogic {
         break;
 
       case END_PLAYER_TURN:
-        // TODO: cleanup actions
-        // TODO: check if game ended? // no cards or both player passed
-        // TODO: else reset players played && go back
-        gameField.getOpponent().setHasLastPlayed(false);
-        gameField.getCurrentPlayer().setHasLastPlayed(false);
-        gameStateMachine.restartTurns();
-        connector.syncGameField(gameField);
+        // TODO: check if game ended? // no cards
+        if (bothPLayerHavePassed()) {
+          Log.i(TAG, "Both players passed, round ends.");
+          gameStateMachine.endRound();
+          return;
+        }
+
+        turnReset();
+
+        if (gameStateMachine.restartTurns()) {
+          connector.syncGameField(gameField);
+        }
+
+      case END_ROUND:
+        roundReset();
+        // TODO: check if game completly ended
+        // TODO: clean gameboard
+        // TODO: reset players
 
       default:
         break;
@@ -455,8 +473,16 @@ public class GameLogic {
   }
 
   private boolean bothPlayerHavePlayed() {
-    return gameField.getCurrentPlayer().isHasLastPlayed()
-        && gameField.getOpponent().isHasLastPlayed();
+    Player currentPlayer = gameField.getCurrentPlayer();
+    Player opponent = gameField.getOpponent();
+    return (currentPlayer.isHasLastPlayed() || currentPlayer.isHasPassed())
+        && (opponent.isHasLastPlayed() || opponent.isHasPassed());
+  }
+
+  private boolean bothPLayerHavePassed() {
+    Player currentPlayer = gameField.getCurrentPlayer();
+    Player opponent = gameField.getOpponent();
+    return currentPlayer.isHasPassed() && opponent.isHasPassed();
   }
 
   // Getters & Setters

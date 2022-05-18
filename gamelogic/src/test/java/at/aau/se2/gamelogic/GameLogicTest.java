@@ -474,6 +474,25 @@ public class GameLogicTest {
   }
 
   @Test
+  public void testHandleGameSyncEndRound() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    gameField.setCardDecks(cardDecks);
+    currentPlayer.setHasPassed(true);
+    gameField.setCurrentPlayer(currentPlayer);
+    gameField.setOpponent(currentPlayer);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_PLAYER_TURN);
+    when(mockGameStateMachine.endRound()).thenReturn(true);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockGameStateMachine).endRound();
+    assertFalse(currentPlayer.isHasLastPlayed());
+  }
+
+  @Test
   public void testGetCardsToMulligan() {
     sut.setWhoAmI(InitialPlayer.INITIATOR);
     GameField gameField = new GameField();
