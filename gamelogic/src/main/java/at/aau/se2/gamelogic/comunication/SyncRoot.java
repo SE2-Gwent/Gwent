@@ -25,11 +25,11 @@ public class SyncRoot {
   }
 
   @Exclude
-  public ArrayList<SyncAction> getLastActions() {
+  public ArrayList<SyncAction> getLastActions(int lastSavedSize) {
     ArrayList<SyncAction> lastActions = new ArrayList<>();
     if (syncActions.isEmpty()) return lastActions;
 
-    for (int i = syncActions.size() - 1; i < syncActions.size(); i++) {
+    for (int i = lastSavedSize; i < syncActions.size(); i++) {
       lastActions.add(syncActions.get(i + "_key"));
     }
 

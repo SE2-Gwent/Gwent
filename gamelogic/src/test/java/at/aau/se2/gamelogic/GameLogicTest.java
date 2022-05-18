@@ -269,7 +269,7 @@ public class GameLogicTest {
     gameField.setCardDeckFor(InitialPlayer.INITIATOR, testCards);
     gameField.setCardDeckFor(InitialPlayer.OPPONENT, testCards);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
-    when(mockSyncRoot.getLastActions())
+    when(mockSyncRoot.getLastActions(eq(0)))
         .thenReturn(new ArrayList(Collections.singletonList(startingSyncAction)));
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
     when(mockGameStateMachine.roundCanStart()).thenReturn(true);
@@ -396,20 +396,21 @@ public class GameLogicTest {
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.MULLIGAN_CARDS);
     when(mockGameStateMachine.cardsChanged()).thenReturn(true);
 
-    when(mockSyncRoot.getLastActions())
-        .thenReturn(
-            new ArrayList<>(
-                Arrays.asList(
-                    new SyncAction(
-                        SyncAction.Type.MULLIGAN_COMPLETE, InitialPlayer.INITIATOR.name()))));
+    ArrayList<SyncAction> lastSyncActions =
+        new ArrayList<>(
+            Arrays.asList(
+                new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, InitialPlayer.INITIATOR.name())));
+    when(mockSyncRoot.getLastActions(eq(0))).thenReturn(lastSyncActions);
+    HashMap<String, SyncAction> syncActions = new HashMap<>();
+    syncActions.put("0_key", lastSyncActions.get(0));
+    when(mockSyncRoot.getSyncActions()).thenReturn(syncActions);
     sut.handleGameSyncUpdates(mockSyncRoot);
 
-    when(mockSyncRoot.getLastActions())
-        .thenReturn(
-            new ArrayList<>(
-                Arrays.asList(
-                    new SyncAction(
-                        SyncAction.Type.MULLIGAN_COMPLETE, InitialPlayer.OPPONENT.name()))));
+    lastSyncActions =
+        new ArrayList<>(
+            Arrays.asList(
+                new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, InitialPlayer.OPPONENT.name())));
+    when(mockSyncRoot.getLastActions(eq(1))).thenReturn(lastSyncActions);
     sut.handleGameSyncUpdates(mockSyncRoot);
 
     verify(mockGameStateMachine).cardsChanged();
@@ -678,6 +679,10 @@ public class GameLogicTest {
         new TestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, true));
     testData.add(
         new TestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, true));
+    testData.add(
+        new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, true));
+    testData.add(
+        new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, true));
 
     for (TestData data : testData) {
       sut.setStartingPlayer(data.startingPlayer);
