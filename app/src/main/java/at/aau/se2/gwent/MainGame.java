@@ -34,7 +34,7 @@ public class MainGame extends AppCompatActivity {
 
     setContentView(R.layout.mainboard);
     // erzeugt Testkarten
-    generatetestentities();
+    //generatetestentities();
     // Balken - mit Appnamen auf hidegesetzt
     getSupportActionBar().hide();
     // Einzelne Imageviews holen
@@ -50,7 +50,7 @@ public class MainGame extends AppCompatActivity {
     activatedonebutton();
   }
   // erzeugt die testkarten muss im weiteren verlauf ausgetauscht werden
-  public void generatetestentities() {
+  /*public void generatetestentities() {
     Card one = new Card(1, R.drawable.hearts2);
     Card two = new Card(2, R.drawable.hearts3);
     Card three = new Card(3, R.drawable.hearts4);
@@ -65,7 +65,7 @@ public class MainGame extends AppCompatActivity {
     handcards.add(two);
     handcards.add(four);
     handcards.add(seven);
-  }
+  }*/
 
   public void activatedonebutton() {
     View testview = findViewById(R.id.testview);
@@ -121,7 +121,7 @@ public class MainGame extends AppCompatActivity {
               // Wenn man draufklickt - ist eine Karte ausgewählt?
               @Override
               public void onClick(View v) {
-                System.out.println("Yes button wurde gedruckt");
+
                 deleteonclicklistenerofallelements();
                 popupWindow.dismiss();
 
@@ -173,14 +173,7 @@ public class MainGame extends AppCompatActivity {
         });
   }
 
-  // Handkarten anzeigen
-  public void showpicturesforhandcards(ArrayList<Card> handcards) {
-    for (int i = 0; i < handcards.size(); i++) {
-      cards.get(i).setImageResource(handcards.get(i).resource);
-      cards.get(i).setTag(handcards.get(i).resource);
-      cards.get(i).setVisibility(View.VISIBLE);
-    }
-  }
+
 
   // Jede einzelne Handkarte bekommt einen OnClickListener
   public void addonclicklistenerforhandcards(ArrayList<Card> handcards) {
@@ -200,18 +193,9 @@ public class MainGame extends AppCompatActivity {
                   currentcard = (ImageView) v;
                   // Platzhalter die Frei sind Sichtbarmachen und OnClick freigeben
                   activateplaceholders();
-
                   activateonclicklistenertoplaceholders();
                 }
               });
-    }
-  }
-
-  // macht die freien kartenplätze ersichtlich
-  public void activateplaceholders() {
-    // Placeholder werden sichtbar
-    for (ImageView i : placeholder) {
-      i.setVisibility(View.VISIBLE);
     }
   }
 
@@ -237,7 +221,24 @@ public class MainGame extends AppCompatActivity {
           });
     }
   }
+  //erledigt
+  // Handkarten anzeigen
+  public void showpicturesforhandcards(ArrayList<Card> handcards) {
+    for (int i = 0; i < handcards.size(); i++) {
+      cards.get(i).setImageResource(handcards.get(i).resource);
+      cards.get(i).setTag(handcards.get(i).resource);
+      cards.get(i).setVisibility(View.VISIBLE);
+    }
+  }
 
+  //erledigt
+  public void activateplaceholders() {
+    // Placeholder werden sichtbar
+    for (ImageView i : placeholder) {
+      i.setVisibility(View.VISIBLE);
+    }
+  }
+  //erledigt
   // Done buttom entfernt alle OnClicklistener
   public void deleteonclicklistenerofallelements() {
     for (ImageView card : cards) {
@@ -251,6 +252,9 @@ public class MainGame extends AppCompatActivity {
     }
   }
 
+
+
+  //erledigt
   public void fillplaceholderimageviewarray() {
 
     View firstrow = findViewById(R.id.firstrow);

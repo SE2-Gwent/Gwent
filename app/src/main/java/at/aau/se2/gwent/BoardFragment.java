@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +21,8 @@ public class BoardFragment extends Fragment {
 
   private Boardviewmodel viewModel;
   private MainboardBinding binding;
+  ArrayList<ImageView> cards;
+  ArrayList<ImageView> placeholder;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class BoardFragment extends Fragment {
   private void updateUI(Board.State state) {
     switch (state) {
       case INITIAL:
+        generateimageviews();
         loadhandcards();
         setonclicklistener();
         break;
@@ -70,35 +75,72 @@ public class BoardFragment extends Fragment {
       case DONE:
         loadhandcards();
         setonclicklistener();
-
     }
   }
 
   private void loadhandcards() {
     ArrayList<Integer> handcards = viewModel.getHandcards();
-    binding.handdeck.card1.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card2.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card3.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card4.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card5.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card6.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card7.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card8.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card9.setImageResource(R.drawable.hearts2);
-    binding.handdeck.card10.setImageResource(0);
+    for(int i= 0; i<10; i++){
+      cards.get(i).setImageResource(handcards.get(i));
+    }
   }
   public void setonclicklistener(){
     if(viewModel.getCurrentState().equals(Board.State.INITIAL)){
       //onclickaufhandkarten
     }else if(viewModel.getCurrentState().equals(Board.State.CARDCLICKED)){
-      //onclickvonhandkartenweg, onclickaufplaceholder
+        for(ImageView place: placeholder){
+          //
+        }
     }else{
-      //alleonclicklistenerweg
+      loadhandcards();
+      for (ImageView a: cards){
+        a.setOnClickListener(null);
+      }
+      for (ImageView b: placeholder){
+        b.setOnClickListener(null);
+      }
     }
 
   }
 
   public void showplaceholders(){
-
+      for(ImageView a: placeholder){
+        a.setVisibility(View.VISIBLE);
+      }
   }
+
+  public void generateimageviews(){
+    cards = new ArrayList<ImageView>(10);
+    cards.add(binding.handdeck.card1);
+    cards.add(binding.handdeck.card2);
+    cards.add(binding.handdeck.card3);
+    cards.add(binding.handdeck.card4);
+    cards.add(binding.handdeck.card5);
+    cards.add(binding.handdeck.card6);
+    cards.add(binding.handdeck.card7);
+    cards.add(binding.handdeck.card8);
+    cards.add(binding.handdeck.card9);
+    cards.add(binding.handdeck.card10);
+
+    placeholder = new ArrayList<>(18);
+    placeholder.add(binding.firstrow.rowcard1);
+    placeholder.add(binding.firstrow.rowcard2);
+    placeholder.add(binding.firstrow.rowcard3);
+    placeholder.add(binding.firstrow.rowcard4);
+    placeholder.add(binding.firstrow.rowcard5);
+    placeholder.add(binding.firstrow.rowcard6);
+    placeholder.add(binding.firstrow.rowcard7);
+    placeholder.add(binding.firstrow.rowcard8);
+    placeholder.add(binding.firstrow.rowcard9);
+    placeholder.add(binding.secondrow.rowcard1);
+    placeholder.add(binding.secondrow.rowcard2);
+    placeholder.add(binding.secondrow.rowcard3);
+    placeholder.add(binding.secondrow.rowcard4);
+    placeholder.add(binding.secondrow.rowcard5);
+    placeholder.add(binding.secondrow.rowcard6);
+    placeholder.add(binding.secondrow.rowcard7);
+    placeholder.add(binding.secondrow.rowcard8);
+    placeholder.add(binding.secondrow.rowcard9);
+  }
+
 }
