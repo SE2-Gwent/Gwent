@@ -361,28 +361,46 @@ public class GameLogic {
         break;
 
       case END_ROUND:
-        Player player = gameField.getPointLeadingPlayer();
-        if (player == null) {
+        // TODO: Refactor to make sure, Initatior and Oponent syncing tasks get clearer
+
+        Player player = this.gameField.getPointLeadingPlayer();
+        // only game initiator can randomly choose winner
+        if (player == null && whoAmI == InitialPlayer.INITIATOR) {
           // round tied, choose random winner
           Random random = new Random();
           InitialPlayer randomWinningPlayer =
               (random.nextInt(2) == 1) ? InitialPlayer.INITIATOR : InitialPlayer.OPPONENT;
-          player = gameField.getPlayer(randomWinningPlayer);
-          // TODO: race condition deluxe baby
+          player = this.gameField.getPlayer(randomWinningPlayer);
+          connector.sendSyncAction(
+              new SyncAction(
+                  SyncAction.Type.ROUND_WINNER, player.getInitialPlayerInformation().name()));
         }
-        addWinner(player.getInitialPlayerInformation());
-        player.setCurrentMatchPoints(player.getCurrentMatchPoints() + 1);
 
-        Player winningPlayer = gameField.getWinnerOrNull();
+        if (player == null && whoAmI == InitialPlayer.OPPONENT) {
+          InitialPlayer syncedWinningPlayer = SyncActionUtil.findWinningPlayer(newSyncActions);
+          if (syncedWinningPlayer == null) return;
+          player = this.gameField.getPlayer(syncedWinningPlayer);
+        }
+
+        if (player != null) {
+          addWinner(player.getInitialPlayerInformation());
+          player.setCurrentMatchPoints(player.getCurrentMatchPoints() + 1);
+        }
+
+        Player winningPlayer = this.gameField.getWinnerOrNull();
         if (winningPlayer != null) {
           Log.i(TAG, winningPlayer.getInitialPlayerInformation() + " has won");
-          gameStateMachine.endGame();
+          if (gameStateMachine.endGame()) {
+            connector.syncGameField(this.gameField);
+          }
           return;
         }
 
-        roundReset();
-
-        if (gameStateMachine.restartRound()) connector.syncGameField(this.gameField);
+        if (player == null) return;
+        if (gameStateMachine.restartRound()) {
+          roundReset();
+          connector.syncGameField(this.gameField);
+        }
         // TODO: clean gameboard
         // TODO: reset players
         break;

@@ -5,7 +5,8 @@ import java.util.Objects;
 public class SyncAction {
   public enum Type {
     STARTING_PLAYER,
-    MULLIGAN_COMPLETE
+    MULLIGAN_COMPLETE,
+    ROUND_WINNER
   }
 
   private Type type;

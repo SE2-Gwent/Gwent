@@ -581,7 +581,7 @@ public class GameLogicTest {
     gameField.getRows().getP1MeleeRow().add(testCards.get(0));
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_ROUND);
-    when(mockGameStateMachine.endGame()).thenReturn(true);
+    when(mockGameStateMachine.restartRound()).thenReturn(true);
 
     sut.handleGameSyncUpdates(mockSyncRoot);
 

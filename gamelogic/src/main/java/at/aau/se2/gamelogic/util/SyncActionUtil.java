@@ -26,4 +26,14 @@ public class SyncActionUtil {
 
     return null;
   }
+
+  public static InitialPlayer findWinningPlayer(ArrayList<SyncAction> actions) {
+    for (SyncAction action : actions) {
+      if (action.getType() == SyncAction.Type.ROUND_WINNER) {
+        return InitialPlayer.valueOf(action.getMessage());
+      }
+    }
+
+    return null;
+  }
 }
