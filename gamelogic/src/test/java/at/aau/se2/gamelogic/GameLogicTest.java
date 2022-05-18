@@ -453,6 +453,27 @@ public class GameLogicTest {
   }
 
   @Test
+  public void testPassGame() {
+    GameField gameField = new GameField();
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    sut.setStartingPlayer(InitialPlayer.INITIATOR);
+    sut.setCurrentPlayerCanPass(true);
+    sut.setGameField(gameField);
+
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    gameField.setCurrentPlayer(currentPlayer);
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.START_PLAYER_TURN)).thenReturn(true);
+
+    sut.pass();
+
+    verify(mockConnector, times(1)).syncGameField(any());
+    ArgumentCaptor<GameField> captor = ArgumentCaptor.forClass(GameField.class);
+    verify(mockConnector, times(1)).syncGameField(captor.capture());
+    assertTrue(captor.getValue().getPlayer(InitialPlayer.INITIATOR).isHasPassed());
+  }
+
+  @Test
   public void testGetCardsToMulligan() {
     sut.setWhoAmI(InitialPlayer.INITIATOR);
     GameField gameField = new GameField();

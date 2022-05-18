@@ -27,7 +27,7 @@ import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
-// TODO: End Round / Let player pass
+// TODO: Let player pass
 // TODO: Handle Card Actions
 // TODO: SyncAction for CardActions (opt)
 
@@ -41,6 +41,8 @@ public class GameLogic {
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
   private int cardMulligansLeft = 0;
+  // set when playing card or using hero activity
+  private boolean currentPlayerCanPass = true;
   private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
@@ -182,6 +184,23 @@ public class GameLogic {
     }
 
     gameField.getPlayer(whoAmI).setHasLastPlayed(true);
+    connector.syncGameField(gameField);
+  }
+
+  public void pass() {
+    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) {
+      Log.w(TAG, "Wrong state to pass round");
+      return;
+    }
+
+    if (!isMyTurn()) {
+      Log.w(TAG, "It is not your turn, cannot end turn");
+      return;
+    }
+
+    if (!currentPlayerCanPass) return;
+
+    gameField.getPlayer(whoAmI).setHasPassed(true);
     connector.syncGameField(gameField);
   }
 
