@@ -617,79 +617,42 @@ public class GameLogicTest {
   }
 
   @Test
-  public void getPlayerToTurn() {
-    class TestData {
-      int round;
-      InitialPlayer startingPlayer;
-      boolean hasInitialPlayerPlayed;
-      InitialPlayer expected;
-      boolean hasInititalPlayerWon;
-      boolean playerHasPassed;
-
-      public TestData(
-          int round,
-          InitialPlayer startingPlayer,
-          boolean hasInitialPlayerPlayed,
-          InitialPlayer expected,
-          boolean hasInitialPlayerWon,
-          boolean playerHasPassed) {
-        this.round = round;
-        this.startingPlayer = startingPlayer;
-        this.hasInitialPlayerPlayed = hasInitialPlayerPlayed;
-        this.expected = expected;
-        this.hasInititalPlayerWon = hasInitialPlayerWon;
-        this.playerHasPassed = playerHasPassed;
-      }
-    }
-
+  public void getPlayerToTurnForRound0() {
     Player mockCurrentPlayer = mock(Player.class);
+    Player mockOpponentPlayer = mock(Player.class);
     GameField gameField = mock(GameField.class);
     sut.setGameField(gameField);
     when(mockGameStateMachine.stateEquals(GameState.START_PLAYER_TURN)).thenReturn(true);
-    when(gameField.getPlayer(any())).thenReturn(mockCurrentPlayer);
+    when(gameField.getPlayer(eq(InitialPlayer.INITIATOR))).thenReturn(mockCurrentPlayer);
+    when(gameField.getPlayer(eq(InitialPlayer.OPPONENT))).thenReturn(mockOpponentPlayer);
 
-    ArrayList<TestData> testData = new ArrayList<>(); // <RoundNumber, StartingPlayer.hasPlayed>
+    ArrayList<MyTurnTestData> testData =
+        new ArrayList<>(); // <RoundNumber, StartingPlayer.hasPlayed>
     testData.add(
-        new TestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true, false));
+        new MyTurnTestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, false));
     testData.add(
-        new TestData(0, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, true, false));
+        new MyTurnTestData(0, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, false));
     testData.add(
-        new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, false, false));
+        new MyTurnTestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, false));
     testData.add(
-        new TestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, false, false));
-    testData.add(
-        new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, false));
-    testData.add(
-        new TestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.INITIATOR, true, false));
+        new MyTurnTestData(0, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, false));
 
     testData.add(
-        new TestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true, false));
+        new MyTurnTestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true));
     testData.add(
-        new TestData(0, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, true, false));
-    testData.add(
-        new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, false, false));
-    testData.add(
-        new TestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, false, false));
-    testData.add(
-        new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, false));
-    testData.add(
-        new TestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.OPPONENT, true, false));
+        new MyTurnTestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true));
 
-    testData.add(
-        new TestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, true));
-    testData.add(
-        new TestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, true));
-    testData.add(
-        new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, true));
-    testData.add(
-        new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, true));
-
-    for (TestData data : testData) {
+    for (MyTurnTestData data : testData) {
       sut.setStartingPlayer(data.startingPlayer);
       when(gameField.getRoundNumber()).thenReturn(data.round);
-      when(mockCurrentPlayer.isHasLastPlayed()).thenReturn(data.hasInitialPlayerPlayed);
-      when(mockCurrentPlayer.isHasLastRoundWon()).thenReturn(data.hasInititalPlayerWon);
-      when(mockCurrentPlayer.isHasPassed()).thenReturn(data.playerHasPassed);
+
+      if (data.startingPlayer == InitialPlayer.INITIATOR) {
+        when(mockCurrentPlayer.isHasLastPlayed()).thenReturn(data.hasInitialPlayerPlayed);
+        when(mockCurrentPlayer.isHasPassed()).thenReturn(data.playerHasPassed);
+      } else {
+        when(mockOpponentPlayer.isHasLastPlayed()).thenReturn(data.hasInitialPlayerPlayed);
+        when(mockOpponentPlayer.isHasPassed()).thenReturn(data.playerHasPassed);
+      }
 
       InitialPlayer playerToTurn = sut.getPlayerToTurn();
 
@@ -697,6 +660,74 @@ public class GameLogicTest {
     }
   }
 
+  @Test
+  public void getPlayerToTurnForRound1And2() {
+    Player mockCurrentPlayer = mock(Player.class);
+    Player mockOpponentPlayer = mock(Player.class);
+    GameField gameField = mock(GameField.class);
+    sut.setGameField(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.START_PLAYER_TURN)).thenReturn(true);
+    when(gameField.getPlayer(eq(InitialPlayer.INITIATOR))).thenReturn(mockCurrentPlayer);
+    when(gameField.getPlayer(eq(InitialPlayer.OPPONENT))).thenReturn(mockOpponentPlayer);
+
+    ArrayList<MyTurnTestData> testData =
+        new ArrayList<>(); // <RoundNumber, StartingPlayer.hasPlayed>
+
+    // startingPlayer will have won first round in getPlayersWonRound()
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, false));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.INITIATOR, false));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, false));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.OPPONENT, false));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true));
+    testData.add(
+        new MyTurnTestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true));
+
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, false));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.INITIATOR, true, InitialPlayer.INITIATOR, false));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, false));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.OPPONENT, true, InitialPlayer.OPPONENT, false));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true));
+    testData.add(
+        new MyTurnTestData(2, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true));
+
+    for (MyTurnTestData data : testData) {
+      sut.setStartingPlayer(data.startingPlayer);
+      when(gameField.getRoundNumber()).thenReturn(data.round);
+      sut.setPlayersRoundsWon(data.getPlayersWonRound());
+
+      if (data.startingPlayer.other()
+          == InitialPlayer.INITIATOR) { // here other, because startingPlayer is swaped because of
+        // getPlayersWonRound() mock
+        when(mockCurrentPlayer.isHasLastPlayed()).thenReturn(data.hasInitialPlayerPlayed);
+        when(mockCurrentPlayer.isHasPassed()).thenReturn(data.playerHasPassed);
+      } else {
+        when(mockOpponentPlayer.isHasLastPlayed()).thenReturn(data.hasInitialPlayerPlayed);
+        when(mockOpponentPlayer.isHasPassed()).thenReturn(data.playerHasPassed);
+      }
+
+      InitialPlayer playerToTurn = sut.getPlayerToTurn();
+
+      assertEquals(data.expected, playerToTurn);
+    }
+  }
   // Helper Methods
 
   private ArrayList<Card> playerCardsFrom(ArrayList<Card> cards) {
@@ -719,6 +750,39 @@ public class GameLogicTest {
               0,
               "This is a test Card",
               new ArrayList<ActionParams>()));
+    }
+  }
+
+  class MyTurnTestData {
+    int round;
+    InitialPlayer startingPlayer;
+    boolean hasInitialPlayerPlayed;
+    InitialPlayer expected;
+    boolean playerHasPassed;
+
+    public MyTurnTestData(
+        int round,
+        InitialPlayer startingPlayer,
+        boolean hasInitialPlayerPlayed,
+        InitialPlayer expected,
+        boolean playerHasPassed) {
+      this.round = round;
+      this.startingPlayer = startingPlayer;
+      this.hasInitialPlayerPlayed = hasInitialPlayerPlayed;
+      this.expected = expected;
+      this.playerHasPassed = playerHasPassed;
+    }
+
+    public ArrayList<InitialPlayer> getPlayersWonRound() {
+      ArrayList<InitialPlayer> winList = new ArrayList<>();
+      if (round == 1) {
+        winList.add(startingPlayer);
+      }
+      if (round == 2) {
+        winList.add(startingPlayer.other());
+        winList.add(startingPlayer);
+      }
+      return winList;
     }
   }
 }

@@ -1,5 +1,7 @@
 package at.aau.se2.gamelogic;
 
+import static java.lang.Math.max;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -45,6 +47,8 @@ public class GameLogic {
   private boolean currentPlayerCanPass = true;
   private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
   private int lastSavedActionSize = 0;
+  private ArrayList<InitialPlayer> playersRoundsWon = new ArrayList<>();
+
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
@@ -364,7 +368,9 @@ public class GameLogic {
           InitialPlayer randomWinningPlayer =
               (random.nextInt(2) == 1) ? InitialPlayer.INITIATOR : InitialPlayer.OPPONENT;
           player = gameField.getPlayer(randomWinningPlayer);
+          // TODO: race condition deluxe baby
         }
+        addWinner(player.getInitialPlayerInformation());
         player.setCurrentMatchPoints(player.getCurrentMatchPoints() + 1);
 
         Player winningPlayer = gameField.getWinnerOrNull();
@@ -471,26 +477,23 @@ public class GameLogic {
     if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) return startingPlayer;
 
     int roundNumber = gameField.getRoundNumber(); // 0, 1, or 2
-    InitialPlayer startingPlayer = this.startingPlayer;
-    InitialPlayer otherPlayer =
-        startingPlayer == InitialPlayer.INITIATOR
-            ? InitialPlayer.OPPONENT
-            : InitialPlayer.INITIATOR;
 
-    if (roundNumber == 0) {
-      Player player = gameField.getPlayer(startingPlayer);
-      if (player.isHasPassed()) return otherPlayer;
-      return player.isHasLastPlayed() ? otherPlayer : startingPlayer;
+    InitialPlayer playerWonLastRound = null;
+    if (playersRoundsWon.size() > max(0, roundNumber - 1)) {
+      playerWonLastRound = playersRoundsWon.get(max(0, roundNumber - 1));
     }
 
-    boolean startingPlayerHasWonLastRound = gameField.getPlayer(startingPlayer).isHasLastRoundWon();
-    InitialPlayer roundStartingPlayer =
-        startingPlayerHasWonLastRound ? otherPlayer : startingPlayer;
-    InitialPlayer roundSecondPlayer = startingPlayerHasWonLastRound ? startingPlayer : otherPlayer;
+    InitialPlayer startingPlayer =
+        (playerWonLastRound == null) ? this.startingPlayer : playerWonLastRound.other();
+    InitialPlayer otherPlayer = startingPlayer.other();
 
-    Player player = gameField.getPlayer(roundSecondPlayer);
-    if (player.isHasPassed()) return otherPlayer;
-    return player.isHasLastPlayed() ? roundSecondPlayer : roundStartingPlayer;
+    if (gameField.getPlayer(startingPlayer).isHasPassed()) return otherPlayer;
+
+    if (gameField.getPlayer(startingPlayer).isHasLastPlayed()) {
+      return otherPlayer;
+    } else {
+      return startingPlayer;
+    }
   }
 
   public boolean isMyTurn() {
@@ -501,6 +504,10 @@ public class GameLogic {
 
   public @Nullable Player getWinner() {
     return gameField.getWinnerOrNull();
+  }
+
+  private void addWinner(InitialPlayer player) {
+    playersRoundsWon.add(player);
   }
 
   private boolean bothPlayerHaveMulliganed() {
@@ -594,5 +601,9 @@ public class GameLogic {
 
   public boolean getCurrentPlayerCanPass() {
     return currentPlayerCanPass;
+  }
+
+  protected void setPlayersRoundsWon(ArrayList<InitialPlayer> playersRoundsWon) {
+    this.playersRoundsWon = playersRoundsWon;
   }
 }
