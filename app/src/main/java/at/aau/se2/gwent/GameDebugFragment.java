@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,6 +39,15 @@ public class GameDebugFragment extends Fragment {
           binding.stateTextView.setText(viewState.getState());
           binding.playerTextView.setText(viewState.getPlayer());
           binding.startingPlayerTextView.setText(viewState.getStartingPlayer());
+          binding.playersTurnTextView.setText(viewState.getPlayersTurn());
+          binding.roundTextView.setText(viewState.getRoundNumber());
+          binding.pointsTextView.setText(viewState.getCombinedPlayerPoints());
+        });
+
+    viewModel.errorMutableLiveData.observe(
+        this,
+        error -> {
+          Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
         });
 
     binding.cancelMulliganCardButton.setOnClickListener(
@@ -47,6 +57,14 @@ public class GameDebugFragment extends Fragment {
     binding.mulliganCardButton.setOnClickListener(
         view -> {
           viewModel.mulliganCard();
+        });
+    binding.roundDoneButton.setOnClickListener(
+        view -> {
+          viewModel.roundDone();
+        });
+    binding.passRoundButton.setOnClickListener(
+        view -> {
+          viewModel.passRound();
         });
   }
 }

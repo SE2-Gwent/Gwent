@@ -21,6 +21,7 @@ import at.aau.se2.gamelogic.state.GameState;
 public class GameDebugViewModel extends ViewModel
     implements GameStateCallback, GameFieldObserver, GameLogicDataProvider {
   public MutableLiveData<ViewState> state = new MutableLiveData<>();
+  public MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
 
   private static final String TAG = GameDebugViewModel.class.getSimpleName();
 
@@ -42,22 +43,39 @@ public class GameDebugViewModel extends ViewModel
     mulliganCardId++;
   }
 
+  public void roundDone() {
+    if (!gameLogic.isMyTurn()) {
+      errorMutableLiveData.setValue("Its not your turn");
+      return;
+    }
+
+    gameLogic.endTurn();
+  }
+
+  public void passRound() {
+    if (!gameLogic.isMyTurn()) {
+      errorMutableLiveData.setValue("Its not your turn");
+      return;
+    }
+
+    if (!gameLogic.getCurrentPlayerCanPass()) {
+      errorMutableLiveData.setValue("You cannot pass");
+      return;
+    }
+
+    gameLogic.pass();
+  }
+
   @Override
   public void gameStateChanged(@NonNull GameState current, @Nullable GameState old) {
     Log.v(TAG, "State changed to: " + current + " from " + old);
+    createCurrentViewState();
   }
 
   @Override
   public void updateGameField(GameField gameField) {
     Log.v(TAG, "Update Gamefield: " + gameField);
-
-    ViewState newState =
-        new ViewState(
-            String.valueOf(gameLogic.getGameId()),
-            gameLogic.getCurrentGameState(),
-            gameLogic.getWhoAmI(),
-            gameLogic.getStartingPlayer());
-    state.setValue(newState);
+    createCurrentViewState();
   }
 
   @Override
@@ -65,22 +83,53 @@ public class GameDebugViewModel extends ViewModel
     return generateTestCards();
   }
 
+  private void createCurrentViewState() {
+    ViewState newState =
+        new ViewState(
+            String.valueOf(gameLogic.getGameId()),
+            gameLogic.getCurrentGameState(),
+            gameLogic.getWhoAmI(),
+            gameLogic.getStartingPlayer(),
+            gameLogic.getPlayerToTurn(),
+            String.valueOf(gameLogic.getGameField().getRoundNumber()),
+            gameLogic
+                .getGameField()
+                .getPointsForPlayer(gameLogic.getGameField().getCurrentPlayer()),
+            gameLogic.getGameField().getPointsForPlayer(gameLogic.getGameField().getOpponent()),
+            gameLogic.isMyTurn());
+    state.setValue(newState);
+  }
+
   class ViewState {
     private String gameId;
     private String state;
     private String player;
     private String startingPlayer;
+    private String playersTurn;
+    private String roundNumber;
+    private String combinedPlayerPoints;
+    private boolean isMyTurn;
 
     public ViewState(
         String gameId,
         GameState state,
         @Nullable InitialPlayer player,
-        @Nullable InitialPlayer startingPlayer) {
+        @Nullable InitialPlayer startingPlayer,
+        @Nullable InitialPlayer playersTurn,
+        String roundNumber,
+        int currentPlayerPoints,
+        int opponentPlayerPoints,
+        boolean isMyTurn) {
       this.gameId = gameId;
       this.state = state.name();
       this.player = player == null ? "Not Set" : "Player: " + player.name();
       this.startingPlayer =
           startingPlayer == null ? "Not Set" : "StartingPlayer: " + startingPlayer.name();
+      this.playersTurn = playersTurn == null ? "Not Set" : "PlayersTurn: " + playersTurn.name();
+      this.roundNumber = "Round: " + roundNumber;
+      this.combinedPlayerPoints =
+          "Innitiator " + currentPlayerPoints + ":" + opponentPlayerPoints + " Opponent";
+      this.isMyTurn = isMyTurn;
     }
 
     public String getGameId() {
@@ -95,8 +144,24 @@ public class GameDebugViewModel extends ViewModel
       return player;
     }
 
+    public String getPlayersTurn() {
+      return playersTurn;
+    }
+
     public String getStartingPlayer() {
       return startingPlayer;
+    }
+
+    public boolean isMyTurn() {
+      return isMyTurn;
+    }
+
+    public String getRoundNumber() {
+      return roundNumber;
+    }
+
+    public String getCombinedPlayerPoints() {
+      return combinedPlayerPoints;
     }
   }
 
