@@ -15,6 +15,8 @@ public class Card {
   private String cardText;
   private ArrayList<ActionParams> cardActions;
   private Map<ActionParams, Integer> currentActionCooldown;
+  private String imgResourceBasic;
+  private String imgResourceDetail;
 
   // TODO: tmp, please delete when boardView connected to GameLogic
   public Card(int id) {
@@ -28,7 +30,9 @@ public class Card {
       int power,
       int powerDiff,
       String cardText,
-      ArrayList<ActionParams> cardActions) {
+      ArrayList<ActionParams> cardActions,
+      String imgResourceBasic,
+      String imgResourceDetail) {
     this.id = id;
     this.name = name;
     this.types = types;
@@ -37,6 +41,8 @@ public class Card {
     this.cardText = cardText;
     this.cardActions = cardActions;
     this.currentActionCooldown = new HashMap<>();
+    this.imgResourceBasic = imgResourceBasic;
+    this.imgResourceDetail = imgResourceDetail;
   }
 
   public int getId() {
@@ -93,6 +99,22 @@ public class Card {
 
   public void setCardActions(ArrayList<ActionParams> cardActions) {
     this.cardActions = cardActions;
+  }
+
+  public String getImgResourceBasic() {
+    return imgResourceBasic;
+  }
+
+  public void setImgResourceBasic(String imgResourceBasic) {
+    this.imgResourceBasic = imgResourceBasic;
+  }
+
+  public String getImgResourceDetail() {
+    return imgResourceDetail;
+  }
+
+  public void setImgResourceDetail(String imgResourceDetail) {
+    this.imgResourceDetail = imgResourceDetail;
   }
 
   public Map<ActionParams, Integer> getCurrentActionCooldown() {

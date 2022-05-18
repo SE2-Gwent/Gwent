@@ -50,7 +50,9 @@ public class GameLogicTest {
             0,
             0,
             "This is a test Card",
-            new ArrayList<ActionParams>()));
+            new ArrayList<ActionParams>(),
+            "test_card_1_basic",
+            "test_card_2_basic"));
     testCards.add(
         new Card(
             2,
@@ -59,7 +61,9 @@ public class GameLogicTest {
             0,
             0,
             "This is another test Card",
-            new ArrayList<ActionParams>()));
+            new ArrayList<ActionParams>(),
+            "test_card_2_basic",
+            "test_card_2_detail"));
     cardDecks = new CardDecks(testCards, testCards);
     currentPlayer = new Player(1, InitialPlayer.INITIATOR);
     meleeRow = new Row(1, RowType.MELEE);
