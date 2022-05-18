@@ -442,6 +442,8 @@ public class GameLogicTest {
     gameField.setCardDecks(cardDecks);
     sut.setGameField(gameField);
     currentPlayer.setHasLastPlayed(true);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.OPPONENT, testCards);
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(currentPlayer);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
@@ -484,7 +486,8 @@ public class GameLogicTest {
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(currentPlayer);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
-    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_PLAYER_TURN);
+    when(mockGameStateMachine.getCurrent())
+        .thenReturn(GameState.END_PLAYER_TURN, GameState.END_ROUND);
     when(mockGameStateMachine.endRound()).thenReturn(true);
 
     sut.handleGameSyncUpdates(mockSyncRoot);
@@ -501,7 +504,8 @@ public class GameLogicTest {
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(currentPlayer);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
-    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_PLAYER_TURN);
+    when(mockGameStateMachine.getCurrent())
+        .thenReturn(GameState.END_PLAYER_TURN, GameState.END_ROUND);
     when(mockGameStateMachine.endRound()).thenReturn(true);
 
     sut.handleGameSyncUpdates(mockSyncRoot);
@@ -519,13 +523,16 @@ public class GameLogicTest {
     GameField gameField = new GameField();
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(otherPlayer);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.OPPONENT, testCards);
     gameField.getRows().getP1MeleeRow().add(testCards.get(0));
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_ROUND);
-    when(mockGameStateMachine.endRound()).thenReturn(true);
+    when(mockGameStateMachine.restartRound()).thenReturn(true);
 
     sut.handleGameSyncUpdates(mockSyncRoot);
 
+    verify(mockConnector).syncGameField(any());
     assertEquals(1, gameField.getPlayer(InitialPlayer.INITIATOR).getCurrentMatchPoints());
     assertEquals(1, sut.getGameField().getRoundNumber());
   }
@@ -555,6 +562,32 @@ public class GameLogicTest {
         InitialPlayer.INITIATOR,
         sut.getGameField().getWinnerOrNull().getInitialPlayerInformation());
     assertEquals(currentPlayer, sut.getWinner());
+  }
+
+  @Test
+  public void testHandleGameSyncEndGameRestartRound() {
+    Player otherPlayer = new Player(2, InitialPlayer.OPPONENT);
+
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    SyncRoot mockSyncRoot = mock(SyncRoot.class);
+    GameField gameField = new GameField();
+    sut.setGameField(gameField);
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    currentPlayer.setHasLastPlayed(true);
+    currentPlayer.setHasPassed(true);
+    gameField.setOpponent(otherPlayer);
+    gameField.getRows().getP1MeleeRow().add(testCards.get(0));
+    when(mockSyncRoot.getGameField()).thenReturn(gameField);
+    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_ROUND);
+    when(mockGameStateMachine.endGame()).thenReturn(true);
+
+    sut.handleGameSyncUpdates(mockSyncRoot);
+
+    verify(mockGameStateMachine).restartRound();
+    assertFalse(currentPlayer.isHasLastPlayed());
+    assertFalse(currentPlayer.isHasPassed());
+    assertEquals(1, sut.getCardMulligansLeft());
   }
 
   @Test

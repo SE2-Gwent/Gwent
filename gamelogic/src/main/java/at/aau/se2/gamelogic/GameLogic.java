@@ -345,7 +345,7 @@ public class GameLogic {
         turnReset();
 
         if (gameStateMachine.restartTurns()) {
-          connector.syncGameField(gameField);
+          connector.syncGameField(this.gameField);
         }
 
       case END_ROUND:
@@ -367,6 +367,7 @@ public class GameLogic {
 
         // TODO: clean gameboard
         // TODO: reset players
+        break;
 
       default:
         break;
