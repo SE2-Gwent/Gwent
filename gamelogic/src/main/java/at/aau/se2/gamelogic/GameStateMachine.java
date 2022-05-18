@@ -26,7 +26,7 @@ public class GameStateMachine {
       case START_GAME_ROUND:
         return current == GameState.WAIT_FOR_OPPONENT || current == GameState.INITIALIZE;
       case DRAW_CARDS:
-        return current == GameState.START_GAME_ROUND;
+        return current == GameState.START_GAME_ROUND || current == GameState.END_ROUND;
       case MULLIGAN_CARDS:
         return current == GameState.DRAW_CARDS;
       case START_PLAYER_TURN:
@@ -104,6 +104,10 @@ public class GameStateMachine {
 
   public boolean restartTurns() {
     return cardsChanged();
+  }
+
+  public boolean restartRound() {
+    return roundCanStart();
   }
 
   public boolean endRound() {

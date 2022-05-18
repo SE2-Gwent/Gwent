@@ -54,6 +54,8 @@ public class GameField {
 
   @Exclude
   public int getPointsForPlayer(Player player) {
+    if (player == null) return 0;
+
     int points = 0;
 
     for (Card card : getRows().meleeRowFor(player)) {

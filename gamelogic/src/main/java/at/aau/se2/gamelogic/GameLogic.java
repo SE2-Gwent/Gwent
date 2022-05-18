@@ -40,10 +40,11 @@ public class GameLogic {
   private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
-  private int cardMulligansLeft = 0;
+  private int cardMulligansLeft = 3;
   // set when playing card or using hero activity
   private boolean currentPlayerCanPass = true;
   private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
+  private int lastSavedActionSize = 0;
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
@@ -239,10 +240,6 @@ public class GameLogic {
     }
 
     gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(drawnCards.values()));
-
-    if (gameStateMachine.cardsDrawn()) {
-      connector.syncGameField(gameField);
-    }
   }
 
   // Need to do it person per person to prevent race-condidition, where both players
@@ -266,18 +263,25 @@ public class GameLogic {
   }
 
   private void turnReset() {
-    gameField.getOpponent().setHasLastPlayed(false);
     gameField.getCurrentPlayer().setHasLastPlayed(false);
+    gameField.getOpponent().setHasLastPlayed(false);
   }
 
-  private void roundReset() {}
+  private void roundReset() {
+    turnReset();
+    gameField.getCurrentPlayer().setHasPassed(false);
+    gameField.getOpponent().setHasPassed(false);
+    cardMulligansLeft = 1;
+    playerHasMulliganedCards.put(InitialPlayer.INITIATOR, false);
+    playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
+  }
 
   protected void handleGameSyncUpdates(SyncRoot syncRoot) {
     if (syncRoot == null) return;
 
     this.gameField = syncRoot.getGameField();
 
-    ArrayList<SyncAction> newSyncActions = syncRoot.getLastActions();
+    ArrayList<SyncAction> newSyncActions = syncRoot.getLastActions(lastSavedActionSize);
 
     switch (gameStateMachine.getCurrent()) {
       case WAIT_FOR_OPPONENT:
@@ -297,10 +301,9 @@ public class GameLogic {
           return;
         }
 
-        cardMulligansLeft = (gameField.getRoundNumber() == 0) ? 3 : 1;
-
         InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
         if (gameStateMachine.roundCanStart()) {
+          lastSavedActionSize = syncRoot.getSyncActions().size();
           this.startingPlayer = startingPlayer;
         }
         break;
@@ -308,12 +311,17 @@ public class GameLogic {
       case DRAW_CARDS:
         if (gameField == null || gameField.getCurrentPlayer() == null) return;
         drawCards();
+
+        if (gameStateMachine.cardsDrawn()) {
+          connector.syncGameField(this.gameField);
+        }
         break;
 
       case MULLIGAN_CARDS:
         InitialPlayer mulliganedPlayer = SyncActionUtil.findPlayerHasMulliganed(newSyncActions);
         if (mulliganedPlayer == null) return;
         playerHasMulliganedCards.put(mulliganedPlayer, true);
+        lastSavedActionSize = syncRoot.getSyncActions().size();
 
         if (!bothPlayerHaveMulliganed()) return;
         gameStateMachine.cardsChanged();
@@ -325,20 +333,19 @@ public class GameLogic {
           return;
         }
 
-        gameStateMachine.endPlayerTurns();
-        handleGameSyncUpdates(syncRoot);
+        if (gameStateMachine.endPlayerTurns()) handleGameSyncUpdates(syncRoot);
         break;
 
       case END_PLAYER_TURN:
         if (bothPLayerHavePassed()) {
           Log.i(TAG, "Both players passed, round ends.");
-          gameStateMachine.endRound();
+          if (gameStateMachine.endRound()) handleGameSyncUpdates(syncRoot);
           return;
         }
 
         if (bothPlayerOutOfCards()) {
           Log.i(TAG, "Both players run out of cards, round ends.");
-          gameStateMachine.endRound();
+          if (gameStateMachine.endRound()) handleGameSyncUpdates(syncRoot);
           return;
         }
 
@@ -347,16 +354,18 @@ public class GameLogic {
         if (gameStateMachine.restartTurns()) {
           connector.syncGameField(this.gameField);
         }
+        break;
 
       case END_ROUND:
-        roundReset();
-
         Player player = gameField.getPointLeadingPlayer();
-        if (player != null) {
-          player.setCurrentMatchPoints(player.getCurrentMatchPoints() + 1);
-        } else {
-          // TODO: round tied
+        if (player == null) {
+          // round tied, choose random winner
+          Random random = new Random();
+          InitialPlayer randomWinningPlayer =
+              (random.nextInt(2) == 1) ? InitialPlayer.INITIATOR : InitialPlayer.OPPONENT;
+          player = gameField.getPlayer(randomWinningPlayer);
         }
+        player.setCurrentMatchPoints(player.getCurrentMatchPoints() + 1);
 
         Player winningPlayer = gameField.getWinnerOrNull();
         if (winningPlayer != null) {
@@ -365,6 +374,9 @@ public class GameLogic {
           return;
         }
 
+        roundReset();
+
+        if (gameStateMachine.restartRound()) connector.syncGameField(this.gameField);
         // TODO: clean gameboard
         // TODO: reset players
         break;
