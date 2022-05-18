@@ -345,7 +345,21 @@ public class GameLogic {
 
       case END_ROUND:
         roundReset();
-        // TODO: check if game completly ended
+
+        Player player = gameField.getPointLeadingPlayer();
+        if (player != null) {
+          player.setCurrentMatchPoints(player.getCurrentMatchPoints() + 1);
+        } else {
+          // TODO: round tied
+        }
+
+        Player winningPlayer = gameField.getWinnerOrNull();
+        if (winningPlayer != null) {
+          Log.i(TAG, winningPlayer.getInitialPlayerInformation() + " has won");
+          gameStateMachine.endGame();
+          return;
+        }
+
         // TODO: clean gameboard
         // TODO: reset players
 
@@ -465,6 +479,10 @@ public class GameLogic {
     InitialPlayer playerToTurn = getPlayerToTurn();
     if (whoAmI == null || playerToTurn == null) return false;
     return playerToTurn.name().equals(whoAmI.name());
+  }
+
+  public @Nullable Player getWinner() {
+    return gameField.getWinnerOrNull();
   }
 
   private boolean bothPlayerHaveMulliganed() {

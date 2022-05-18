@@ -8,5 +8,6 @@ public enum GameState {
   MULLIGAN_CARDS,
   START_PLAYER_TURN,
   END_PLAYER_TURN,
-  END_ROUND
+  END_ROUND,
+  END_GAME
 }

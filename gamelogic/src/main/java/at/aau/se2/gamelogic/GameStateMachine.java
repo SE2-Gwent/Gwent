@@ -35,6 +35,8 @@ public class GameStateMachine {
         return current == GameState.START_PLAYER_TURN;
       case END_ROUND:
         return current == GameState.END_PLAYER_TURN;
+      case END_GAME:
+        return current == GameState.END_ROUND;
       default:
         return false;
     }
@@ -121,6 +123,16 @@ public class GameStateMachine {
     }
 
     changeState(GameState.END_PLAYER_TURN);
+    return true;
+  }
+
+  public boolean endGame() {
+    if (!canProgressTo(GameState.END_GAME)) {
+      Log.w("Cannot start game round.");
+      return false;
+    }
+
+    changeState(GameState.END_GAME);
     return true;
   }
 

@@ -9,7 +9,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 public class GameField {
-  private GameFieldRows rows;
+  private GameFieldRows rows = new GameFieldRows();
   @Nullable private Player currentPlayer;
   @Nullable private Player opponent;
   private CardDecks cardDecks = new CardDecks();
@@ -36,6 +36,41 @@ public class GameField {
   public int getRoundNumber() {
     if (currentPlayer == null || opponent == null) return 0;
     return currentPlayer.getCurrentMatchPoints() + opponent.getCurrentMatchPoints();
+  }
+
+  @Exclude
+  public @Nullable Player getPointLeadingPlayer() {
+    int currentPoints = getPointsForPlayer(currentPlayer);
+    int opponentPoints = getPointsForPlayer(opponent);
+
+    if (currentPoints == opponentPoints) {
+      return null;
+    }
+
+    return (getPointsForPlayer(currentPlayer) > getPointsForPlayer(opponent))
+        ? currentPlayer
+        : opponent;
+  }
+
+  @Exclude
+  public int getPointsForPlayer(Player player) {
+    int points = 0;
+
+    for (Card card : getRows().meleeRowFor(player)) {
+      points = +card.getPower() + card.getPowerDiff();
+    }
+    for (Card card : getRows().rangedRowFor(player)) {
+      points = +card.getPower() + card.getPowerDiff();
+    }
+
+    return points;
+  }
+
+  @Exclude
+  public Player getWinnerOrNull() {
+    if (currentPlayer.getCurrentMatchPoints() == 2) return currentPlayer;
+    if (opponent.getCurrentMatchPoints() == 2) return opponent;
+    return null;
   }
 
   public void setPlayingCardsFor(InitialPlayer player, ArrayList<Card> cards) {
