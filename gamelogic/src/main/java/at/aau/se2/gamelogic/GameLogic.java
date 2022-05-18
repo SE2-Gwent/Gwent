@@ -409,7 +409,9 @@ public class GameLogic {
             : InitialPlayer.INITIATOR;
 
     if (roundNumber == 0) {
-      return gameField.getPlayer(startingPlayer).isHasLastPlayed() ? otherPlayer : startingPlayer;
+      Player player = gameField.getPlayer(startingPlayer);
+      if (player.isHasPassed()) return otherPlayer;
+      return player.isHasLastPlayed() ? otherPlayer : startingPlayer;
     }
 
     boolean startingPlayerHasWonLastRound = gameField.getPlayer(startingPlayer).isHasLastRoundWon();
@@ -417,9 +419,9 @@ public class GameLogic {
         startingPlayerHasWonLastRound ? otherPlayer : startingPlayer;
     InitialPlayer roundSecondPlayer = startingPlayerHasWonLastRound ? startingPlayer : otherPlayer;
 
-    return gameField.getPlayer(roundSecondPlayer).isHasLastPlayed()
-        ? roundSecondPlayer
-        : roundStartingPlayer;
+    Player player = gameField.getPlayer(roundSecondPlayer);
+    if (player.isHasPassed()) return otherPlayer;
+    return player.isHasLastPlayed() ? roundSecondPlayer : roundStartingPlayer;
   }
 
   public boolean isMyTurn() {
@@ -497,5 +499,13 @@ public class GameLogic {
 
   public void setGameLogicDataProvider(GameLogicDataProvider gameLogicDataProvider) {
     this.gameLogicDataProvider = gameLogicDataProvider;
+  }
+
+  protected void setCurrentPlayerCanPass(boolean currentPlayerCanPass) {
+    this.currentPlayerCanPass = currentPlayerCanPass;
+  }
+
+  public boolean getCurrentPlayerCanPass() {
+    return currentPlayerCanPass;
   }
 }

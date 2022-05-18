@@ -485,18 +485,21 @@ public class GameLogicTest {
       boolean hasInitialPlayerPlayed;
       InitialPlayer expected;
       boolean hasInititalPlayerWon;
+      boolean playerHasPassed;
 
       public TestData(
           int round,
           InitialPlayer startingPlayer,
           boolean hasInitialPlayerPlayed,
           InitialPlayer expected,
-          boolean hasInitialPlayerWon) {
+          boolean hasInitialPlayerWon,
+          boolean playerHasPassed) {
         this.round = round;
         this.startingPlayer = startingPlayer;
         this.hasInitialPlayerPlayed = hasInitialPlayerPlayed;
         this.expected = expected;
         this.hasInititalPlayerWon = hasInitialPlayerWon;
+        this.playerHasPassed = playerHasPassed;
       }
     }
 
@@ -507,25 +510,43 @@ public class GameLogicTest {
     when(gameField.getPlayer(any())).thenReturn(mockCurrentPlayer);
 
     ArrayList<TestData> testData = new ArrayList<>(); // <RoundNumber, StartingPlayer.hasPlayed>
-    testData.add(new TestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true));
-    testData.add(new TestData(0, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, true));
-    testData.add(new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, false));
-    testData.add(new TestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, false));
-    testData.add(new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true));
-    testData.add(new TestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.INITIATOR, true));
+    testData.add(
+        new TestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, true, false));
+    testData.add(
+        new TestData(0, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, true, false));
+    testData.add(
+        new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.INITIATOR, false, false));
+    testData.add(
+        new TestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.OPPONENT, false, false));
+    testData.add(
+        new TestData(1, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, false));
+    testData.add(
+        new TestData(1, InitialPlayer.INITIATOR, true, InitialPlayer.INITIATOR, true, false));
 
-    testData.add(new TestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true));
-    testData.add(new TestData(0, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, true));
-    testData.add(new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, false));
-    testData.add(new TestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, false));
-    testData.add(new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true));
-    testData.add(new TestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.OPPONENT, true));
+    testData.add(
+        new TestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, true, false));
+    testData.add(
+        new TestData(0, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, true, false));
+    testData.add(
+        new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.OPPONENT, false, false));
+    testData.add(
+        new TestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.INITIATOR, false, false));
+    testData.add(
+        new TestData(1, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, false));
+    testData.add(
+        new TestData(1, InitialPlayer.OPPONENT, true, InitialPlayer.OPPONENT, true, false));
+
+    testData.add(
+        new TestData(0, InitialPlayer.INITIATOR, false, InitialPlayer.OPPONENT, true, true));
+    testData.add(
+        new TestData(0, InitialPlayer.OPPONENT, false, InitialPlayer.INITIATOR, true, true));
 
     for (TestData data : testData) {
       sut.setStartingPlayer(data.startingPlayer);
       when(gameField.getRoundNumber()).thenReturn(data.round);
       when(mockCurrentPlayer.isHasLastPlayed()).thenReturn(data.hasInitialPlayerPlayed);
       when(mockCurrentPlayer.isHasLastRoundWon()).thenReturn(data.hasInititalPlayerWon);
+      when(mockCurrentPlayer.isHasPassed()).thenReturn(data.playerHasPassed);
 
       InitialPlayer playerToTurn = sut.getPlayerToTurn();
 
