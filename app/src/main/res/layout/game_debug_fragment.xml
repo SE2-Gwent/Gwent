@@ -56,12 +56,20 @@
         app:layout_constraintTop_toBottomOf="@+id/playersTurnTextView" />
 
     <TextView
-        android:id="@+id/pointsTextView"
+        android:id="@+id/cardPointsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roundTextView" />
+
+    <TextView
+        android:id="@+id/roundPointsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardPointsView" />
 
     <Button
         android:id="@+id/cancelMulliganCardButton"

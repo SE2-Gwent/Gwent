@@ -41,7 +41,8 @@ public class GameDebugFragment extends Fragment {
           binding.startingPlayerTextView.setText(viewState.getStartingPlayer());
           binding.playersTurnTextView.setText(viewState.getPlayersTurn());
           binding.roundTextView.setText(viewState.getRoundNumber());
-          binding.pointsTextView.setText(viewState.getCombinedPlayerPoints());
+          binding.cardPointsView.setText(viewState.getCombinedPlayerPoints());
+          binding.roundPointsView.setText(viewState.getRoundsWon());
         });
 
     viewModel.errorMutableLiveData.observe(

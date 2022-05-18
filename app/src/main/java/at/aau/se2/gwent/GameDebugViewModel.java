@@ -15,6 +15,7 @@ import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardType;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.InitialPlayer;
+import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.state.GameState;
 
@@ -84,6 +85,9 @@ public class GameDebugViewModel extends ViewModel
   }
 
   private void createCurrentViewState() {
+    Player current = gameLogic.getGameField().getCurrentPlayer();
+    Player opponent = gameLogic.getGameField().getOpponent();
+
     ViewState newState =
         new ViewState(
             String.valueOf(gameLogic.getGameId()),
@@ -96,6 +100,8 @@ public class GameDebugViewModel extends ViewModel
                 .getGameField()
                 .getPointsForPlayer(gameLogic.getGameField().getCurrentPlayer()),
             gameLogic.getGameField().getPointsForPlayer(gameLogic.getGameField().getOpponent()),
+            (current != null) ? current.getCurrentMatchPoints() : 0,
+            (opponent != null) ? opponent.getCurrentMatchPoints() : 0,
             gameLogic.isMyTurn());
     state.setValue(newState);
   }
@@ -108,6 +114,7 @@ public class GameDebugViewModel extends ViewModel
     private String playersTurn;
     private String roundNumber;
     private String combinedPlayerPoints;
+    private String roundsWon;
     private boolean isMyTurn;
 
     public ViewState(
@@ -119,6 +126,8 @@ public class GameDebugViewModel extends ViewModel
         String roundNumber,
         int currentPlayerPoints,
         int opponentPlayerPoints,
+        int currentPlayerRoundsWon,
+        int opponentPlayerRoundsWon,
         boolean isMyTurn) {
       this.gameId = gameId;
       this.state = state.name();
@@ -128,7 +137,13 @@ public class GameDebugViewModel extends ViewModel
       this.playersTurn = playersTurn == null ? "Not Set" : "PlayersTurn: " + playersTurn.name();
       this.roundNumber = "Round: " + roundNumber;
       this.combinedPlayerPoints =
-          "Innitiator " + currentPlayerPoints + ":" + opponentPlayerPoints + " Opponent";
+          "Points: Innitiator " + currentPlayerPoints + ":" + opponentPlayerPoints + " Opponent";
+      this.roundsWon =
+          "Rounds: Innitiator "
+              + currentPlayerRoundsWon
+              + ":"
+              + opponentPlayerRoundsWon
+              + " Opponent";
       this.isMyTurn = isMyTurn;
     }
 
@@ -158,6 +173,10 @@ public class GameDebugViewModel extends ViewModel
 
     public String getRoundNumber() {
       return roundNumber;
+    }
+
+    public String getRoundsWon() {
+      return roundsWon;
     }
 
     public String getCombinedPlayerPoints() {
