@@ -29,7 +29,6 @@ import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
-// TODO: Let player pass
 // TODO: Handle Card Actions
 // TODO: SyncAction for CardActions (opt)
 
@@ -402,7 +401,6 @@ public class GameLogic {
           connector.syncGameField(this.gameField);
         }
         // TODO: clean gameboard
-        // TODO: reset players
         break;
 
       default:
