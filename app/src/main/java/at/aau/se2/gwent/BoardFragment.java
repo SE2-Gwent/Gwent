@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import android.content.pm.ActivityInfo;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +16,31 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gwent.databinding.MainboardBinding;
-import at.aau.se2.gwent.views.Boardviewmodel;
+import at.aau.se2.gwent.views.BoardViewModel;
 
 public class BoardFragment extends Fragment {
   private static final String TAG = BoardFragment.class.getSimpleName();
-  //Klassenzugriff
-  private Boardviewmodel viewModel;
+  //Deklariere Variablen
+  private BoardViewModel viewModel;
   //Binding: nicht immer R.id schreiben muss (Aufruf)
   private MainboardBinding binding;
   //Placeholder und Imageviews zugriff (hole Sie)
   ArrayList<ImageView> cards;
   ArrayList<ImageView> placeholder;
 
+  public BoardFragment() {
+    //TODO: connect gamefieldlistener from gamelogic
+
+  }
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    viewModel = new ViewModelProvider(this).get(Boardviewmodel.class);
+    viewModel = new ViewModelProvider(this).get(BoardViewModel.class);
     //Observer: Wenn sich der Zustand ändert (Variable), dann führt er die Methode aus
     viewModel.getCurrentState().observe(this, this::updateUI);
   }
+
 
   @Override
   public View onCreateView(
@@ -40,7 +48,7 @@ public class BoardFragment extends Fragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    //Holt sich nur das Binding (Kevin)
+    //??
     binding = MainboardBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
@@ -69,26 +77,12 @@ public class BoardFragment extends Fragment {
   Aufruf(Done) ->
 
    */
-  private void updateUI(Board.State state) {
-    switch (state) {
-      case INITIAL:
-        /*generateimageviews();
-        loadhandcards();
-        setonclicklistener();*/
-        break;
-
-      case ACTIVATEHERO:
-        break;
-      case CARDCLICKED:
-        showplaceholders();
-        setonclicklistener();
-        break;
-      case CARDPLACED:
-        break;
-      case DONE:
-        loadhandcards();
-        setonclicklistener();
+  private void updateUI(BoardViewState state) {
+    if(state == null){
+      return;
     }
+    Log.v(TAG, String.valueOf(state.currentPlayerHandCards));
+
   }
 
   //Ruft alle Handkarten auf - (Viewmodel) - setze Karten aus Viewmodel
@@ -101,9 +95,9 @@ public class BoardFragment extends Fragment {
 
   //Je nach Status werden die OnClicklistener gesetzt (Handkarte, Board, usw)
   public void setonclicklistener() {
-    if (viewModel.getCurrentState().equals(Board.State.INITIAL)) {
+    if (viewModel.getCurrentState().equals(BoardViewState.State.INITIAL)) {
       // onclickaufhandkarten
-    } else if (viewModel.getCurrentState().equals(Board.State.CARDCLICKED)) {
+    } else if (viewModel.getCurrentState().equals(BoardViewState.State.CARDCLICKED)) {
       for (ImageView place : placeholder) {
         //
       }
