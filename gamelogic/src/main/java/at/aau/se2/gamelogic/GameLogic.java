@@ -391,7 +391,7 @@ public class GameLogic {
         if (winningPlayer != null) {
           Log.i(TAG, winningPlayer.getInitialPlayerInformation() + " has won");
           if (gameStateMachine.endGame()) {
-            connector.syncGameField(this.gameField);
+            if (whoAmI == InitialPlayer.INITIATOR) connector.syncGameField(this.gameField);
           }
           return;
         }
