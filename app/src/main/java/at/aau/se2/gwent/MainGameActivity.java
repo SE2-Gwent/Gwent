@@ -50,6 +50,11 @@ public class MainGameActivity extends AppCompatActivity {
     addOnClickListenerForHandCards(handcards);
     // Done Buttom - Damit der Zug beendet wird.
     activateDoneButton();
+
+    for (CardView card : placeholder) {
+      card.getCardImageView().setVisibility(View.INVISIBLE);
+      card.getCardImageView().setImageResource(R.drawable.card_background);
+    }
   }
 
   // erzeugt die testkarten muss im weiteren verlauf ausgetauscht werden
@@ -193,13 +198,6 @@ public class MainGameActivity extends AppCompatActivity {
               new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  if (currentcard != null) {
-                    // Holt das Bild
-                    currentplaceholder
-                        .getCardImageView()
-                        .setImageResource(R.drawable.card_background);
-                    currentcard.setVisibility(View.VISIBLE);
-                  }
 
                   currentcard = (CardView) v;
                   // Platzhalter die Frei sind Sichtbarmachen und OnClick freigeben
@@ -215,7 +213,7 @@ public class MainGameActivity extends AppCompatActivity {
   public void activatePlaceholders() {
     // Placeholder werden sichtbar
     for (CardView i : placeholder) {
-      i.setVisibility(View.VISIBLE);
+      i.getCardImageView().setVisibility(View.VISIBLE);
     }
   }
 
@@ -228,18 +226,18 @@ public class MainGameActivity extends AppCompatActivity {
             // Placeholder befüllt
             @Override
             public void onClick(View v) {
-              if (currentplaceholder == null) return;
-
-              currentplaceholder.getCardImageView().setImageResource(R.drawable.card_background);
-
               // Beim Ersten Ausspielen wird der Placeholder mit der Handkarte ausgetauscht.
               CardView test = (CardView) v;
               currentplaceholder = test;
+              currentplaceholder.setAlpha(1.0F);
               currentplaceholder
                   .getCardImageView()
-                  .setImageResource((Integer) currentcard.getTag());
+                  .setImageResource(R.drawable.an_craite_amorsmith);
+              currentplaceholder.setTag("full");
+
               // ausgespielte Handkarte unsichtbar
-              currentcard.setVisibility(View.INVISIBLE);
+              currentcard.setVisibility(View.GONE);
+              deleteOnClickListenerOfAllElements();
             }
           });
     }
@@ -247,13 +245,10 @@ public class MainGameActivity extends AppCompatActivity {
 
   // Done buttom entfernt alle OnClicklistener
   public void deleteOnClickListenerOfAllElements() {
-    for (CardView card : cards) {
-      card.setOnClickListener(null);
-    }
     for (CardView placeholder : placeholder) {
       placeholder.setOnClickListener(null);
       if (placeholder.getTag() != "full") {
-        placeholder.setVisibility(View.INVISIBLE);
+        placeholder.getCardImageView().setVisibility(View.INVISIBLE);
       }
     }
   }
