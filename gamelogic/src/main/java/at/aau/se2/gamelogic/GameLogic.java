@@ -378,6 +378,7 @@ public class GameLogic {
         if (player == null && whoAmI == InitialPlayer.OPPONENT) {
           InitialPlayer syncedWinningPlayer = SyncActionUtil.findWinningPlayer(newSyncActions);
           if (syncedWinningPlayer == null) return;
+          lastSavedActionSize = syncRoot.getSyncActions().size();
           player = this.gameField.getPlayer(syncedWinningPlayer);
         }
 
