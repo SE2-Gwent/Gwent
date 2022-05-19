@@ -10,6 +10,7 @@ public class Boardviewmodel extends ViewModel {
 
   private MutableLiveData<Board.State> currentState = new MutableLiveData<>(Board.State.INITIAL);
 
+  //Object das Livestatusupdates gibt (Observer)
   public MutableLiveData<Board.State> getCurrentState() {
     return currentState;
   }
@@ -18,6 +19,7 @@ public class Boardviewmodel extends ViewModel {
     this.currentState = currentState;
   }
 
+  //Handkarten holen
   public ArrayList<Integer> getHandcards() {
     return new ArrayList<>(10);
   }

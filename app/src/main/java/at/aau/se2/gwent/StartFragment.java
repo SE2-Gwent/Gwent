@@ -89,8 +89,8 @@ public class StartFragment extends Fragment implements CardActionCallback {
           @Override
           public void onClick(View view) {
 
-            Intent intent = new Intent(getActivity(), BoardFragment.class);
-            ((MainActivity) getActivity()).startActivity(intent);
+            Intent intent = new Intent(getActivity(), MainGame.class);
+            ((MainGame) getActivity()).startActivity(intent);
           }
         });
   }

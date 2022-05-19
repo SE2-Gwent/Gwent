@@ -2,13 +2,13 @@ package at.aau.se2.gwent;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,9 +18,11 @@ import at.aau.se2.gwent.views.Boardviewmodel;
 
 public class BoardFragment extends Fragment {
   private static final String TAG = BoardFragment.class.getSimpleName();
-
+  //Klassenzugriff
   private Boardviewmodel viewModel;
+  //Binding: nicht immer R.id schreiben muss (Aufruf)
   private MainboardBinding binding;
+  //Placeholder und Imageviews zugriff (hole Sie)
   ArrayList<ImageView> cards;
   ArrayList<ImageView> placeholder;
 
@@ -28,6 +30,7 @@ public class BoardFragment extends Fragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     viewModel = new ViewModelProvider(this).get(Boardviewmodel.class);
+    //Observer: Wenn sich der Zustand ändert (Variable), dann führt er die Methode aus
     viewModel.getCurrentState().observe(this, this::updateUI);
   }
 
@@ -37,23 +40,20 @@ public class BoardFragment extends Fragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
+    //Holt sich nur das Binding (Kevin)
     binding = MainboardBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
+  //??
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    // this should destroy the fragment if the button is clicked
-    /*binding.backgroundImageButton.setOnClickListener(
-    view -> {
-        Navigation.findNavController(
-                Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
-                .popBackStack();
-    });*/
+
   }
 
+  //??
   @Override
   public void onStop() {
     super.onStop();
@@ -61,16 +61,29 @@ public class BoardFragment extends Fragment {
         .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
   }
 
+  /*3 Staten:
+  Aufruf(Initial) -> Auf Methoden wird zugerufen
+  Aufruf(Cardclicked) ->
+  Aufruf(Acitivatehero) -> Heroability
+  Aufruf(Cardplaced) -> Idee Donebuttom aktivieren (Visible)
+  Aufruf(Done) ->
+
+   */
   private void updateUI(Board.State state) {
     switch (state) {
       case INITIAL:
-        generateimageviews();
+        /*generateimageviews();
         loadhandcards();
-        setonclicklistener();
+        setonclicklistener();*/
+        break;
+
+      case ACTIVATEHERO:
         break;
       case CARDCLICKED:
         showplaceholders();
         setonclicklistener();
+        break;
+      case CARDPLACED:
         break;
       case DONE:
         loadhandcards();
@@ -78,38 +91,42 @@ public class BoardFragment extends Fragment {
     }
   }
 
+  //Ruft alle Handkarten auf - (Viewmodel) - setze Karten aus Viewmodel
   private void loadhandcards() {
     ArrayList<Integer> handcards = viewModel.getHandcards();
-    for(int i= 0; i<10; i++){
+    for (int i = 0; i < 10; i++) {
       cards.get(i).setImageResource(handcards.get(i));
     }
   }
-  public void setonclicklistener(){
-    if(viewModel.getCurrentState().equals(Board.State.INITIAL)){
-      //onclickaufhandkarten
-    }else if(viewModel.getCurrentState().equals(Board.State.CARDCLICKED)){
-        for(ImageView place: placeholder){
-          //
-        }
-    }else{
+
+  //Je nach Status werden die OnClicklistener gesetzt (Handkarte, Board, usw)
+  public void setonclicklistener() {
+    if (viewModel.getCurrentState().equals(Board.State.INITIAL)) {
+      // onclickaufhandkarten
+    } else if (viewModel.getCurrentState().equals(Board.State.CARDCLICKED)) {
+      for (ImageView place : placeholder) {
+        //
+      }
+    } else {
       loadhandcards();
-      for (ImageView a: cards){
+      for (ImageView a : cards) {
         a.setOnClickListener(null);
       }
-      for (ImageView b: placeholder){
+      for (ImageView b : placeholder) {
         b.setOnClickListener(null);
       }
     }
-
   }
 
-  public void showplaceholders(){
-      for(ImageView a: placeholder){
-        a.setVisibility(View.VISIBLE);
-      }
+  //Wenn Karten click erscheinen alle Placeholder
+  public void showplaceholders() {
+    for (ImageView a : placeholder) {
+      a.setVisibility(View.VISIBLE);
+    }
   }
 
-  public void generateimageviews(){
+  //Ressourcen holen um auf die Imageviews zuzugreifen
+  public void generateimageviews() {
     cards = new ArrayList<ImageView>(10);
     cards.add(binding.handdeck.card1);
     cards.add(binding.handdeck.card2);
@@ -122,6 +139,7 @@ public class BoardFragment extends Fragment {
     cards.add(binding.handdeck.card9);
     cards.add(binding.handdeck.card10);
 
+    //Ressourcen holen um auf die placeholder zuzugreifen
     placeholder = new ArrayList<>(18);
     placeholder.add(binding.firstrow.rowcard1);
     placeholder.add(binding.firstrow.rowcard2);
@@ -142,5 +160,4 @@ public class BoardFragment extends Fragment {
     placeholder.add(binding.secondrow.rowcard8);
     placeholder.add(binding.secondrow.rowcard9);
   }
-
 }

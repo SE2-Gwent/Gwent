@@ -34,7 +34,7 @@ public class MainGame extends AppCompatActivity {
 
     setContentView(R.layout.mainboard);
     // erzeugt Testkarten
-    //generatetestentities();
+    // generatetestentities();
     // Balken - mit Appnamen auf hidegesetzt
     getSupportActionBar().hide();
     // Einzelne Imageviews holen
@@ -173,8 +173,6 @@ public class MainGame extends AppCompatActivity {
         });
   }
 
-
-
   // Jede einzelne Handkarte bekommt einen OnClickListener
   public void addonclicklistenerforhandcards(ArrayList<Card> handcards) {
     for (int i = 0; i < 10; i++) {
@@ -221,7 +219,7 @@ public class MainGame extends AppCompatActivity {
           });
     }
   }
-  //erledigt
+  // erledigt
   // Handkarten anzeigen
   public void showpicturesforhandcards(ArrayList<Card> handcards) {
     for (int i = 0; i < handcards.size(); i++) {
@@ -231,14 +229,14 @@ public class MainGame extends AppCompatActivity {
     }
   }
 
-  //erledigt
+  // erledigt
   public void activateplaceholders() {
     // Placeholder werden sichtbar
     for (ImageView i : placeholder) {
       i.setVisibility(View.VISIBLE);
     }
   }
-  //erledigt
+  // erledigt
   // Done buttom entfernt alle OnClicklistener
   public void deleteonclicklistenerofallelements() {
     for (ImageView card : cards) {
@@ -252,9 +250,7 @@ public class MainGame extends AppCompatActivity {
     }
   }
 
-
-
-  //erledigt
+  // erledigt
   public void fillplaceholderimageviewarray() {
 
     View firstrow = findViewById(R.id.firstrow);
