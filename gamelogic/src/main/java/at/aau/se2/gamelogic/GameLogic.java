@@ -341,6 +341,7 @@ public class GameLogic {
 
         if (!bothPlayerHaveMulliganed()) return;
         gameStateMachine.cardsChanged();
+        gameField.updateGameDecksAfterMulligan();
         break;
 
       case START_PLAYER_TURN:

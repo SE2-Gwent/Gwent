@@ -413,6 +413,7 @@ public class GameLogicTest {
     when(mockSyncRoot.getLastActions(eq(1))).thenReturn(lastSyncActions);
     sut.handleGameSyncUpdates(mockSyncRoot);
 
+    assertTrue(20 != sut.getGameField().getCardDeck(InitialPlayer.INITIATOR).size());
     verify(mockGameStateMachine).cardsChanged();
   }
 

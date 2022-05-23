@@ -83,6 +83,16 @@ public class GameField {
     return null;
   }
 
+  public void updateGameDecksAfterMulligan() {
+    for (String cardId : currentHandCards.getP1Deck().keySet()) {
+      cardDecks.getP1Deck().remove(cardId);
+    }
+
+    for (String cardId : currentHandCards.getP2Deck().keySet()) {
+      cardDecks.getP2Deck().remove(cardId);
+    }
+  }
+
   public void setPlayingCardsFor(InitialPlayer player, ArrayList<Card> cards) {
     currentHandCards.setDeck(player, cards);
   }
