@@ -445,6 +445,12 @@ public class GameLogic {
                 .getCardDecks()
                 .getCard(deployParams.getCardUUID(), gameField.getCurrentPlayer());
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
+        // remove card from hand
+        // TODO: Test removing of card
+        gameField
+            .getCardDeck(gameField.getCurrentPlayer().getInitialPlayerInformation())
+            .remove(card.getFirebaseId());
+
         break;
 
       case ATTACK:
