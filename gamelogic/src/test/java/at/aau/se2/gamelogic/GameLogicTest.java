@@ -462,6 +462,8 @@ public class GameLogicTest {
     sut.setWhoAmI(InitialPlayer.INITIATOR);
     sut.setStartingPlayer(InitialPlayer.INITIATOR);
     sut.setCurrentPlayerCanPass(true);
+    gameField.setOpponent(currentPlayer);
+    gameField.setCurrentPlayer(currentPlayer);
     sut.setGameField(gameField);
 
     SyncRoot mockSyncRoot = mock(SyncRoot.class);
@@ -599,6 +601,7 @@ public class GameLogicTest {
     gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
     gameField.setCardDecks(cardDecks);
     gameField.setCurrentPlayer(currentPlayer);
+    gameField.setOpponent(currentPlayer);
     sut.setGameField(gameField);
     when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
 

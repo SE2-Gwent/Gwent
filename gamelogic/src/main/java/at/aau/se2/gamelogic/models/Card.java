@@ -106,4 +106,8 @@ public class Card {
   public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
     this.currentActionCooldown = currentActionCooldown;
   }
+
+  public String getFirebaseId() {
+    return id + "_card";
+  }
 }

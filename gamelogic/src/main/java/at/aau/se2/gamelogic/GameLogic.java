@@ -143,23 +143,34 @@ public class GameLogic {
     connector.syncGameField(gameField);
   }
 
-  public void mulliganCard(int cardId) {
-    if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return;
+  /*
+   @return Returns cardId to show instead of old card
+  */
+  public @Nullable String mulliganCard(int cardId) {
+    if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return null;
     if (cardMulligansLeft == 0) {
       Log.w(TAG, "There are no mulligans left this round");
-      return;
+      return null;
     }
 
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
     HashMap<String, Card> playingCards = gameField.getCurrentHandCardsFor(whoAmI);
 
+    int startingPlayingCardsSize = playingCards.size();
     playingCards.remove(cardId + "_card");
 
+    String mulliganedCardId = null;
     Random random = new Random();
-    while (playingCards.size() < 10) {
+    // try to change card, until we have same amount again
+    while (playingCards.size() < startingPlayingCardsSize) {
       int randomIndex = random.nextInt(cards.size());
       Card card = cards.get(randomIndex);
-      playingCards.put(String.valueOf(card.getId() + "_card"), card);
+
+      // card already in playing cards, try again
+      if (playingCards.containsKey(card.getFirebaseId())) continue;
+
+      mulliganedCardId = card.getFirebaseId();
+      playingCards.put(mulliganedCardId, card);
     }
 
     gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(playingCards.values()));
@@ -169,6 +180,8 @@ public class GameLogic {
     if (cardMulligansLeft == 0) {
       connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
     }
+
+    return mulliganedCardId;
   }
 
   public void abortMulliganCards() {

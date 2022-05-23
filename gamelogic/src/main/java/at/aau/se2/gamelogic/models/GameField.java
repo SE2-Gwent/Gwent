@@ -1,19 +1,16 @@
 package at.aau.se2.gamelogic.models;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.firebase.database.Exclude;
 
+import android.util.Log;
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
-import at.aau.se2.gamelogic.GameLogic;
-
 public class GameField {
-  final private String TAG = GameField.class.getSimpleName();
+  private final String TAG = GameField.class.getSimpleName();
 
   private GameFieldRows rows = new GameFieldRows();
   @Nullable private Player currentPlayer;
@@ -43,7 +40,7 @@ public class GameField {
   @Exclude
   public int getRoundNumber() {
     if (currentPlayer == null || opponent == null) {
-      Log.v(TAG, "Cannot calculate round. Players are not setup correctly");
+      Log.i(TAG, "Cannot calculate round. Players are not setup correctly");
       return 0;
     }
     return currentPlayer.getCurrentMatchPoints() + opponent.getCurrentMatchPoints();
