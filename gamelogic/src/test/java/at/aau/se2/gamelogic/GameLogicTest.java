@@ -608,6 +608,25 @@ public class GameLogicTest {
   }
 
   @Test
+  public void testGetCardsToMulliganForLaterRounds() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    gameField.setOpponent(currentPlayer);
+    currentPlayer.setCurrentMatchPoints(1);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+
+    ArrayList<Card> cards = sut.getCardsToMulligan();
+
+    assertEquals(3, cards.size());
+  }
+
+  @Test
   public void testGetCardsToMulliganFailed() {
     when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(false);
 

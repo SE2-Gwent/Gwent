@@ -483,11 +483,15 @@ public class GameLogic {
     if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return null;
 
     ArrayList<Card> cardsToMulligan = new ArrayList<>();
-    for (int i = 0; i < 6; i++) {
     ArrayList<Card> playingCards =
         new ArrayList<>(gameField.getCurrentHandCardsFor(whoAmI).values());
+    int cardCountToMulligan = 3;
+    if (gameField.getRoundNumber() == 0) cardCountToMulligan = 6;
+
+    for (int i = 0; i < cardCountToMulligan; i++) {
       cardsToMulligan.add(playingCards.get(i));
     }
+
     return cardsToMulligan;
   }
 
