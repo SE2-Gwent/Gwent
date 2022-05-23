@@ -1,8 +1,6 @@
 package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
@@ -14,7 +12,6 @@ public class Card {
   private int powerDiff;
   private String cardText;
   private ArrayList<ActionParams> cardActions;
-  private Map<ActionParams, Integer> currentActionCooldown;
   private String imgResourceBasic;
   private String imgResourceDetail;
 
@@ -40,7 +37,6 @@ public class Card {
     this.powerDiff = powerDiff;
     this.cardText = cardText;
     this.cardActions = cardActions;
-    this.currentActionCooldown = new HashMap<>();
     this.imgResourceBasic = imgResourceBasic;
     this.imgResourceDetail = imgResourceDetail;
   }
@@ -115,13 +111,5 @@ public class Card {
 
   public void setImgResourceDetail(String imgResourceDetail) {
     this.imgResourceDetail = imgResourceDetail;
-  }
-
-  public Map<ActionParams, Integer> getCurrentActionCooldown() {
-    return currentActionCooldown;
-  }
-
-  public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
-    this.currentActionCooldown = currentActionCooldown;
   }
 }

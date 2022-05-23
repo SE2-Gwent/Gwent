@@ -82,7 +82,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
           public void onClick(View view) {
             gameLogic.performAction(
                 new CardAction(CardAction.ActionType.DEPLOY),
-                new DeployParams(0, new Row(1, RowType.MELEE), 0));
+                new DeployParams(0, new Row(1, RowType.MELEE), 0, null));
           }
         });
   }

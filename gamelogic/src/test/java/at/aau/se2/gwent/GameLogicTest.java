@@ -75,10 +75,11 @@ public class GameLogicTest {
   @Test
   public void testPerformActionMappings() {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
-    testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, meleeRow, 0));
+    testData.put(
+        new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, meleeRow, 0, null));
     testData.put(
         new CardAction(CardAction.ActionType.ATTACK),
-        new AttackParams(0, new ArrayList<Integer>(Arrays.asList(1, 2))));
+        new AttackParams(0, new ArrayList<Integer>(Arrays.asList(1, 2)), 1));
     testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(meleeRow));
     // add other actions here to test
 
@@ -95,11 +96,11 @@ public class GameLogicTest {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(
         new CardAction(CardAction.ActionType.DEPLOY),
-        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
+        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2)), 1));
     testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(meleeRow));
     testData.put(
         new CardAction(CardAction.ActionType.FOG),
-        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
+        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2)), 1));
     // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
@@ -115,8 +116,8 @@ public class GameLogicTest {
     CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
     CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
 
-    sut.performAction(action, new DeployParams(1, meleeRow, 0));
-    sut.performAction(action2, new DeployParams(2, meleeRow, 0));
+    sut.performAction(action, new DeployParams(1, meleeRow, 0, null));
+    sut.performAction(action2, new DeployParams(2, meleeRow, 0, null));
 
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).size());
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());

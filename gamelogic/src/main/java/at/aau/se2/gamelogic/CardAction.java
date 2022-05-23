@@ -4,7 +4,11 @@ public class CardAction {
   public enum ActionType {
     DEPLOY(1),
     ATTACK(2),
-    FOG(3);
+    FOG(3),
+    HEAL(4),
+    SWAP(5),
+    BOOST(6),
+    ORDER(7);
 
     private final int id;
 

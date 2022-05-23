@@ -45,6 +45,9 @@ public class GameLogic {
                 .getCardDecks()
                 .getCard(deployParams.getCardUUID(), gameField.getCurrentPlayer());
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
+
+        // TODO: loop over list which contains properties and call performAction again for each
+        // elem.
         break;
 
       case ATTACK:
@@ -57,6 +60,25 @@ public class GameLogic {
         FogParams fogParams = (params instanceof FogParams ? (FogParams) params : null);
         if (fogParams == null) return;
         // TODO: implement row fogging
+        break;
+
+      case HEAL:
+        // TODO: implement heal unit(s)
+        break;
+
+      case BOOST:
+        // TODO: implement boost unit(s)
+        break;
+
+      case SWAP:
+        // TODO: implement swap units(s)
+        break;
+
+      case ORDER:
+        // TODO: implement order ability
+
+        // TODO: if coolDowmRem == 0 -> loop over list which contains properties and call
+        // performAction again for each elem.
         break;
 
       default:
