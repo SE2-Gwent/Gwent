@@ -12,8 +12,10 @@ public class GameField {
   private GameFieldRows rows = new GameFieldRows();
   @Nullable private Player currentPlayer;
   @Nullable private Player opponent;
+  // The two cardDecks both players are playing with
   private CardDecks cardDecks = new CardDecks();
-  private CardDecks playingCards = new CardDecks();
+  // Cards the player should get displayed in their hand
+  private CardDecks currentHandCards = new CardDecks();
   private ArrayList<Hero> heroes;
 
   @Keep
@@ -76,7 +78,7 @@ public class GameField {
   }
 
   public void setPlayingCardsFor(InitialPlayer player, ArrayList<Card> cards) {
-    playingCards.setDeck(player, cards);
+    currentHandCards.setDeck(player, cards);
   }
 
   public void setCardDeckFor(InitialPlayer player, ArrayList<Card> cards) {
@@ -117,18 +119,18 @@ public class GameField {
     return initialPlayer == InitialPlayer.INITIATOR ? cardDecks.getP1Deck() : cardDecks.getP2Deck();
   }
 
-  public HashMap<String, Card> getPlayingCards(InitialPlayer initialPlayer) {
+  public HashMap<String, Card> getCurrentHandCardsFor(InitialPlayer initialPlayer) {
     return initialPlayer == InitialPlayer.INITIATOR
-        ? playingCards.getP1Deck()
-        : playingCards.getP2Deck();
+        ? currentHandCards.getP1Deck()
+        : currentHandCards.getP2Deck();
   }
 
   public ArrayList<Hero> getHeroes() {
     return heroes;
   }
 
-  public CardDecks getPlayingCards() {
-    return playingCards;
+  public CardDecks getCurrentHandCards() {
+    return currentHandCards;
   }
 
   public void setCardDecks(CardDecks cardDecks) {

@@ -331,8 +331,8 @@ public class GameLogicTest {
     verify(mockGameStateMachine).cardsDrawn();
     ArgumentCaptor<GameField> captor = ArgumentCaptor.forClass(GameField.class);
     verify(mockConnector, times(1)).syncGameField(captor.capture());
-    assertNotNull(captor.getValue().getPlayingCards());
-    assertEquals(10, captor.getValue().getPlayingCards().getP1Deck().size());
+    assertNotNull(captor.getValue().getCurrentHandCards());
+    assertEquals(10, captor.getValue().getCurrentHandCards().getP1Deck().size());
   }
 
   @Test

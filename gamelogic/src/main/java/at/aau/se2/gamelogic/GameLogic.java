@@ -151,7 +151,7 @@ public class GameLogic {
     }
 
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
-    HashMap<String, Card> playingCards = gameField.getPlayingCards(whoAmI);
+    HashMap<String, Card> playingCards = gameField.getCurrentHandCardsFor(whoAmI);
 
     playingCards.remove(cardId + "_card");
 
@@ -483,8 +483,9 @@ public class GameLogic {
     if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return null;
 
     ArrayList<Card> cardsToMulligan = new ArrayList<>();
-    ArrayList<Card> playingCards = new ArrayList<>(gameField.getPlayingCards(whoAmI).values());
     for (int i = 0; i < 6; i++) {
+    ArrayList<Card> playingCards =
+        new ArrayList<>(gameField.getCurrentHandCardsFor(whoAmI).values());
       cardsToMulligan.add(playingCards.get(i));
     }
     return cardsToMulligan;
@@ -533,7 +534,7 @@ public class GameLogic {
   }
 
   private boolean bothPlayerOutOfCards() {
-    CardDecks playingCards = gameField.getPlayingCards();
+    CardDecks playingCards = gameField.getCurrentHandCards();
 
     return playingCards.getP1Deck().isEmpty() && playingCards.getP2Deck().isEmpty();
   }
