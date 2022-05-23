@@ -1,5 +1,7 @@
 package at.aau.se2.gamelogic.models;
 
+import androidx.annotation.Keep;
+
 public class Player {
   private int id;
   private int currentMatchPoints;
@@ -7,6 +9,9 @@ public class Player {
   private boolean hasLastPlayed;
   private boolean hasLastRoundWon;
   private InitialPlayer initialPlayerInformation;
+
+  @Keep
+  public Player() {}
 
   public Player(int id, InitialPlayer initialPlayerInformation) {
     this.id = id;

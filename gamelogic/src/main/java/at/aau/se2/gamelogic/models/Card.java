@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
 public class Card {
@@ -15,6 +16,9 @@ public class Card {
   private String cardText;
   private ArrayList<ActionParams> cardActions;
   private Map<ActionParams, Integer> currentActionCooldown;
+
+  @Keep
+  public Card() {}
 
   // TODO: tmp, please delete when boardView connected to GameLogic
   public Card(int id) {
@@ -101,5 +105,9 @@ public class Card {
 
   public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
     this.currentActionCooldown = currentActionCooldown;
+  }
+
+  public String getFirebaseId() {
+    return id + "_card";
   }
 }

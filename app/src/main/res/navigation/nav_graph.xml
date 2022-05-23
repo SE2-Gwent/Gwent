@@ -9,12 +9,24 @@
         android:id="@+id/StartFragment"
         android:name="at.aau.se2.gwent.StartFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_start" />
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_StartFragment_to_gameDebugFragment"
+            app:destination="@id/gameDebugFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/settings"
         android:name="at.aau.se2.gwent.views.settings.SettingsFragment"
         android:label="settings_fragment"
         tools:layout="@layout/settings_fragment" />
+
+    <fragment
+        android:id="@+id/gameDebugFragment"
+        android:name="at.aau.se2.gwent.GameDebugFragment"
+        android:label="game_debug_fragment"
+        tools:layout="@layout/game_debug_fragment" />
+
     <fragment
         android:id="@+id/detailed_card"
         android:name="at.aau.se2.gwent.views.detailedcard.DetailedCardFragment"
