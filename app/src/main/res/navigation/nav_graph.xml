@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_StartFragment_to_gameDebugFragment"
             app:destination="@id/gameDebugFragment" />
+        <action
+            android:id="@+id/action_StartFragment_to_board_fragment"
+            app:destination="@id/board_fragment" />
     </fragment>
 
     <fragment
@@ -39,8 +42,8 @@
         />
     </fragment>
     <fragment
-        android:id="@+id/MainGame"
+        android:id="@+id/board_fragment"
         android:name="at.aau.se2.gwent.BoardFragment"
         android:label="Game"
-        tools:layout="@layout/mainboard" />
+        tools:layout="@layout/fragment_boardview" />
 </navigation>

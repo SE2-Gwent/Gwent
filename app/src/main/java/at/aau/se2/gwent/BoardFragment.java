@@ -11,14 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import at.aau.se2.gwent.databinding.MainboardBinding;
+import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
 import at.aau.se2.gwent.views.BoardViewModel;
 
 public class BoardFragment extends Fragment {
   private static final String TAG = BoardFragment.class.getSimpleName();
 
   private BoardViewModel viewModel;
-  private MainboardBinding binding;
+  private FragmentBoardviewBinding binding;
   ArrayList<ImageView> cards;
   ArrayList<ImageView> placeholder;
 
@@ -36,7 +36,7 @@ public class BoardFragment extends Fragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    binding = MainboardBinding.inflate(inflater, container, false);
+    binding = FragmentBoardviewBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 

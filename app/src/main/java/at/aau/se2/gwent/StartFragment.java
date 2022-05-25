@@ -70,7 +70,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
                           Navigation.findNavController(
                               Objects.requireNonNull(getActivity()),
                               R.id.nav_host_fragment_content_main);
-                      controller.navigate(R.id.action_StartFragment_to_gameDebugFragment);
+                      controller.navigate(R.id.action_StartFragment_to_board_fragment);
 
                       break;
                     case FAILURE:
@@ -79,19 +79,6 @@ public class StartFragment extends Fragment implements CardActionCallback {
                       break;
                   }
                 });
-          }
-        });
-
-    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
-
-    binding.cardView.setOnLongClickListener(
-        new View.OnLongClickListener() {
-          @Override
-          public boolean onLongClick(View v) {
-            Navigation.findNavController(
-                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
-                .navigate(R.id.detailed_card);
-            return true;
           }
         });
 
