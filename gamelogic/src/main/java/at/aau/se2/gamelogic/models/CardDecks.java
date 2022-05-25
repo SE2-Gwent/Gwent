@@ -3,24 +3,47 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.annotation.Keep;
+
 public class CardDecks {
-  private HashMap<Integer, Card> p1Deck = new HashMap<>();
-  private HashMap<Integer, Card> p2Deck = new HashMap<>();
+  private HashMap<String, Card> p1Deck = new HashMap<>();
+  private HashMap<String, Card> p2Deck = new HashMap<>();
+
+  @Keep
+  public CardDecks() {}
 
   public CardDecks(ArrayList<Card> p1Deck, ArrayList<Card> p2Deck) {
-    for (Card c : p1Deck) this.p1Deck.put(c.getId(), c);
-
-    for (Card c : p2Deck) this.p2Deck.put(c.getId(), c);
+    setDeck(InitialPlayer.INITIATOR, p1Deck);
+    setDeck(InitialPlayer.OPPONENT, p2Deck);
   }
 
   public Card getCard(int cardId, Player player) {
     switch (player.getInitialPlayerInformation()) {
       case INITIATOR:
-        return p1Deck.get(cardId);
+        return p1Deck.get(cardId + "_card");
       case OPPONENT:
-        return p2Deck.get(cardId);
+        return p2Deck.get(cardId + "_card");
       default:
         return null;
     }
+  }
+
+  public void setDeck(InitialPlayer player, ArrayList<Card> cards) {
+    HashMap<String, Card> destination = player == InitialPlayer.INITIATOR ? p1Deck : p2Deck;
+    for (Card c : cards) {
+      destination.put(String.valueOf(c.getId()) + "_card", c);
+    }
+  }
+
+  public HashMap<String, Card> getP1Deck() {
+    return p1Deck;
+  }
+
+  public HashMap<String, Card> getP2Deck() {
+    return p2Deck;
+  }
+
+  public boolean hasDecksForBothPlayers() {
+    return p1Deck.size() > 0 && p2Deck.size() > 0;
   }
 }

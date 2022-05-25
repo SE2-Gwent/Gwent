@@ -5,4 +5,8 @@ public enum InitialPlayer {
   INITIATOR,
   // The player who joins a game
   OPPONENT;
+
+  public InitialPlayer other() {
+    return (this == INITIATOR) ? OPPONENT : INITIATOR;
+  }
 }

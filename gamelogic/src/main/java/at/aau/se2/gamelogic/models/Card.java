@@ -2,6 +2,7 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
 public class Card {
@@ -14,6 +15,9 @@ public class Card {
   private ArrayList<ActionParams> cardActions;
   private String imgResourceBasic;
   private String imgResourceDetail;
+
+  @Keep
+  public Card() {}
 
   // TODO: tmp, please delete when boardView connected to GameLogic
   public Card(int id) {
@@ -111,5 +115,9 @@ public class Card {
 
   public void setImgResourceDetail(String imgResourceDetail) {
     this.imgResourceDetail = imgResourceDetail;
+  }
+
+  public String getFirebaseId() {
+    return id + "_card";
   }
 }
