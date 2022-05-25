@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
             .navigate(R.id.detailed_card);
         return true;
+      case R.id.action_debug:
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+            .navigate(R.id.game_debug_fragment);
+        return true;
       default:
         return super.onOptionsItemSelected(item);
     }
