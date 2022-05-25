@@ -40,6 +40,14 @@ public class CardView extends FrameLayout {
     pointTextView.setText(String.valueOf(attackPoints));
     nameTextView.setText(name);
     cardImageView.setImageDrawable(getResources().getDrawable(cardImage));
+    setAlpha(1.0F);
+  }
+
+  public void showAsPlaceholder() {
+    pointTextView.setText(null);
+    nameTextView.setText(null);
+    cardImageView.setImageDrawable(getResources().getDrawable(R.drawable.card_background));
+    setAlpha(0.4F);
   }
 
   public void setSelected(boolean selected) {
@@ -61,6 +69,7 @@ public class CardView extends FrameLayout {
           setSelected(!isSelected);
         });
 
+    showAsPlaceholder();
     updateUI();
   }
 
