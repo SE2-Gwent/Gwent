@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/board_fragment"
-        android:name="at.aau.se2.gwent.BoardFragment"
+        android:name="at.aau.se2.gwent.views.board.BoardFragment"
         android:label="Game"
         tools:layout="@layout/fragment_boardview" />
 </navigation>

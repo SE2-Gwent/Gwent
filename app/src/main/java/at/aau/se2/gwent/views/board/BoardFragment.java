@@ -1,4 +1,4 @@
-package at.aau.se2.gwent;
+package at.aau.se2.gwent.views.board;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
-import at.aau.se2.gwent.views.BoardViewModel;
 
 public class BoardFragment extends Fragment {
   private static final String TAG = BoardFragment.class.getSimpleName();

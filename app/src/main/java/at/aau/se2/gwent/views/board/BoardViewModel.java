@@ -1,30 +1,27 @@
-package at.aau.se2.gwent.views;
+package at.aau.se2.gwent.views.board;
 
 import java.util.ArrayList;
 
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import at.aau.se2.gamelogic.GameFieldObserver;
+import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.GameFieldRows;
-import at.aau.se2.gwent.BoardViewState;
+import at.aau.se2.gwent.Environment;
 
-public class BoardViewModel extends ViewModel {
-
-  private MutableLiveData<BoardViewState> currentState = new MutableLiveData<>();
-  // String aus der Boardviewmodel heißt.
+public class BoardViewModel extends ViewModel implements GameFieldObserver {
   private static final String TAG = BoardViewModel.class.getSimpleName();
+  private MutableLiveData<BoardViewState> currentState = new MutableLiveData<>();
+  private final GameLogic gameLogic = Environment.getSharedInstance().getGameLogic();
 
-  // Object das Livestatusupdates gibt (Observer)
-  public MutableLiveData<BoardViewState> getCurrentState() {
-    return currentState;
+  public BoardViewModel() {
+    gameLogic.registerGameFieldListener(this);
   }
 
-  // Handkarten holen
-  public ArrayList<Integer> getHandcards() {
-    return new ArrayList<>(10);
-  }
-
+  // GameFieldObserver
   public void updateGameField(GameField gameField) {
     Log.v(TAG, "Update Gamefield: " + gameField);
     createCurrentViewState(gameField);
@@ -44,5 +41,9 @@ public class BoardViewModel extends ViewModel {
 
      */
     currentState.setValue(boardViewState);
+  }
+
+  public MutableLiveData<BoardViewState> getCurrentState() {
+    return currentState;
   }
 }
