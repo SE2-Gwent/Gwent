@@ -23,9 +23,13 @@ import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
-import at.aau.se2.gamelogic.models.cardactions.AttackParams;
+import at.aau.se2.gamelogic.models.cardactions.BoostParams;
+import at.aau.se2.gamelogic.models.cardactions.DamageParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
+import at.aau.se2.gamelogic.models.cardactions.HealParams;
+import at.aau.se2.gamelogic.models.cardactions.OrderParams;
+import at.aau.se2.gamelogic.models.cardactions.SwapParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
@@ -454,7 +458,7 @@ public class GameLogic {
         break;
 
       case ATTACK:
-        AttackParams attackParams = (params instanceof AttackParams ? (AttackParams) params : null);
+        DamageParams attackParams = (params instanceof DamageParams ? (DamageParams) params : null);
         if (attackParams == null) return;
         // TODO: implement card attacking
         break;
@@ -463,6 +467,30 @@ public class GameLogic {
         FogParams fogParams = (params instanceof FogParams ? (FogParams) params : null);
         if (fogParams == null) return;
         // TODO: implement row fogging
+        break;
+
+      case BOOST:
+        BoostParams boostParams = (params instanceof BoostParams ? (BoostParams) params : null);
+        if (boostParams == null) return;
+        // TODO: implement card boosting
+        break;
+
+      case HEAL:
+        HealParams healParams = (params instanceof HealParams ? (HealParams) params : null);
+        if (healParams == null) return;
+        // TODO: implement card healing
+        break;
+
+      case SWAP:
+        SwapParams swapParams = (params instanceof SwapParams ? (SwapParams) params : null);
+        if (swapParams == null) return;
+        // TODO: implement card swapping
+        break;
+
+      case ORDER:
+        OrderParams orderParams = (params instanceof OrderParams ? (OrderParams) params : null);
+        if (orderParams == null) return;
+        // TODO: implement ability order
         break;
 
       default:

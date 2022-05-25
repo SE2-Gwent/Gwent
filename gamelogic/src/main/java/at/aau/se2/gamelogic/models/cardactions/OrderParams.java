@@ -4,18 +4,19 @@ import java.util.HashMap;
 
 import at.aau.se2.gamelogic.CardAction;
 
-/*
-this class is used for order abilities
-it stores the initialCoolDown and the remaining CoolDown (number of allied turn until the ability
-can be activated again)
-it contains a Hashmap which contains all abilities which will be executed, if the order ability
-of the card is activated
- */
+/** This class is used to implement order abilities. */
 public class OrderParams extends ActionParams {
   private final int coolDown;
   private int coolDownRem;
   HashMap<CardAction, ActionParams> triggeredActions = new HashMap<>();
 
+  /**
+   * @param coolDown Number of allied turns to wait (static value)
+   * @param coolDownRem Remaining number of allied turns until ability can be activated again (if
+   *     the card has ZEAL, this is initialy set to 0)
+   * @param triggeredActions Hashmap which contains actions which are executed if the ability is
+   *     activated.
+   */
   public OrderParams(
       int coolDown, int coolDownRem, HashMap<CardAction, ActionParams> triggeredActions) {
     this.coolDown = coolDown;

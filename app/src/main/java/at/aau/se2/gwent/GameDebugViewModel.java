@@ -195,7 +195,9 @@ public class GameDebugViewModel extends ViewModel
               i,
               0,
               "This is a test Card",
-              new ArrayList<ActionParams>()));
+              new ArrayList<ActionParams>(),
+              "Hello",
+              "World"));
     }
 
     return testCards;

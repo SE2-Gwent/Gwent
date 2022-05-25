@@ -5,9 +5,9 @@ import java.util.HashMap;
 import at.aau.se2.gamelogic.CardAction;
 import at.aau.se2.gamelogic.models.Row;
 
-/*
-this class is used for deploying a card on a row and to trigger abilities which will be
-executed on deploy. See Hashmap (works in the same way as the order ability)
+/**
+ * This class is used for deploying cards on rows and to store all abilities related the the DEPLOY
+ * keyword (Triggered when deployed)
  */
 public class DeployParams extends ActionParams {
   private int cardUUID;
@@ -15,6 +15,12 @@ public class DeployParams extends ActionParams {
   private int position;
   HashMap<CardAction, ActionParams> triggeredActions;
 
+  /**
+   * @param cardUUID UUID of the card to deploy.
+   * @param row Row where the card should get deployed.
+   * @param position Deploy position within the row.
+   * @param triggeredActions A Hashmap contains all actions which are triggered on deploy.
+   */
   public DeployParams(
       int cardUUID, Row row, int position, HashMap<CardAction, ActionParams> triggeredActions) {
     this.cardUUID = cardUUID;

@@ -40,7 +40,7 @@ import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
-import at.aau.se2.gamelogic.models.cardactions.AttackParams;
+import at.aau.se2.gamelogic.models.cardactions.DamageParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
@@ -83,11 +83,13 @@ public class GameLogicTest {
             new ArrayList<>()));
 
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
-    testData.put(new CardAction(CardAction.ActionType.DEPLOY), new DeployParams(1, meleeRow, 0));
+    testData.put(
+        new CardAction(CardAction.ActionType.DEPLOY),
+        new DeployParams(1, meleeRow, 0, new HashMap<>()));
     testData.put(
         new CardAction(CardAction.ActionType.ATTACK),
-        new AttackParams(0, new ArrayList<Integer>(Arrays.asList(1, 2))));
-    testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(meleeRow));
+        new DamageParams(0, new ArrayList<Integer>(Arrays.asList(1, 2)), 1, 2, false, false));
+    testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(meleeRow, false));
     // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
@@ -112,11 +114,11 @@ public class GameLogicTest {
     HashMap<CardAction, ActionParams> testData = new HashMap<>();
     testData.put(
         new CardAction(CardAction.ActionType.DEPLOY),
-        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
-    testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(meleeRow));
+        new DamageParams(0, new ArrayList<>(Arrays.asList(1, 2)), 1, 2, false, false));
+    testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(meleeRow, false));
     testData.put(
         new CardAction(CardAction.ActionType.FOG),
-        new AttackParams(0, new ArrayList<>(Arrays.asList(1, 2))));
+        new DamageParams(0, new ArrayList<>(Arrays.asList(1, 2)), 1, 2, false, false));
     // add other actions here to test
 
     for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
@@ -142,8 +144,8 @@ public class GameLogicTest {
     CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
     CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
 
-    sut.performAction(action, new DeployParams(1, meleeRow, 0));
-    sut.performAction(action2, new DeployParams(2, meleeRow, 0));
+    sut.performAction(action, new DeployParams(1, meleeRow, 0, new HashMap<>()));
+    sut.performAction(action2, new DeployParams(2, meleeRow, 0, new HashMap<>()));
 
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).size());
     assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());
@@ -772,7 +774,9 @@ public class GameLogicTest {
               i,
               0,
               "This is a test Card",
-              new ArrayList<ActionParams>()));
+              new ArrayList<ActionParams>(),
+              "hello",
+              "world"));
     }
   }
 
