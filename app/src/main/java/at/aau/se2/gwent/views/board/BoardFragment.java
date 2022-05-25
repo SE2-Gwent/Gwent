@@ -1,32 +1,42 @@
 package at.aau.se2.gwent.views.board;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import at.aau.se2.gamelogic.comunication.SingleEvent;
+import at.aau.se2.gamelogic.models.RowType;
+import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
+import at.aau.se2.gwent.views.common.CardView;
+
+// TODO: Hide NavBar
 
 public class BoardFragment extends Fragment {
   private static final String TAG = BoardFragment.class.getSimpleName();
 
   private BoardViewModel viewModel;
   private FragmentBoardviewBinding binding;
-  ArrayList<ImageView> cards;
-  ArrayList<ImageView> placeholder;
+  private ArrayList<CardView> playersHandCardViews;
+  private ArrayList<CardView> opponentsHandCardViews;
+  private HashMap<RowType, ArrayList<CardView>> opponentRowCardViews = new HashMap<>();
+  private HashMap<RowType, ArrayList<CardView>> playerRowCardViews = new HashMap<>();
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     viewModel = new ViewModelProvider(this).get(BoardViewModel.class);
-    // Observer: Wenn sich der Zustand ändert (Variable), dann führt er die Methode aus
     viewModel.getCurrentState().observe(this, this::updateUI);
+    viewModel.getActionLiveData().observe(this, this::handleEvents);
   }
 
   @Override
@@ -36,8 +46,42 @@ public class BoardFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
 
     binding = FragmentBoardviewBinding.inflate(inflater, container, false);
+    setupGameRows();
     return binding.getRoot();
   }
 
-  private void updateUI(BoardViewState viewstate) {}
+  private void setupGameRows() {
+    playerRowCardViews.put(RowType.MELEE, getCardsFromLayout(binding.playersMeleeRowLayout));
+    playerRowCardViews.put(RowType.RANGED, getCardsFromLayout(binding.playersRangeRowLayout));
+    opponentRowCardViews.put(RowType.MELEE, getCardsFromLayout(binding.opponentsMeleeRowLayout));
+    opponentRowCardViews.put(RowType.RANGED, getCardsFromLayout(binding.opponentsRangeRowLayout));
+
+    playersHandCardViews = getCardsFromLayout(binding.playersHandLayout);
+    opponentsHandCardViews = getCardsFromLayout(binding.opponentsHandLayout);
+  }
+
+  private ArrayList<CardView> getCardsFromLayout(CardareaBinding layout) {
+    int childCount = layout.getRoot().getChildCount();
+    ArrayList<CardView> cards = new ArrayList<>();
+    for (int i = 0; i < childCount; i++) {
+      CardView cardView = (CardView) layout.getRoot().getChildAt(i);
+      if (cardView == null) continue;
+      cards.add(cardView);
+    }
+    return cards;
+  }
+
+  private void updateUI(BoardViewData viewData) {
+    Log.i(TAG, String.valueOf(viewData.getCurrentPlayerHandCards().size()));
+  }
+
+  private void handleEvents(SingleEvent<BoardViewData.Event> event) {
+    switch (event.getValueIfNotHandled()) {
+      case SHOW_MULLIGAN:
+        Toast.makeText(getContext(), "Show Mulligan View", Toast.LENGTH_SHORT).show();
+        break;
+      default:
+        break;
+    }
+  }
 }
