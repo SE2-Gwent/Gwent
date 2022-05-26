@@ -14,9 +14,9 @@ import at.aau.se2.gamelogic.GameStateCallback;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
-import at.aau.se2.gamelogic.models.GameFieldRows;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
+import at.aau.se2.gwent.util.DebugHelper;
 
 public class BoardViewModel extends ViewModel
     implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
@@ -29,13 +29,29 @@ public class BoardViewModel extends ViewModel
   private final GameLogic gameLogic = Environment.getSharedInstance().getGameLogic();
 
   private MutableLiveData<BoardViewData> currentState = new MutableLiveData<>();
-  private MutableLiveData<SingleEvent<Event>> actionLiveData =
-      new MutableLiveData<>();
+  private MutableLiveData<SingleEvent<Event>> actionLiveData = new MutableLiveData<>();
 
   public BoardViewModel() {
     gameLogic.registerGameFieldListener(this);
     gameLogic.setGameLogicDataProvider(this);
     gameLogic.getGameStateMachine().registerListener(this);
+  }
+
+  public void didClickPrimaryButton() {
+    if (currentState.getValue() == null) return;
+
+    switch (currentState.getValue().getPrimaryButtonMode()) {
+      case PASS_ROUND:
+        gameLogic.pass();
+        break;
+      case END_ROUND:
+        gameLogic.endTurn();
+        break;
+    }
+  }
+
+  public void cancelMulligan() {
+    gameLogic.abortMulliganCards();
   }
 
   // GameFieldObserver
@@ -46,7 +62,7 @@ public class BoardViewModel extends ViewModel
 
   private void createCurrentViewState(GameField gameField) {
     BoardViewData boardViewState =
-        new BoardViewData(gameField);
+        new BoardViewData(gameField, gameLogic.isMyTurn(), gameLogic.getCurrentPlayerCanPass());
 
     currentState.setValue(boardViewState);
   }
@@ -68,8 +84,6 @@ public class BoardViewModel extends ViewModel
     }
   }
 
-  public void cancelMulligan() {
-    gameLogic.abortMulliganCards();
   }
 
   // Getters & Setters

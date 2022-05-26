@@ -12,12 +12,11 @@ import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.GameLogicDataProvider;
 import at.aau.se2.gamelogic.GameStateCallback;
 import at.aau.se2.gamelogic.models.Card;
-import at.aau.se2.gamelogic.models.CardType;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.state.GameState;
+import at.aau.se2.gwent.util.DebugHelper;
 
 public class GameDebugViewModel extends ViewModel
     implements GameStateCallback, GameFieldObserver, GameLogicDataProvider {
@@ -81,7 +80,7 @@ public class GameDebugViewModel extends ViewModel
 
   @Override
   public ArrayList<Card> needsCardDeck() {
-    return generateTestCards();
+    return DebugHelper.generateTestCards();
   }
 
   private void createCurrentViewState() {
@@ -182,22 +181,5 @@ public class GameDebugViewModel extends ViewModel
     public String getCombinedPlayerPoints() {
       return combinedPlayerPoints;
     }
-  }
-
-  private ArrayList<Card> generateTestCards() {
-    ArrayList<Card> testCards = new ArrayList<>();
-    for (int i = 1; i <= 25; i++) {
-      testCards.add(
-          new Card(
-              i,
-              "TestCard " + i,
-              new ArrayList<CardType>(),
-              i,
-              0,
-              "This is a test Card",
-              new ArrayList<ActionParams>()));
-    }
-
-    return testCards;
   }
 }

@@ -2,9 +2,11 @@ package at.aau.se2.gwent.views.board;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +51,17 @@ public class BoardFragment extends Fragment {
 
     binding = FragmentBoardviewBinding.inflate(inflater, container, false);
     setupGameRows();
+    setupButtons();
+    Objects.requireNonNull(getActivity())
+        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     return binding.getRoot();
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    Objects.requireNonNull(getActivity())
+        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
   }
 
   private void setupGameRows() {
@@ -73,12 +85,25 @@ public class BoardFragment extends Fragment {
     return cards;
   }
 
+  private void setupButtons() {
+    binding.primaryRoundButton.setOnClickListener(
+        view -> {
+          viewModel.didClickPrimaryButton();
+        });
+  }
+
   private void updateUI(BoardViewData viewData) {
-    Log.i(TAG, String.valueOf(viewData.getCurrentPlayerHandCards().size()));
+    Log.i(TAG, String.valueOf(viewData.getGameField().getRoundNumber()));
+
+    binding.primaryRoundButton.setText(viewData.getPrimaryButtonMode().getText());
+    binding.primaryRoundButton.setEnabled(viewData.isPrimaryButtonEnabled());
   }
 
   private void handleEvents(SingleEvent<BoardViewModel.Event> event) {
-    switch (event.getValueIfNotHandled()) {
+    BoardViewModel.Event eventValue = event.getValueIfNotHandled();
+    if (eventValue == null) return;
+
+    switch (eventValue) {
       case SHOW_MULLIGAN:
         // TODO: Replace with Mulligan Fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

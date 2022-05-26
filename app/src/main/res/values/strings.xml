@@ -22,5 +22,8 @@
     <string name="action_detailed_card">Detailed card</string>
     <string name="close">Close</string>
     <string name="mulligan">Mulligan</string>
+    <string name="done">Done</string>
+    <string name="pass_round">Pass</string>
+    <string name="end_round">Finish</string>
 
 </resources>
