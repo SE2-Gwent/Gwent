@@ -32,6 +32,7 @@ public class DetailedCardViewModel extends ViewModel {
             powerDiff,
             cardText,
             null,
+            null,
             "ard_feainn_crossbow_man_basic",
             "ard_feainn_crossbow_man_detail");
     // -- END REMOVE --

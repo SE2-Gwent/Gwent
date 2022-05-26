@@ -11,9 +11,6 @@ import at.aau.se2.gamelogic.models.GameFieldRows;
 import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
-import at.aau.se2.gamelogic.models.cardactions.DamageParams;
-import at.aau.se2.gamelogic.models.cardactions.DeployParams;
-import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.models.heroactions.HeroActionParams;
 
 /** This class is used to convert a given Json-String into an object and vice versa. */
@@ -52,18 +49,6 @@ public class JsonConverter {
 
   public static Row deserializeRow(String json) {
     return new Gson().fromJson(json, Row.class);
-  }
-
-  public static DamageParams deserializeCardAttackParams(String json) {
-    return new Gson().fromJson(json, DamageParams.class);
-  }
-
-  public static DeployParams deserializeCardDeployParams(String json) {
-    return new Gson().fromJson(json, DeployParams.class);
-  }
-
-  public static FogParams deserializeCardFogParams(String json) {
-    return new Gson().fromJson(json, FogParams.class);
   }
 
   public static HeroActionParams deserializeHeroAttackParams(String json) {

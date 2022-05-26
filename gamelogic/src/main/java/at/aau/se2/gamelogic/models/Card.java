@@ -1,11 +1,10 @@
 package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import androidx.annotation.Keep;
-import at.aau.se2.gamelogic.CardAction;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
+import at.aau.se2.gamelogic.models.cardactions.triggers.DeployTrigger;
+import at.aau.se2.gamelogic.models.cardactions.triggers.OrderTrigger;
 
 public class Card {
   private int id;
@@ -14,7 +13,8 @@ public class Card {
   private int power;
   private int powerDiff;
   private String cardText;
-  HashMap<CardAction, ActionParams> cardActions;
+  private DeployTrigger deployTrigger;
+  private OrderTrigger orderTrigger;
   private String imgResourceBasic;
   private String imgResourceDetail;
 
@@ -33,7 +33,8 @@ public class Card {
       int power,
       int powerDiff,
       String cardText,
-      HashMap<CardAction, ActionParams> cardActions,
+      DeployTrigger deployTrigger,
+      OrderTrigger orderTrigger,
       String imgResourceBasic,
       String imgResourceDetail) {
     this.id = id;
@@ -42,7 +43,8 @@ public class Card {
     this.power = power;
     this.powerDiff = powerDiff;
     this.cardText = cardText;
-    this.cardActions = cardActions;
+    this.deployTrigger = deployTrigger;
+    this.orderTrigger = orderTrigger;
     this.imgResourceBasic = imgResourceBasic;
     this.imgResourceDetail = imgResourceDetail;
   }
@@ -95,14 +97,6 @@ public class Card {
     this.cardText = cardText;
   }
 
-  public HashMap<CardAction, ActionParams> getCardActions() {
-    return cardActions;
-  }
-
-  public void setCardActions(HashMap<CardAction, ActionParams> cardActions) {
-    this.cardActions = cardActions;
-  }
-
   public String getImgResourceBasic() {
     return imgResourceBasic;
   }
@@ -117,6 +111,14 @@ public class Card {
 
   public void setImgResourceDetail(String imgResourceDetail) {
     this.imgResourceDetail = imgResourceDetail;
+  }
+
+  public DeployTrigger getDeployTrigger() {
+    return deployTrigger;
+  }
+
+  public OrderTrigger getOrderTrigger() {
+    return orderTrigger;
   }
 
   public String getFirebaseId() {

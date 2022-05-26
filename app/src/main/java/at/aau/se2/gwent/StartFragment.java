@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import at.aau.se2.gamelogic.CardAction;
-import at.aau.se2.gamelogic.CardActionCallback;
 import at.aau.se2.gamelogic.GameLogic;
-import at.aau.se2.gamelogic.models.Row;
-import at.aau.se2.gamelogic.models.RowType;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
-import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gwent.databinding.FragmentStartBinding;
 
-public class StartFragment extends Fragment implements CardActionCallback {
+public class StartFragment extends Fragment {
   private static final String TAG = StartFragment.class.getSimpleName();
 
   private FragmentStartBinding binding;
@@ -35,7 +28,6 @@ public class StartFragment extends Fragment implements CardActionCallback {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    gameLogic.registerCardActionCallback(this);
   }
 
   @Nullable
@@ -104,9 +96,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            gameLogic.performAction(
-                new CardAction(CardAction.ActionType.DEPLOY),
-                new DeployParams(0, new Row(1, RowType.MELEE), 0, null));
+            // TODO: call gamelogic.deployCard(card, row, pos)
           }
         });
   }
@@ -115,11 +105,6 @@ public class StartFragment extends Fragment implements CardActionCallback {
   public void onDestroyView() {
     super.onDestroyView();
     binding = null;
-  }
-
-  @Override
-  public void didPerformAction(CardAction action, ActionParams params) {
-    Log.v(TAG, "Action Performed: " + action.getType().name());
   }
 
   @Override
