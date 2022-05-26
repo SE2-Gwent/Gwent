@@ -68,11 +68,6 @@ public class BoardViewModel extends ViewModel
   }
 
   @Override
-  public ArrayList<Card> needsCardDeck() {
-    return new ArrayList<>();
-  }
-
-  @Override
   public void gameStateChanged(@NonNull GameState current, @Nullable GameState old) {
     Log.v(TAG, "GameState changed: " + current);
 
@@ -84,10 +79,12 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  @Override
+  public ArrayList<Card> needsCardDeck() {
+    return DebugHelper.generateTestCards();
   }
 
   // Getters & Setters
-
   public MutableLiveData<BoardViewData> getCurrentState() {
     return currentState;
   }
