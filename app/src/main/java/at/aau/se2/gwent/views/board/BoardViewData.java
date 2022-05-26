@@ -3,24 +3,16 @@ package at.aau.se2.gwent.views.board;
 import java.util.ArrayList;
 
 import at.aau.se2.gamelogic.models.Card;
+import at.aau.se2.gamelogic.models.GameField;
 
 public class BoardViewData {
-  public enum Event {
-    SHOW_MULLIGAN
+  private GameField gameField;
+
+  public BoardViewData(GameField gameField) {
+    this.gameField = gameField;
   }
 
-  private ArrayList<at.aau.se2.gamelogic.models.Card> currentPlayerHandCards;
-  private ArrayList<at.aau.se2.gamelogic.models.Card> opponentHandCards;
-
-  public BoardViewData(ArrayList<Card> currentPlayerHandCards) {
-    this.currentPlayerHandCards = currentPlayerHandCards;
-  }
-
-  public ArrayList<Card> getCurrentPlayerHandCards() {
-    return currentPlayerHandCards;
-  }
-
-  public ArrayList<Card> getOpponentHandCards() {
-    return opponentHandCards;
+  public GameField getGameField() {
+    return gameField;
   }
 }

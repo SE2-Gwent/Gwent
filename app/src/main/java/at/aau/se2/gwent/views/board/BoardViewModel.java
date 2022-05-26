@@ -20,11 +20,16 @@ import at.aau.se2.gwent.Environment;
 
 public class BoardViewModel extends ViewModel
     implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
+
+  public enum Event {
+    SHOW_MULLIGAN
+  }
+
   private static final String TAG = BoardViewModel.class.getSimpleName();
   private final GameLogic gameLogic = Environment.getSharedInstance().getGameLogic();
 
   private MutableLiveData<BoardViewData> currentState = new MutableLiveData<>();
-  private MutableLiveData<SingleEvent<BoardViewData.Event>> actionLiveData =
+  private MutableLiveData<SingleEvent<Event>> actionLiveData =
       new MutableLiveData<>();
 
   public BoardViewModel() {
@@ -40,16 +45,9 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
-    GameFieldRows rows = gameField.getRows();
-    rows.meleeRowFor(gameField.getCurrentPlayer());
     BoardViewData boardViewState =
-        new BoardViewData(gameField.getRows().meleeRowFor(gameField.getCurrentPlayer()));
+        new BoardViewData(gameField);
 
-    /*TODO: Karten die im Gamefield als Handkarten in der Hand anzeigen
-    Daten auf die Karten bekomme
-    Karten anzeigen View - Daten anzeigen
-
-     */
     currentState.setValue(boardViewState);
   }
 
@@ -64,7 +62,7 @@ public class BoardViewModel extends ViewModel
 
     switch (current) {
       case MULLIGAN_CARDS:
-        actionLiveData.setValue(new SingleEvent<>(BoardViewData.Event.SHOW_MULLIGAN));
+        actionLiveData.setValue(new SingleEvent<>(Event.SHOW_MULLIGAN));
       default:
         break;
     }
@@ -80,7 +78,7 @@ public class BoardViewModel extends ViewModel
     return currentState;
   }
 
-  public MutableLiveData<SingleEvent<BoardViewData.Event>> getActionLiveData() {
+  public MutableLiveData<SingleEvent<Event>> getActionLiveData() {
     return actionLiveData;
   }
 }

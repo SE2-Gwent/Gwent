@@ -21,5 +21,6 @@
     <string name="activate_ability">Ability</string>
     <string name="action_detailed_card">Detailed card</string>
     <string name="close">Close</string>
+    <string name="mulligan">Mulligan</string>
 
 </resources>

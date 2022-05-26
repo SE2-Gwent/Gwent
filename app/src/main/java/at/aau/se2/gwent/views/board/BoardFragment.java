@@ -77,11 +77,12 @@ public class BoardFragment extends Fragment {
     Log.i(TAG, String.valueOf(viewData.getCurrentPlayerHandCards().size()));
   }
 
-  private void handleEvents(SingleEvent<BoardViewData.Event> event) {
+  private void handleEvents(SingleEvent<BoardViewModel.Event> event) {
     switch (event.getValueIfNotHandled()) {
       case SHOW_MULLIGAN:
         // TODO: Replace with Mulligan Fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.mulligan);
         builder.setNegativeButton(
             R.string.cancel,
             new DialogInterface.OnClickListener() {
