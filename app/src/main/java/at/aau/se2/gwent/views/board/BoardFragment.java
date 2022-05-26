@@ -2,13 +2,13 @@ package at.aau.se2.gwent.views.board;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
+import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.CardareaBinding;
@@ -31,8 +32,8 @@ public class BoardFragment extends Fragment {
 
   private BoardViewModel viewModel;
   private FragmentBoardviewBinding binding;
-  private ArrayList<CardView> playersHandCardViews;
-  private ArrayList<CardView> opponentsHandCardViews;
+  private ArrayList<CardView> playersHandCardViews = new ArrayList<>();
+  private ArrayList<CardView> opponentsHandCardViews = new ArrayList<>();
   private HashMap<RowType, ArrayList<CardView>> opponentRowCardViews = new HashMap<>();
   private HashMap<RowType, ArrayList<CardView>> playerRowCardViews = new HashMap<>();
 
@@ -64,10 +65,14 @@ public class BoardFragment extends Fragment {
   }
 
   private void setupGameRows() {
-    playerRowCardViews.put(RowType.MELEE, getCardsFromLayout(binding.playersMeleeRowLayout));
-    playerRowCardViews.put(RowType.RANGED, getCardsFromLayout(binding.playersRangeRowLayout));
-    opponentRowCardViews.put(RowType.MELEE, getCardsFromLayout(binding.opponentsMeleeRowLayout));
-    opponentRowCardViews.put(RowType.RANGED, getCardsFromLayout(binding.opponentsRangeRowLayout));
+    playerRowCardViews.put(
+        RowType.MELEE, CardRowHelper.getCardsFromLayout(binding.playersMeleeRowLayout));
+    playerRowCardViews.put(
+        RowType.RANGED, CardRowHelper.getCardsFromLayout(binding.playersRangeRowLayout));
+    opponentRowCardViews.put(
+        RowType.MELEE, CardRowHelper.getCardsFromLayout(binding.opponentsMeleeRowLayout));
+    opponentRowCardViews.put(
+        RowType.RANGED, CardRowHelper.getCardsFromLayout(binding.opponentsRangeRowLayout));
     CardRowHelper.setBackgroundDrawable(
         new CardareaBinding[] {
           binding.playersMeleeRowLayout,
@@ -84,22 +89,8 @@ public class BoardFragment extends Fragment {
       CardRowHelper.setCardsVisibility(cardViews, View.INVISIBLE);
     }
 
-    playersHandCardViews = getCardsFromLayout(binding.playersHandLayout);
-    opponentsHandCardViews = getCardsFromLayout(binding.opponentsHandLayout);
-
-    CardRowHelper.setCardsAlpha(playersHandCardViews, 1.0F);
-    CardRowHelper.setCardsAlpha(opponentsHandCardViews, 1.0F);
-  }
-
-  private ArrayList<CardView> getCardsFromLayout(CardareaBinding layout) {
-    int childCount = layout.getRoot().getChildCount();
-    ArrayList<CardView> cards = new ArrayList<>();
-    for (int i = 0; i < childCount; i++) {
-      CardView cardView = (CardView) layout.getRoot().getChildAt(i);
-      if (cardView == null) continue;
-      cards.add(cardView);
-    }
-    return cards;
+    CardRowHelper.removeCardViews(binding.playersHandLayout);
+    CardRowHelper.removeCardViews(binding.opponentsHandLayout);
   }
 
   private void setupButtons() {
@@ -110,10 +101,21 @@ public class BoardFragment extends Fragment {
   }
 
   private void updateUI(BoardViewData viewData) {
-    Log.i(TAG, String.valueOf(viewData.getGameField().getRoundNumber()));
-
     binding.primaryRoundButton.setText(viewData.getPrimaryButtonMode().getText());
     binding.primaryRoundButton.setEnabled(viewData.isPrimaryButtonEnabled());
+
+    CardRowHelper.removeCardViews(binding.playersHandLayout);
+    playersHandCardViews.clear();
+    for (Map.Entry<String, Card> entry : viewData.getPlayersHandCards().entrySet()) {
+      Card card = entry.getValue();
+      CardView cardView = new CardView(getContext(), null);
+      // TODO: Replace drawable with cards drawable
+      cardView.setupWithCard(
+          entry.getKey(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+      binding.playersHandLayout.getRoot().addView(cardView);
+
+      playersHandCardViews.add(cardView);
+    }
   }
 
   private void handleEvents(SingleEvent<BoardViewModel.Event> event) {

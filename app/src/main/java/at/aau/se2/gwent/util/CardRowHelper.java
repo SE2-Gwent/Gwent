@@ -25,4 +25,19 @@ public class CardRowHelper {
       binding.getRoot().setBackgroundResource(drawable);
     }
   }
+
+  public static void removeCardViews(CardareaBinding binding) {
+    binding.getRoot().removeAllViews();
+  }
+
+  public static ArrayList<CardView> getCardsFromLayout(CardareaBinding layout) {
+    int childCount = layout.getRoot().getChildCount();
+    ArrayList<CardView> cards = new ArrayList<>();
+    for (int i = 0; i < childCount; i++) {
+      CardView cardView = (CardView) layout.getRoot().getChildAt(i);
+      if (cardView == null) continue;
+      cards.add(cardView);
+    }
+    return cards;
+  }
 }

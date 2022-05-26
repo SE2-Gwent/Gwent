@@ -1,6 +1,9 @@
 package at.aau.se2.gwent.views.board;
 
+import java.util.HashMap;
+
 import androidx.annotation.StringRes;
+import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gwent.R;
 
@@ -43,5 +46,12 @@ public class BoardViewData {
 
   public boolean isPrimaryButtonEnabled() {
     return myTurn;
+  }
+
+  public HashMap<String, Card> getPlayersHandCards() {
+    if (gameField.getCurrentPlayer() == null) return null;
+
+    return gameField.getCurrentHandCardsFor(
+        gameField.getCurrentPlayer().getInitialPlayerInformation());
   }
 }

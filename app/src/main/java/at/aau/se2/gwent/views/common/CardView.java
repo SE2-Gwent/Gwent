@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.DrawableRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import at.aau.se2.gwent.R;
 
 public class CardView extends FrameLayout {
@@ -20,6 +21,7 @@ public class CardView extends FrameLayout {
   private TextView nameTextView;
   private boolean isSelected = false;
   private Drawable borderDrawable = getResources().getDrawable(R.drawable.cardview_border);
+  private String cardId;
 
   public CardView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -36,7 +38,9 @@ public class CardView extends FrameLayout {
     init(context);
   }
 
-  public void setupWithCard(int attackPoints, String name, @DrawableRes int cardImage) {
+  public void setupWithCard(
+      String cardId, int attackPoints, String name, @DrawableRes int cardImage) {
+    this.cardId = cardId;
     pointTextView.setText(String.valueOf(attackPoints));
     nameTextView.setText(name);
     cardImageView.setImageDrawable(getResources().getDrawable(cardImage));
@@ -63,6 +67,12 @@ public class CardView extends FrameLayout {
     cardImageView = view.findViewById(R.id.imageViewCardBackground);
     nameTextView = view.findViewById(R.id.textViewName);
     pointTextView = view.findViewById(R.id.textViewPoints);
+
+    ConstraintLayout.LayoutParams params =
+        new ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+    params.leftMargin = 5;
+    params.rightMargin = 5;
+    setLayoutParams(params);
 
     setOnClickListener(
         view -> {
