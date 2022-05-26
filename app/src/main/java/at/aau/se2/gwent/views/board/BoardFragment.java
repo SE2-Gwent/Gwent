@@ -60,8 +60,6 @@ public class BoardFragment extends Fragment {
   @Override
   public void onStop() {
     super.onStop();
-    Objects.requireNonNull(getActivity())
-        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
   }
 
   private void setupGameRows() {

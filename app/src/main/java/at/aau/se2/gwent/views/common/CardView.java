@@ -70,11 +70,18 @@ public class CardView extends FrameLayout {
         });
 
     showAsPlaceholder();
-    updateUI();
+
+    updateUI(true);
   }
 
   private void updateUI() {
+    updateUI(false);
+  }
+
+  private void updateUI(boolean disableAnimation) {
     cardView.setForeground(isSelected ? borderDrawable : null); // ? = Tenary Operator
+
+    if (disableAnimation) return;
 
     Animation animation =
         new ScaleAnimation(
