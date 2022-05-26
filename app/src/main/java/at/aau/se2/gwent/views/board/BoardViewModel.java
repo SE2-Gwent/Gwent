@@ -70,6 +70,12 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void cancelMulligan() {
+    gameLogic.abortMulliganCards();
+  }
+
+  // Getters & Setters
+
   public MutableLiveData<BoardViewData> getCurrentState() {
     return currentState;
   }

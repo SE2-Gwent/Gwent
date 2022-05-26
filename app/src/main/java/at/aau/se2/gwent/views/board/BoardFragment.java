@@ -3,18 +3,20 @@ package at.aau.se2.gwent.views.board;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.RowType;
+import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
 import at.aau.se2.gwent.views.common.CardView;
@@ -78,7 +80,18 @@ public class BoardFragment extends Fragment {
   private void handleEvents(SingleEvent<BoardViewData.Event> event) {
     switch (event.getValueIfNotHandled()) {
       case SHOW_MULLIGAN:
-        Toast.makeText(getContext(), "Show Mulligan View", Toast.LENGTH_SHORT).show();
+        // TODO: Replace with Mulligan Fragment
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setNegativeButton(
+            R.string.cancel,
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                viewModel.cancelMulligan();
+              }
+            });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
         break;
       default:
         break;
