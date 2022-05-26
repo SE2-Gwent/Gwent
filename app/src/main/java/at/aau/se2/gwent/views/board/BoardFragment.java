@@ -21,6 +21,7 @@ import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
+import at.aau.se2.gwent.util.CardRowHelper;
 import at.aau.se2.gwent.views.common.CardView;
 
 // TODO: Hide NavBar
@@ -67,9 +68,27 @@ public class BoardFragment extends Fragment {
     playerRowCardViews.put(RowType.RANGED, getCardsFromLayout(binding.playersRangeRowLayout));
     opponentRowCardViews.put(RowType.MELEE, getCardsFromLayout(binding.opponentsMeleeRowLayout));
     opponentRowCardViews.put(RowType.RANGED, getCardsFromLayout(binding.opponentsRangeRowLayout));
+    CardRowHelper.setBackgroundDrawable(
+        new CardareaBinding[] {
+          binding.playersMeleeRowLayout,
+          binding.playersRangeRowLayout,
+          binding.opponentsMeleeRowLayout,
+          binding.opponentsRangeRowLayout
+        },
+        R.drawable.game_board_row_background);
+
+    for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+      CardRowHelper.setCardsVisibility(cardViews, View.INVISIBLE);
+    }
+    for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+      CardRowHelper.setCardsVisibility(cardViews, View.INVISIBLE);
+    }
 
     playersHandCardViews = getCardsFromLayout(binding.playersHandLayout);
     opponentsHandCardViews = getCardsFromLayout(binding.opponentsHandLayout);
+
+    CardRowHelper.setCardsAlpha(playersHandCardViews, 1.0F);
+    CardRowHelper.setCardsAlpha(opponentsHandCardViews, 1.0F);
   }
 
   private ArrayList<CardView> getCardsFromLayout(CardareaBinding layout) {
