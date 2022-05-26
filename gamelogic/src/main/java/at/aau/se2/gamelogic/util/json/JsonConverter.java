@@ -1,4 +1,6 @@
-package at.aau.se2.gamelogic.util;
+package at.aau.se2.gamelogic.util.json;
+
+import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
@@ -14,6 +16,7 @@ import at.aau.se2.gamelogic.models.cardactions.DeployParams;
 import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.models.heroactions.HeroActionParams;
 
+/** This class is used to convert a given Json-String into an object and vice versa. */
 public class JsonConverter {
   public static String serialize(Object c) {
     return new Gson().toJson(c);
@@ -21,6 +24,10 @@ public class JsonConverter {
 
   public static Card deserializeCard(String json) {
     return new Gson().fromJson(json, Card.class);
+  }
+
+  public static ArrayList<Card> deserializeCardList(String json) {
+    return new Gson().fromJson(json, ArrayList.class);
   }
 
   public static CardDecks deserializeCardDecks(String json) {

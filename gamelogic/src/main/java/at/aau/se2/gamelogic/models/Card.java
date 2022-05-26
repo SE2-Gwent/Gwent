@@ -1,8 +1,10 @@
 package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.annotation.Keep;
+import at.aau.se2.gamelogic.CardAction;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
 public class Card {
@@ -12,7 +14,7 @@ public class Card {
   private int power;
   private int powerDiff;
   private String cardText;
-  private ArrayList<ActionParams> cardActions;
+  HashMap<CardAction, ActionParams> cardActions;
   private String imgResourceBasic;
   private String imgResourceDetail;
 
@@ -31,7 +33,7 @@ public class Card {
       int power,
       int powerDiff,
       String cardText,
-      ArrayList<ActionParams> cardActions,
+      HashMap<CardAction, ActionParams> cardActions,
       String imgResourceBasic,
       String imgResourceDetail) {
     this.id = id;
@@ -93,11 +95,11 @@ public class Card {
     this.cardText = cardText;
   }
 
-  public ArrayList<ActionParams> getCardActions() {
+  public HashMap<CardAction, ActionParams> getCardActions() {
     return cardActions;
   }
 
-  public void setCardActions(ArrayList<ActionParams> cardActions) {
+  public void setCardActions(HashMap<CardAction, ActionParams> cardActions) {
     this.cardActions = cardActions;
   }
 

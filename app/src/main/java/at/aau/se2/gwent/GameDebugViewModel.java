@@ -1,6 +1,7 @@
 package at.aau.se2.gwent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -16,7 +17,6 @@ import at.aau.se2.gamelogic.models.CardType;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.state.GameState;
 
 public class GameDebugViewModel extends ViewModel
@@ -195,7 +195,7 @@ public class GameDebugViewModel extends ViewModel
               i,
               0,
               "This is a test Card",
-              new ArrayList<ActionParams>(),
+              new HashMap<>(),
               "Hello",
               "World"));
     }
