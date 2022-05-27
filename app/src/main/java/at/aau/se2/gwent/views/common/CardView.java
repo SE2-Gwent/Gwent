@@ -20,7 +20,7 @@ public class CardView extends FrameLayout {
   private TextView pointTextView;
   private TextView nameTextView;
   private boolean isSelected = false;
-  private Drawable borderDrawable = getResources().getDrawable(R.drawable.cardview_border);
+  private final Drawable borderDrawable = getResources().getDrawable(R.drawable.cardview_border);
   private String cardId;
 
   public CardView(Context context, AttributeSet attrs) {
@@ -74,11 +74,6 @@ public class CardView extends FrameLayout {
     params.rightMargin = 5;
     setLayoutParams(params);
 
-    setOnClickListener(
-        view -> {
-          setSelected(!isSelected);
-        });
-
     showAsPlaceholder();
 
     updateUI(true);
@@ -107,6 +102,10 @@ public class CardView extends FrameLayout {
     animation.setFillAfter(true);
     animation.setDuration(500);
     startAnimation(animation);
+  }
+
+  public String getCardId() {
+    return cardId;
   }
 
   public ImageView getCardImageView() {

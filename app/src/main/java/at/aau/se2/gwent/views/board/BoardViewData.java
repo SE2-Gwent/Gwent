@@ -3,11 +3,13 @@ package at.aau.se2.gwent.views.board;
 import java.util.HashMap;
 
 import androidx.annotation.StringRes;
+import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gwent.R;
 
-public class BoardViewData {
+public class BoardViewData implements Cloneable {
+
   public enum PrimaryButtonMode {
     PASS_ROUND,
     END_ROUND;
@@ -27,11 +29,19 @@ public class BoardViewData {
   private GameField gameField;
   private boolean myTurn;
   private boolean canPass;
+  private String selectedCardId;
+  private boolean isGameFieldDirty;
 
-  public BoardViewData(GameField gameField, boolean myTurn, boolean canPass) {
+  public BoardViewData(GameField gameField, GameLogic gameLogic) {
     this.gameField = gameField;
-    this.myTurn = myTurn;
-    this.canPass = canPass;
+    this.myTurn = gameLogic.isMyTurn();
+    this.canPass = gameLogic.getCurrentPlayerCanPass();
+    isGameFieldDirty = true;
+  }
+
+  // gamefield does not get a own cloned object
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
 
   public GameField getGameField() {
@@ -53,5 +63,18 @@ public class BoardViewData {
 
     return gameField.getCurrentHandCardsFor(
         gameField.getCurrentPlayer().getInitialPlayerInformation());
+  }
+
+  public void setSelectedCardId(String selectedCardId) {
+    this.selectedCardId = selectedCardId;
+    isGameFieldDirty = false;
+  }
+
+  public String getSelectedCardId() {
+    return selectedCardId;
+  }
+
+  public boolean isGameFieldDirty() {
+    return isGameFieldDirty;
   }
 }

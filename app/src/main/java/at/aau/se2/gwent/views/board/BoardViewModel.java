@@ -29,6 +29,7 @@ public class BoardViewModel extends ViewModel
   private final GameLogic gameLogic = Environment.getSharedInstance().getGameLogic();
 
   private MutableLiveData<BoardViewData> currentState = new MutableLiveData<>();
+  private BoardViewData oldViewData;
   private MutableLiveData<SingleEvent<Event>> actionLiveData = new MutableLiveData<>();
 
   public BoardViewModel() {
@@ -50,6 +51,18 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickHandCard(@NonNull String cardId) {
+    if (cardId.equals(getCurrentState().getValue().getSelectedCardId())) return;
+    BoardViewData newState = null;
+    try {
+      newState = (BoardViewData) currentState.getValue().clone();
+      newState.setSelectedCardId(cardId);
+      notifyStateChange(newState);
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+    }
+  }
+
   public void cancelMulligan() {
     gameLogic.abortMulliganCards();
   }
@@ -61,10 +74,14 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
-    BoardViewData boardViewState =
-        new BoardViewData(gameField, gameLogic.isMyTurn(), gameLogic.getCurrentPlayerCanPass());
+    BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
-    currentState.setValue(boardViewState);
+    notifyStateChange(boardViewState);
+  }
+
+  private void notifyStateChange(BoardViewData newState) {
+    oldViewData = currentState.getValue();
+    currentState.setValue(newState);
   }
 
   @Override
@@ -91,5 +108,9 @@ public class BoardViewModel extends ViewModel
 
   public MutableLiveData<SingleEvent<Event>> getActionLiveData() {
     return actionLiveData;
+  }
+
+  public BoardViewData getOldViewData() {
+    return oldViewData;
   }
 }

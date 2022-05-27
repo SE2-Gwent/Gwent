@@ -24,6 +24,7 @@ import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
 import at.aau.se2.gwent.util.CardRowHelper;
 import at.aau.se2.gwent.views.common.CardView;
+import at.aau.se2.gwent.views.detailedcard.DetailedCardFragment;
 
 // TODO: Hide NavBar
 
@@ -32,10 +33,11 @@ public class BoardFragment extends Fragment {
 
   private BoardViewModel viewModel;
   private FragmentBoardviewBinding binding;
-  private ArrayList<CardView> playersHandCardViews = new ArrayList<>();
+  private HashMap<String, CardView> playersHandCardViews = new HashMap<>();
   private ArrayList<CardView> opponentsHandCardViews = new ArrayList<>();
   private HashMap<RowType, ArrayList<CardView>> opponentRowCardViews = new HashMap<>();
   private HashMap<RowType, ArrayList<CardView>> playerRowCardViews = new HashMap<>();
+  private DetailedCardFragment detailedCardFragment;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +106,20 @@ public class BoardFragment extends Fragment {
     binding.primaryRoundButton.setText(viewData.getPrimaryButtonMode().getText());
     binding.primaryRoundButton.setEnabled(viewData.isPrimaryButtonEnabled());
 
+    if (viewData.isGameFieldDirty()) {
+      updateCurrentHandCardRow(viewData);
+    }
+
+    if (viewModel.getOldViewData() != null
+        && viewModel.getOldViewData().getSelectedCardId() != null) {
+      playersHandCardViews.get(viewModel.getOldViewData().getSelectedCardId()).setSelected(false);
+    }
+    if (viewData.getSelectedCardId() != null) {
+      playersHandCardViews.get(viewData.getSelectedCardId()).setSelected(true);
+    }
+  }
+
+  private void updateCurrentHandCardRow(BoardViewData viewData) {
     CardRowHelper.removeCardViews(binding.playersHandLayout);
     playersHandCardViews.clear();
     for (Map.Entry<String, Card> entry : viewData.getPlayersHandCards().entrySet()) {
@@ -113,9 +129,41 @@ public class BoardFragment extends Fragment {
       cardView.setupWithCard(
           entry.getKey(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
       binding.playersHandLayout.getRoot().addView(cardView);
+      cardView.setOnClickListener(
+          view -> {
+            CardView clickedCardView = (CardView) view;
+            viewModel.didClickHandCard(clickedCardView.getCardId());
+          });
 
-      playersHandCardViews.add(cardView);
+      cardView.setOnLongClickListener(
+          view -> {
+            CardView clickedCardView = (CardView) view;
+            showDetailOverlay(clickedCardView.getCardId());
+            return true;
+          });
+
+      playersHandCardViews.put(card.getFirebaseId(), cardView);
     }
+  }
+
+  private void showDetailOverlay(String cardId) {
+    if (detailedCardFragment == null) {
+      detailedCardFragment = DetailedCardFragment.newInstance();
+      detailedCardFragment.setListener(
+          new DetailedCardFragment.Listener() {
+            @Override
+            public void didClickDetailCardFragment() {
+              if (detailedCardFragment == null) return;
+              getChildFragmentManager().beginTransaction().remove(detailedCardFragment).commit();
+            }
+          });
+    }
+
+    // TODO: configure DetailFragment with card data
+    getChildFragmentManager()
+        .beginTransaction()
+        .add(R.id.overlayFrameLayout, detailedCardFragment)
+        .commit();
   }
 
   private void handleEvents(SingleEvent<BoardViewModel.Event> event) {
