@@ -31,6 +31,46 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/opponentsRangeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/opponentsRangeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/opponentsRangeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/opponentsRangeRowLayout" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/opponentsMeleeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/opponentsMeleeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/opponentsMeleeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/opponentsMeleeRowLayout" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/playersMeleeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/playersMeleeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/playersMeleeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/playersMeleeRowLayout" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/playersRangeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/playersRangeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/playersRangeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/playersRangeRowLayout" />
+
         <include
             android:id="@+id/playersRangeRowLayout"
             layout="@layout/cardarea"

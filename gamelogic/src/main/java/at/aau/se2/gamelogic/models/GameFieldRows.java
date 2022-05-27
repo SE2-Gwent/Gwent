@@ -3,6 +3,7 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 
 import androidx.annotation.Keep;
+import at.aau.se2.gamelogic.GameLogic;
 
 public class GameFieldRows {
   private ArrayList<Card> p1MeleeRow = new ArrayList<>();
@@ -11,11 +12,17 @@ public class GameFieldRows {
   private ArrayList<Card> p2RangeRow = new ArrayList<>();
 
   @Keep
-  public GameFieldRows() {}
+  public GameFieldRows() {
+    for (ArrayList<Card> row : new ArrayList[] {p1MeleeRow, p1RangeRow, p2MeleeRow, p2RangeRow}) {
+      for (int i = 0; i < GameLogic.ROW_CARD_NUMBER; i++) {
+        row.add(null);
+      }
+    }
+  }
 
   // Still wrong, because we dont know who is me.
-  public ArrayList<Card> meleeRowFor(Player player) {
-    switch (player.getInitialPlayerInformation()) {
+  public ArrayList<Card> meleeRowFor(InitialPlayer player) {
+    switch (player) {
       case INITIATOR:
         return p1MeleeRow;
       case OPPONENT:
@@ -25,8 +32,8 @@ public class GameFieldRows {
     }
   }
 
-  public ArrayList<Card> rangedRowFor(Player player) {
-    switch (player.getInitialPlayerInformation()) {
+  public ArrayList<Card> rangedRowFor(InitialPlayer player) {
+    switch (player) {
       case INITIATOR:
         return p1RangeRow;
       case OPPONENT:

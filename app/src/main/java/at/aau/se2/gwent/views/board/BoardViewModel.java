@@ -14,6 +14,7 @@ import at.aau.se2.gamelogic.GameStateCallback;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
+import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
 import at.aau.se2.gwent.util.DebugHelper;
@@ -63,8 +64,28 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickRowCard(String cardId) {}
+
   public void cancelMulligan() {
     gameLogic.abortMulliganCards();
+  }
+
+  public void playSelectedCard(RowType rowType, int location) {
+    // TODO: change when deploy mechanic is merged
+
+    ArrayList<Card> cardRow = gameLogic.getGameField().getRows().meleeRowFor(gameLogic.getWhoAmI());
+    if (rowType == RowType.RANGED)
+      cardRow = gameLogic.getGameField().getRows().rangedRowFor(gameLogic.getWhoAmI());
+    if (cardRow.get(location) != null) return;
+
+    String cardId = getCurrentState().getValue().getSelectedCardId();
+    if (cardId == null) return;
+
+    Card playedCard =
+        gameLogic.getGameField().getCurrentHandCards().getCard(cardId, gameLogic.getWhoAmI());
+    cardRow.set(location, playedCard);
+
+    createCurrentViewState(gameLogic.getGameField());
   }
 
   // GameFieldObserver

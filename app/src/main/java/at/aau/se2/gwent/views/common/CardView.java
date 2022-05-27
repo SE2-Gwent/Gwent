@@ -70,8 +70,8 @@ public class CardView extends FrameLayout {
 
     ConstraintLayout.LayoutParams params =
         new ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-    params.leftMargin = 5;
-    params.rightMargin = 5;
+    params.leftMargin = getResources().getDimensionPixelSize(R.dimen.default_card_margin);
+    params.rightMargin = getResources().getDimensionPixelSize(R.dimen.default_card_margin);
     setLayoutParams(params);
 
     showAsPlaceholder();

@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
+import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.CardareaBinding;
@@ -28,7 +29,7 @@ import at.aau.se2.gwent.views.detailedcard.DetailedCardFragment;
 
 // TODO: Hide NavBar
 
-public class BoardFragment extends Fragment {
+public class BoardFragment extends Fragment implements View.OnClickListener {
   private static final String TAG = BoardFragment.class.getSimpleName();
 
   private BoardViewModel viewModel;
@@ -75,20 +76,13 @@ public class BoardFragment extends Fragment {
         RowType.MELEE, CardRowHelper.getCardsFromLayout(binding.opponentsMeleeRowLayout));
     opponentRowCardViews.put(
         RowType.RANGED, CardRowHelper.getCardsFromLayout(binding.opponentsRangeRowLayout));
-    CardRowHelper.setBackgroundDrawable(
-        new CardareaBinding[] {
-          binding.playersMeleeRowLayout,
-          binding.playersRangeRowLayout,
-          binding.opponentsMeleeRowLayout,
-          binding.opponentsRangeRowLayout
-        },
-        R.drawable.game_board_row_background);
 
     for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
-      CardRowHelper.setCardsVisibility(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsOnClickListener(cardViews, this);
     }
     for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
-      CardRowHelper.setCardsVisibility(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
     }
 
     CardRowHelper.removeCardViews(binding.playersHandLayout);
@@ -108,7 +102,37 @@ public class BoardFragment extends Fragment {
 
     if (viewData.isGameFieldDirty()) {
       updateCurrentHandCardRow(viewData);
+      updatePlayerRows(
+          viewData,
+          binding.opponentsMeleeRowLayout,
+          RowType.MELEE,
+          opponentRowCardViews,
+          InitialPlayer.OPPONENT);
+      updatePlayerRows(
+          viewData,
+          binding.opponentsRangeRowLayout,
+          RowType.RANGED,
+          opponentRowCardViews,
+          InitialPlayer.OPPONENT);
+      updatePlayerRows(
+          viewData,
+          binding.playersMeleeRowLayout,
+          RowType.MELEE,
+          playerRowCardViews,
+          InitialPlayer.INITIATOR);
+      updatePlayerRows(
+          viewData,
+          binding.playersRangeRowLayout,
+          RowType.RANGED,
+          playerRowCardViews,
+          InitialPlayer.INITIATOR);
     }
+
+    boolean cardIsSelected = viewData.getSelectedCardId() != null;
+    CardRowHelper.setCardsVisibilityForPlaceholders(
+        playerRowCardViews.get(RowType.MELEE), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+    CardRowHelper.setCardsVisibilityForPlaceholders(
+        playerRowCardViews.get(RowType.RANGED), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
 
     if (viewModel.getOldViewData() != null
         && viewModel.getOldViewData().getSelectedCardId() != null) {
@@ -124,6 +148,8 @@ public class BoardFragment extends Fragment {
     playersHandCardViews.clear();
     for (Map.Entry<String, Card> entry : viewData.getPlayersHandCards().entrySet()) {
       Card card = entry.getValue();
+      if (card == null) continue;
+
       CardView cardView = new CardView(getContext(), null);
       // TODO: Replace drawable with cards drawable
       cardView.setupWithCard(
@@ -144,6 +170,61 @@ public class BoardFragment extends Fragment {
 
       playersHandCardViews.put(card.getFirebaseId(), cardView);
     }
+  }
+
+  private void updatePlayerRows(
+      BoardViewData viewData,
+      CardareaBinding rowLayout,
+      RowType type,
+      HashMap<RowType, ArrayList<CardView>> cardRows,
+      InitialPlayer player) {
+
+    ArrayList<Card> row = viewData.getGameField().getRows().meleeRowFor(player);
+    if (type == RowType.RANGED) row = viewData.getGameField().getRows().rangedRowFor(player);
+
+    int index = -1;
+    for (Card card : row) {
+      index++;
+      if (card == null) continue;
+
+      CardView cardView = new CardView(getContext(), null);
+      // TODO: Replace drawable with cards drawable
+      cardView.setupWithCard(
+          card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+      rowLayout.getRoot().removeViewAt(index);
+      rowLayout.getRoot().addView(cardView, index);
+      cardView.setOnClickListener(
+          view -> {
+            CardView clickedCardView = (CardView) view;
+            viewModel.didClickRowCard(clickedCardView.getCardId());
+          });
+
+      cardView.setOnLongClickListener(
+          view -> {
+            CardView clickedCardView = (CardView) view;
+            showDetailOverlay(clickedCardView.getCardId());
+            return true;
+          });
+
+      cardRows.get(type).remove(index);
+      cardRows.get(type).add(index, cardView);
+    }
+
+    rowLayout.getRoot().forceLayout();
+  }
+
+  // onClickListener of players Rows
+  @Override
+  public void onClick(View view) {
+    if (viewModel.getCurrentState().getValue().getSelectedCardId() == null) {
+      // Selected State
+    }
+
+    // playing card to that location
+    RowType rowType = RowType.MELEE;
+    if (playerRowCardViews.get(RowType.RANGED).contains(view)) rowType = RowType.RANGED;
+    int location = playerRowCardViews.get(rowType).indexOf((CardView) view);
+    viewModel.playSelectedCard(rowType, location);
   }
 
   private void showDetailOverlay(String cardId) {

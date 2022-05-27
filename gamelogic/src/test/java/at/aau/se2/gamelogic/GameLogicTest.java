@@ -145,8 +145,14 @@ public class GameLogicTest {
     sut.performAction(action, new DeployParams(1, meleeRow, 0));
     sut.performAction(action2, new DeployParams(2, meleeRow, 0));
 
-    assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).size());
-    assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());
+    assertEquals(
+        2, sut.getGameFieldRows().meleeRowFor(currentPlayer.getInitialPlayerInformation()).size());
+    assertEquals(
+        2,
+        sut.getGameFieldRows()
+            .meleeRowFor(currentPlayer.getInitialPlayerInformation())
+            .get(0)
+            .getId());
   }
 
   @Test

@@ -2,7 +2,7 @@ package at.aau.se2.gwent.util;
 
 import java.util.ArrayList;
 
-import androidx.annotation.DrawableRes;
+import android.view.View;
 import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.views.common.CardView;
 
@@ -14,15 +14,22 @@ public class CardRowHelper {
     }
   }
 
-  public static void setCardsVisibility(ArrayList<CardView> cardViews, int visibility) {
+  public static void setCardsOnClickListener(
+      ArrayList<CardView> cardViews, View.OnClickListener listener) {
     for (CardView cardView : cardViews) {
-      cardView.setVisibility(visibility);
+      cardView.setOnClickListener(listener);
     }
   }
 
-  public static void setBackgroundDrawable(CardareaBinding[] bindings, @DrawableRes int drawable) {
-    for (CardareaBinding binding : bindings) {
-      binding.getRoot().setBackgroundResource(drawable);
+  public static void setCardsVisibilityForPlaceholders(
+      ArrayList<CardView> cardViews, int visibility) {
+    for (CardView cardView : cardViews) {
+      if (cardView.getCardId() != null) {
+        cardView.setVisibility(View.VISIBLE);
+        continue;
+      }
+
+      cardView.setVisibility(visibility);
     }
   }
 

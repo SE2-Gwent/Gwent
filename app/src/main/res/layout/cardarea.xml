@@ -10,62 +10,72 @@
             android:id="@+id/rowcard1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard5"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard6"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard7"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard8"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_related_margin"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
         <at.aau.se2.gwent.views.common.CardView
             android:id="@+id/rowcard9"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/default_card_margin"
+            android:layout_marginEnd="@dimen/default_card_margin"
             android:alpha="0.4" />
 
 </LinearLayout>
