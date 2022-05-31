@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#163532"
+    android:clipChildren="false"
+    tools:context=".views.detailedcard.DetailedCardFragment">
+
+    <Button
+        android:id="@+id/goBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.09" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard1"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:alpha="0.4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.354"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323"
+        app:srcCompat="@drawable/card_background" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard2"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:alpha="0.4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323"
+        app:srcCompat="@drawable/card_background" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard3"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.642"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323"
+        app:srcCompat="@drawable/card_background" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard4"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.785"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323"
+        app:srcCompat="@drawable/card_background" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard5"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.204"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.743"
+        app:srcCompat="@drawable/card_background">
+
+    </at.aau.se2.gwent.views.common.CardView>
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard6"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.204"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323">
+
+    </at.aau.se2.gwent.views.common.CardView>
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard7"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.743"
+        app:srcCompat="@drawable/card_background">
+
+    </at.aau.se2.gwent.views.common.CardView>
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard8"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.642"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.743"
+        app:srcCompat="@drawable/card_background" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard9"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.785"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.743"
+        app:srcCompat="@drawable/card_background" />
+
+    <at.aau.se2.gwent.views.common.CardView
+        android:id="@+id/mulliganCard10"
+        android:layout_width="45dp"
+        android:layout_height="80dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.4"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.354"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.743"
+        app:srcCompat="@drawable/card_background">
+
+    </at.aau.se2.gwent.views.common.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
