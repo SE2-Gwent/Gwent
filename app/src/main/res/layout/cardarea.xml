@@ -90,7 +90,7 @@
             android:layout_marginEnd="@dimen/default_related_margin"
             app:layout_constraintEnd_toStartOf="@+id/rowcard8"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/rowcard6"
+            app:layout_constraintStart_toEndOf="@+id/rowcard8"
             app:srcCompat="@drawable/card_background" />
 
         <at.aau.se2.gwent.views.common.CardView
