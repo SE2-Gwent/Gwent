@@ -14,7 +14,7 @@
         android:adjustViewBounds="true"
         android:padding="0dp"
         android:scaleType="fitXY"
-        android:src="@drawable/detailed_card_test_initial" />
+        android:src="@drawable/rm_detailed_card_test_initial" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

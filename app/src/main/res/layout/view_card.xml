@@ -29,7 +29,7 @@
             android:background="#1AE192"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:src="@drawable/an_craite_amorsmith"
+            android:src="@drawable/rm_an_craite_amorsmith"
             android:visibility="visible" />
 
         <TextView

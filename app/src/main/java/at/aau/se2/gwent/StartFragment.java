@@ -74,7 +74,7 @@ public class StartFragment extends Fragment {
           }
         });
 
-    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
+    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.rm_an_craite_amorsmith);
 
     binding.cardView.setOnLongClickListener(
         new View.OnLongClickListener() {

@@ -232,7 +232,7 @@ public class MainGameActivity extends AppCompatActivity {
               currentplaceholder.setAlpha(1.0F);
               currentplaceholder
                   .getCardImageView()
-                  .setImageResource(R.drawable.an_craite_amorsmith);
+                  .setImageResource(R.drawable.rm_an_craite_amorsmith);
               currentplaceholder.setTag("full");
 
               // ausgespielte Handkarte unsichtbar
