@@ -20,34 +20,34 @@ public class TargetUnitAction implements CardAction {
   private int targetingCardUUID;
   private ArrayList<Integer> targetedCardsUUIDs;
   private int points;
-  private boolean hasRandomTargets;
-  private boolean canTargetAlliedUnits;
-  private boolean canTargetEnemyUnits;
+  private boolean randomTargets;
+  private boolean targetsAlliedUnits;
+  private boolean targetsEnemyUnits;
   private ActionType actionType;
 
   /**
    * @param targetingCardUUID UUID of the card which is targeting.
    * @param targetedCardsUUIDs List of UUIDs of the targeted cards.
    * @param points Number of points which will be applied on the action on each targeted unit.
-   * @param hasRandomTargets Determines if the targets are chosen at random or by the player.
-   * @param canTargetAlliedUnits Determines if it is possible to target allied units.
-   * @param canTargetEnemyUnits Determines if it is possible to target enemy units.
+   * @param randomTargets Determines if the targets are chosen at random or by the player.
+   * @param targetsAlliedUnits Determines if it is possible to target allied units.
+   * @param targetsEnemyUnits Determines if it is possible to target enemy units.
    * @param actionType Type of the Action (There are currently 4 types: DAMAGE, HEAL, BOOST, SWAP)
    */
   public TargetUnitAction(
       int targetingCardUUID,
       ArrayList<Integer> targetedCardsUUIDs,
       int points,
-      boolean hasRandomTargets,
-      boolean canTargetAlliedUnits,
-      boolean canTargetEnemyUnits,
+      boolean randomTargets,
+      boolean targetsAlliedUnits,
+      boolean targetsEnemyUnits,
       ActionType actionType) {
     this.targetingCardUUID = targetingCardUUID;
     this.targetedCardsUUIDs = targetedCardsUUIDs;
     this.points = points;
-    this.hasRandomTargets = hasRandomTargets;
-    this.canTargetAlliedUnits = canTargetAlliedUnits;
-    this.canTargetEnemyUnits = canTargetEnemyUnits;
+    this.randomTargets = randomTargets;
+    this.targetsAlliedUnits = targetsAlliedUnits;
+    this.targetsEnemyUnits = targetsEnemyUnits;
     this.actionType = actionType;
   }
 
@@ -64,15 +64,15 @@ public class TargetUnitAction implements CardAction {
   }
 
   public boolean hasRandomTargets() {
-    return hasRandomTargets;
+    return randomTargets;
   }
 
   public boolean canTargetAlliedUnits() {
-    return canTargetAlliedUnits;
+    return targetsAlliedUnits;
   }
 
   public boolean canTargetEnemyUnits() {
-    return canTargetEnemyUnits;
+    return targetsEnemyUnits;
   }
 
   public ActionType getActionType() {

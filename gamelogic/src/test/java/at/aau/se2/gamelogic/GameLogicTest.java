@@ -49,8 +49,6 @@ public class GameLogicTest {
   private FirebaseConnector mockConnector;
   private GameStateMachine mockGameStateMachine;
 
-  // CardActionCallback mockCallback;
-
   @Before
   public void setup() {
     setupTestCards();
@@ -61,96 +59,7 @@ public class GameLogicTest {
     mockConnector = mock(FirebaseConnector.class);
     mockGameStateMachine = mock(GameStateMachine.class);
     sut = new GameLogic(mockConnector, mockGameStateMachine);
-    // mockCallback = mock(CardActionCallback.class);
-    // sut.registerCardActionCallback(mockCallback);
   }
-
-  /*
-  @Test
-  public void testPerformActionMappings() {
-    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
-    when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
-    sut.setGameField(
-        new GameField(
-            new GameFieldRows(),
-            currentPlayer,
-            new Player(2, InitialPlayer.OPPONENT),
-            cardDecks,
-            new ArrayList<>()));
-
-    HashMap<CardAction, ActionParams> testData = new HashMap<>();
-    testData.put(
-        new CardAction(CardAction.ActionType.DEPLOY),
-        new DeployParams(1, meleeRow, 0, new HashMap<>()));
-    testData.put(
-        new CardAction(CardAction.ActionType.ATTACK),
-        new DamageParams(0, new ArrayList<Integer>(Arrays.asList(1, 2)), 1, 2, false, false));
-    testData.put(new CardAction(CardAction.ActionType.FOG), new FogParams(meleeRow, false));
-    // add other actions here to test
-
-    for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
-      sut.performAction(entry.getKey(), entry.getValue());
-
-      assertTrue(entry.getKey().isPerformed());
-      verify(mockCallback).didPerformAction(eq(entry.getKey()), eq(entry.getValue()));
-    }
-  }
-  */
-
-  /*
-  @Test
-  public void testPerformActionWithWrongParams() {
-    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
-    sut.setGameField(
-        new GameField(
-            new GameFieldRows(),
-            currentPlayer,
-            new Player(2, InitialPlayer.OPPONENT),
-            cardDecks,
-            new ArrayList<>()));
-
-    HashMap<CardAction, ActionParams> testData = new HashMap<>();
-    testData.put(
-        new CardAction(CardAction.ActionType.DEPLOY),
-        new DamageParams(0, new ArrayList<>(Arrays.asList(1, 2)), 1, 2, false, false));
-    testData.put(new CardAction(CardAction.ActionType.ATTACK), new FogParams(meleeRow, false));
-    testData.put(
-        new CardAction(CardAction.ActionType.FOG),
-        new DamageParams(0, new ArrayList<>(Arrays.asList(1, 2)), 1, 2, false, false));
-    // add other actions here to test
-
-    for (Map.Entry<CardAction, ActionParams> entry : testData.entrySet()) {
-      sut.performAction(entry.getKey(), entry.getValue());
-
-      assertFalse(entry.getKey().isPerformed());
-      verifyNoInteractions(mockCallback);
-    }
-  }
-  */
-
-  /*
-  @Test
-  public void testPerformDeployCardActionResults() {
-    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
-    when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
-    sut.setGameField(
-        new GameField(
-            new GameFieldRows(),
-            currentPlayer,
-            new Player(2, InitialPlayer.OPPONENT),
-            cardDecks,
-            new ArrayList<>()));
-
-    CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
-    CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
-
-    sut.performAction(action, new DeployParams(1, meleeRow, 0, new HashMap<>()));
-    sut.performAction(action2, new DeployParams(2, meleeRow, 0, new HashMap<>()));
-
-    assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).size());
-    assertEquals(2, sut.getGameFieldRows().meleeRowFor(currentPlayer).get(0).getId());
-  }
-   */
 
   @Test
   public void testStartGameFails() {
