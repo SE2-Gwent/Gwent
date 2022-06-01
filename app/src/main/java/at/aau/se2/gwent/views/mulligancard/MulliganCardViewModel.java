@@ -22,12 +22,8 @@ public class MulliganCardViewModel extends ViewModel {
     return state;
   }
 
-  // did click cancel()
-
-
-
+  public void didClickCancel() {
+    gameLogic.abortMulliganCards();
+  }
 }
 // did click card(id)
-
-
-

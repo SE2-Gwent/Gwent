@@ -2,13 +2,16 @@ package at.aau.se2.gwent.views.mulligancard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import at.aau.se2.gamelogic.GameLogic.*;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gwent.R;
@@ -50,6 +53,12 @@ public class MulliganCardFragment extends Fragment {
     return binding.getRoot();
   }
 
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    viewModel.didClickCancel();
+  }
+
   private void setUpUI() {
     binding.mulliganCard1.setupWithCard(0, "", R.drawable.card_background);
     binding.mulliganCard2.setupWithCard(0, "", R.drawable.card_background);
@@ -57,6 +66,13 @@ public class MulliganCardFragment extends Fragment {
     binding.mulliganCard4.setupWithCard(0, "", R.drawable.card_background);
     binding.mulliganCard5.setupWithCard(0, "", R.drawable.card_background);
     binding.mulliganCard6.setupWithCard(0, "", R.drawable.card_background);
+    binding.goBackButton.setOnClickListener(
+        view -> {
+          viewModel.didClickCancel();
+          Navigation.findNavController(
+                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+              .popBackStack();
+        });
   }
 
   private void updateUI(ArrayList<Card> cards) {
@@ -76,8 +92,5 @@ public class MulliganCardFragment extends Fragment {
       mulliganCardView.setupWithCard(
           card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
     }
-
-
-
   }
 }
