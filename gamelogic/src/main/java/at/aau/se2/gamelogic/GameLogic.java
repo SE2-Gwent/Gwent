@@ -146,7 +146,7 @@ public class GameLogic {
   /*
    @return Returns cardId to show instead of old card
   */
-  public @Nullable String mulliganCard(int cardId) {
+  public @Nullable Card mulliganCard(int cardId) {
     if (!gameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)) return null;
     if (cardMulligansLeft == 0) {
       Log.w(TAG, "There are no mulligans left this round");
@@ -159,7 +159,7 @@ public class GameLogic {
     int startingPlayingCardsSize = playingCards.size();
     playingCards.remove(cardId + "_card");
 
-    String mulliganedCardId = null;
+    Card mulliganedCard = null;
     Random random = new Random();
     // try to change card, until we have same amount again
     while (playingCards.size() < startingPlayingCardsSize) {
@@ -169,8 +169,8 @@ public class GameLogic {
       // card already in playing cards, try again
       if (playingCards.containsKey(card.getFirebaseId())) continue;
 
-      mulliganedCardId = card.getFirebaseId();
-      playingCards.put(mulliganedCardId, card);
+      mulliganedCard = card;
+      playingCards.put(mulliganedCard.getFirebaseId(), card);
     }
 
     gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(playingCards.values()));
@@ -181,7 +181,7 @@ public class GameLogic {
       connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
     }
 
-    return mulliganedCardId;
+    return mulliganedCard;
   }
 
   public void abortMulliganCards() {
