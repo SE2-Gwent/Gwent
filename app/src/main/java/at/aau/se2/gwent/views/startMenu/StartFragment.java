@@ -24,6 +24,8 @@ import at.aau.se2.gamelogic.models.Row;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 import at.aau.se2.gamelogic.models.cardactions.DeployParams;
+import at.aau.se2.gwent.Environment;
+import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.FragmentStartBinding;
 
 public class StartFragment extends Fragment implements CardActionCallback {
@@ -107,6 +109,26 @@ public class StartFragment extends Fragment implements CardActionCallback {
             gameLogic.performAction(
                 new CardAction(CardAction.ActionType.DEPLOY),
                 new DeployParams(0, new Row(1, RowType.MELEE), 0));
+          }
+        });
+
+    binding.actionSettings.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Navigation.findNavController(
+                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                .navigate(R.id.settings);
+          }
+        });
+
+    binding.actionDetailedCard.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Navigation.findNavController(
+                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                .navigate(R.id.detailed_card);
           }
         });
   }
