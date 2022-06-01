@@ -54,7 +54,7 @@ jobs:
         # Need to merge reports for following coverageReports task.
         # Every java/android module creates own reports in build folder
       - name: Merge Jacoco Reports
-        run: ./gradlew :app:jacocoTestReportDebug :gamelogic:jacocoTestReport mergeJacocoReports jacocoTestReportMerged
+        run: ./gradlew :app:jacocoTestReportDebug :gamelogic:jacocoTestReportDebug mergeJacocoReports jacocoTestReportMerged
       - name: Upload Results
         uses: actions/upload-artifact@v2
         with:

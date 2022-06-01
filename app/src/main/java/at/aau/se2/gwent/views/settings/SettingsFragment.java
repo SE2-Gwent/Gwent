@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gwent.databinding.SettingsFragmentBinding;
 
 public class SettingsFragment extends Fragment {
-
   private SettingsViewModel viewModel;
   private SettingsFragmentBinding binding;
 
