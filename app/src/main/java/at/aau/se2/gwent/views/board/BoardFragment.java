@@ -35,7 +35,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   private BoardViewModel viewModel;
   private FragmentBoardviewBinding binding;
   private HashMap<String, CardView> playersHandCardViews = new HashMap<>();
-  private ArrayList<CardView> opponentsHandCardViews = new ArrayList<>();
+  private HashMap<String, CardView> opponentsHandCardViews = new HashMap<>();
   private HashMap<RowType, ArrayList<CardView>> opponentRowCardViews = new HashMap<>();
   private HashMap<RowType, ArrayList<CardView>> playerRowCardViews = new HashMap<>();
   private DetailedCardFragment detailedCardFragment;
@@ -101,7 +101,13 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     binding.primaryRoundButton.setEnabled(viewData.isPrimaryButtonEnabled());
 
     if (viewData.isGameFieldDirty()) {
-      updateCurrentHandCardRow(viewData);
+      updateCurrentHandCardRow(
+          viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
+      updateCurrentHandCardRow(
+          viewData.getOpponentsHandCards(),
+          binding.opponentsHandLayout,
+          opponentsHandCardViews,
+          true);
       updatePlayerRows(
           viewData,
           binding.opponentsMeleeRowLayout,
@@ -143,32 +149,42 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     }
   }
 
-  private void updateCurrentHandCardRow(BoardViewData viewData) {
-    CardRowHelper.removeCardViews(binding.playersHandLayout);
-    playersHandCardViews.clear();
-    for (Map.Entry<String, Card> entry : viewData.getPlayersHandCards().entrySet()) {
+  private void updateCurrentHandCardRow(
+      HashMap<String, Card> cards,
+      CardareaBinding handLayout,
+      HashMap<String, CardView> handCardViews,
+      boolean isOpponent) {
+    if (cards == null) return;
+
+    CardRowHelper.removeCardViews(handLayout);
+    handCardViews.clear();
+    for (Map.Entry<String, Card> entry : cards.entrySet()) {
       Card card = entry.getValue();
       if (card == null) continue;
 
       CardView cardView = new CardView(getContext(), null);
+      handLayout.getRoot().addView(cardView);
       // TODO: Replace drawable with cards drawable
-      cardView.setupWithCard(
-          entry.getKey(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
-      binding.playersHandLayout.getRoot().addView(cardView);
-      cardView.setOnClickListener(
-          view -> {
-            CardView clickedCardView = (CardView) view;
-            viewModel.didClickHandCard(clickedCardView.getCardId());
-          });
+      if (isOpponent) {
+        cardView.showAsPlaceholder(false);
+      } else {
+        cardView.setupWithCard(
+            entry.getKey(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+        cardView.setOnClickListener(
+            view -> {
+              CardView clickedCardView = (CardView) view;
+              viewModel.didClickHandCard(clickedCardView.getCardId());
+            });
 
-      cardView.setOnLongClickListener(
-          view -> {
-            CardView clickedCardView = (CardView) view;
-            showDetailOverlay(clickedCardView.getCardId());
-            return true;
-          });
+        cardView.setOnLongClickListener(
+            view -> {
+              CardView clickedCardView = (CardView) view;
+              showDetailOverlay(clickedCardView.getCardId());
+              return true;
+            });
+      }
 
-      playersHandCardViews.put(card.getFirebaseId(), cardView);
+      handCardViews.put(card.getFirebaseId(), cardView);
     }
   }
 

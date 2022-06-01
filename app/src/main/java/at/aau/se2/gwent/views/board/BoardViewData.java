@@ -59,10 +59,16 @@ public class BoardViewData implements Cloneable {
   }
 
   public HashMap<String, Card> getPlayersHandCards() {
-    if (gameField.getCurrentPlayer() == null) return null;
+    if (gameField == null || gameField.getCurrentPlayer() == null) return null;
 
     return gameField.getCurrentHandCardsFor(
         gameField.getCurrentPlayer().getInitialPlayerInformation());
+  }
+
+  public HashMap<String, Card> getOpponentsHandCards() {
+    if (gameField == null || gameField.getOpponent() == null) return null;
+
+    return gameField.getCurrentHandCardsFor(gameField.getOpponent().getInitialPlayerInformation());
   }
 
   public void setSelectedCardId(String selectedCardId) {

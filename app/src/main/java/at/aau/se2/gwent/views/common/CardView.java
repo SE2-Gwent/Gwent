@@ -47,11 +47,11 @@ public class CardView extends FrameLayout {
     setAlpha(1.0F);
   }
 
-  public void showAsPlaceholder() {
+  public void showAsPlaceholder(boolean transparent) {
     pointTextView.setText(null);
     nameTextView.setText(null);
     cardImageView.setImageDrawable(getResources().getDrawable(R.drawable.card_background));
-    setAlpha(0.4F);
+    setAlpha(transparent ? 0.4F : 1.0F);
   }
 
   public void setSelected(boolean selected) {
@@ -74,7 +74,7 @@ public class CardView extends FrameLayout {
     params.rightMargin = getResources().getDimensionPixelSize(R.dimen.default_card_margin);
     setLayoutParams(params);
 
-    showAsPlaceholder();
+    showAsPlaceholder(true);
 
     updateUI(true);
   }
