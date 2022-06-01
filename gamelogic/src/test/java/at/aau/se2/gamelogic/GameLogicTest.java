@@ -128,34 +128,6 @@ public class GameLogicTest {
   }
 
   @Test
-  public void testPerformDeployCardActionResults() {
-    when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
-    when(mockGameStateMachine.stateEquals(any())).thenReturn(true);
-    sut.setGameField(
-        new GameField(
-            new GameFieldRows(),
-            currentPlayer,
-            new Player(2, InitialPlayer.OPPONENT),
-            cardDecks,
-            new ArrayList<>()));
-
-    CardAction action = new CardAction(CardAction.ActionType.DEPLOY);
-    CardAction action2 = new CardAction(CardAction.ActionType.DEPLOY);
-
-    sut.performAction(action, new DeployParams(1, meleeRow, 0));
-    sut.performAction(action2, new DeployParams(2, meleeRow, 0));
-
-    assertEquals(
-        2, sut.getGameFieldRows().meleeRowFor(currentPlayer.getInitialPlayerInformation()).size());
-    assertEquals(
-        2,
-        sut.getGameFieldRows()
-            .meleeRowFor(currentPlayer.getInitialPlayerInformation())
-            .get(0)
-            .getId());
-  }
-
-  @Test
   public void testStartGameFails() {
     when(mockGameStateMachine.canProgressTo(any())).thenReturn(true);
     when(mockGameStateMachine.startGame()).thenReturn(false);
