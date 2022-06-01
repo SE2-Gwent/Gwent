@@ -82,7 +82,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
           }
         });
 
-    binding.cardView.setupWithCard(4, "WeaponSmith", R.drawable.an_craite_amorsmith);
+    binding.cardView.setupWithCard(0, 4, "WeaponSmith", R.drawable.an_craite_amorsmith);
 
     binding.cardView.setOnLongClickListener(
         new View.OnLongClickListener() {

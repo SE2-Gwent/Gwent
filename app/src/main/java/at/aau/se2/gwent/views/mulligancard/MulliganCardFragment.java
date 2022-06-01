@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,12 +59,12 @@ public class MulliganCardFragment extends Fragment {
   }
 
   private void setUpUI() {
-    binding.mulliganCard1.setupWithCard(0, "", R.drawable.card_background);
-    binding.mulliganCard2.setupWithCard(0, "", R.drawable.card_background);
-    binding.mulliganCard3.setupWithCard(0, "", R.drawable.card_background);
-    binding.mulliganCard4.setupWithCard(0, "", R.drawable.card_background);
-    binding.mulliganCard5.setupWithCard(0, "", R.drawable.card_background);
-    binding.mulliganCard6.setupWithCard(0, "", R.drawable.card_background);
+    binding.mulliganCard1.setupWithCard(0, 0, "", R.drawable.card_background);
+    binding.mulliganCard2.setupWithCard(0, 0, "", R.drawable.card_background);
+    binding.mulliganCard3.setupWithCard(0, 0, "", R.drawable.card_background);
+    binding.mulliganCard4.setupWithCard(0, 0, "", R.drawable.card_background);
+    binding.mulliganCard5.setupWithCard(0, 0, "", R.drawable.card_background);
+    binding.mulliganCard6.setupWithCard(0, 0, "", R.drawable.card_background);
     binding.goBackButton.setOnClickListener(
         view -> {
           viewModel.didClickCancel();
@@ -73,7 +72,22 @@ public class MulliganCardFragment extends Fragment {
                   Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
               .popBackStack();
         });
+    binding.mulliganCard1.setOnClickListener(mulliganCardListener);
+    binding.mulliganCard2.setOnClickListener(mulliganCardListener);
+    binding.mulliganCard3.setOnClickListener(mulliganCardListener);
+    binding.mulliganCard4.setOnClickListener(mulliganCardListener);
+    binding.mulliganCard5.setOnClickListener(mulliganCardListener);
+    binding.mulliganCard6.setOnClickListener(mulliganCardListener);
   }
+
+  private View.OnClickListener mulliganCardListener =
+      new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          CardView cardView = (CardView) view;
+          viewModel.didClickCard(cardView.getCardId());
+        }
+      };
 
   private void updateUI(ArrayList<Card> cards) {
     // fill cardViews
@@ -90,7 +104,7 @@ public class MulliganCardFragment extends Fragment {
       CardView mulliganCardView = mulliganCardViews.get(i);
       Card card = cards.get(i);
       mulliganCardView.setupWithCard(
-          card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+          card.getId(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
     }
   }
 }

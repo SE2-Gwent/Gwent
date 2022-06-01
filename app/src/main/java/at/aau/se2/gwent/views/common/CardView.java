@@ -18,6 +18,7 @@ public class CardView extends FrameLayout {
   private ImageView cardImageView;
   private TextView pointTextView;
   private TextView nameTextView;
+  private int cardId;
   private boolean isSelected = false;
   private Drawable borderDrawable = getResources().getDrawable(R.drawable.cardview_border);
 
@@ -36,7 +37,8 @@ public class CardView extends FrameLayout {
     init(context);
   }
 
-  public void setupWithCard(int attackPoints, String name, @DrawableRes int cardImage) {
+  public void setupWithCard(int cardId, int attackPoints, String name, @DrawableRes int cardImage) {
+    this.cardId = cardId;
     pointTextView.setText(String.valueOf(attackPoints));
     nameTextView.setText(name);
     cardImageView.setImageDrawable(getResources().getDrawable(cardImage));
@@ -85,5 +87,11 @@ public class CardView extends FrameLayout {
 
   public ImageView getCardImageView() {
     return cardImageView;
+  }
+
+  public int getCardId() {
+    // TODO remove after merge
+
+    return cardId;
   }
 }

@@ -25,5 +25,29 @@ public class MulliganCardViewModel extends ViewModel {
   public void didClickCancel() {
     gameLogic.abortMulliganCards();
   }
+
+  public void didClickCard(int id) {
+    // Im State Card mit Id finden
+    // State aktualisieren, damit neue Card angezeigt wird.
+    Card card = gameLogic.mulliganCard(id);
+    ArrayList<Card> cardList = state.getValue();
+
+    int index = -1;
+    for (int i = 0; cardList.size() > i; i++) {
+      if (cardList.get(i).getId() == id) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index == -1) {
+      return;
+    }
+
+    cardList.remove(index);
+
+    cardList.add(index, card);
+
+    state.setValue(cardList);
+  }
 }
-// did click card(id)
