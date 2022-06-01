@@ -1,5 +1,7 @@
 package at.aau.se2.gwent;
 
+import java.util.Objects;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import at.aau.se2.gwent.databinding.GameDebugFragmentBinding;
 
 public class GameDebugFragment extends Fragment {
@@ -57,7 +60,9 @@ public class GameDebugFragment extends Fragment {
         });
     binding.mulliganCardButton.setOnClickListener(
         view -> {
-          viewModel.mulliganCard();
+          Navigation.findNavController(
+                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+              .navigate(R.id.action_gameDebugFragment_to_mulliganCardFragment);
         });
     binding.roundDoneButton.setOnClickListener(
         view -> {

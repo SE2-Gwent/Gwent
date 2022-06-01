@@ -91,6 +91,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
             Navigation.findNavController(
                     Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
                 .navigate(R.id.detailed_card);
+
             return true;
           }
         });

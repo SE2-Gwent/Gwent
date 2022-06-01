@@ -85,6 +85,8 @@ public class GameDebugViewModel extends ViewModel
   }
 
   private void createCurrentViewState() {
+    if (gameLogic.getGameField() == null) return;
+
     Player current = gameLogic.getGameField().getCurrentPlayer();
     Player opponent = gameLogic.getGameField().getOpponent();
 

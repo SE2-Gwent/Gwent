@@ -1,97 +1,83 @@
 package at.aau.se2.gwent.views.mulligancard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gamelogic.GameLogic.*;
-import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.FragmentMulliganCardBinding;
 import at.aau.se2.gwent.views.common.CardView;
-import at.aau.se2.gwent.views.detailedcard.DetailedCardViewModel;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MulliganCardFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass. Use the {@link MulliganCardFragment#newInstance} factory
+ * method to create an instance of this fragment.
  */
 public class MulliganCardFragment extends Fragment {
-    //private androidx.cardview.widget.CardView getCardsToMulligan
+  // private androidx.cardview.widget.CardView getCardsToMulligan
 
-    private MulliganCardViewModel viewModel;
-    private FragmentMulliganCardBinding binding;
+  private MulliganCardViewModel viewModel;
+  private FragmentMulliganCardBinding binding;
+  private static final String TAG = MulliganCardFragment.class.getSimpleName();
 
-    public MulliganCardFragment() {
+  public MulliganCardFragment() {}
+  // private MulliganCardFragment binding;
+
+  public MulliganCardFragment newInstance() {
+    // Required empty public constructor
+    return new MulliganCardFragment();
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    viewModel = new ViewModelProvider(this).get(MulliganCardViewModel.class);
+    viewModel.getCurrentState().observe(this, this::updateUI);
+  }
+
+  @Override
+  public View onCreateView(
+      LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    binding = FragmentMulliganCardBinding.inflate(inflater, container, false);
+    setUpUI();
+    return binding.getRoot();
+  }
+
+  private void setUpUI() {
+    binding.mulliganCard1.setupWithCard(0, "", R.drawable.card_background);
+    binding.mulliganCard2.setupWithCard(0, "", R.drawable.card_background);
+    binding.mulliganCard3.setupWithCard(0, "", R.drawable.card_background);
+    binding.mulliganCard4.setupWithCard(0, "", R.drawable.card_background);
+    binding.mulliganCard5.setupWithCard(0, "", R.drawable.card_background);
+    binding.mulliganCard6.setupWithCard(0, "", R.drawable.card_background);
+  }
+
+  private void updateUI(ArrayList<Card> cards) {
+    // fill cardViews
+    ArrayList<CardView> mulliganCardViews =
+        new ArrayList(
+            Arrays.asList(
+                binding.mulliganCard1,
+                binding.mulliganCard2,
+                binding.mulliganCard3,
+                binding.mulliganCard4,
+                binding.mulliganCard5,
+                binding.mulliganCard6));
+    for (int i = 0; cards.size() > i; i++) {
+      CardView mulliganCardView = mulliganCardViews.get(i);
+      Card card = cards.get(i);
+      mulliganCardView.setupWithCard(
+          card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
     }
-    //private MulliganCardFragment binding;
 
 
-    public MulliganCardFragment newInstance() {
-        // Required empty public constructor
-        return new MulliganCardFragment();
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(MulliganCardViewModel.class);
-        viewModel.getCurrentState().observe(this, this::updateUI);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentMulliganCardBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-
-    private void updateUI(ArrayList<Card> cards) {
-        //fill cardViews
-
-        viewModel.state.getValue();
-
-        //if cardCount is 3 -> only have 3 rdm cards visible/clickable -> clicked -> return to game
-        if (GameLogic.getCardsToMulligan == 3) {
-
-            binding.mulliganCard1.setVisibility(View.GONE);
-            binding.mulliganCard2.setVisibility(View.GONE);
-            binding.mulliganCard3.setVisibility(View.GONE);
-            binding.mulliganCard4.setVisibility(View.VISIBLE);
-            binding.mulliganCard5.setVisibility(View.VISIBLE);
-            binding.mulliganCard6.setVisibility(View.VISIBLE);
-
-            // else if cardCount is 6 -> have 6 rdm cards visible/clickable -> clicked -> return to game
-        } else if (GameLogic.getCardsToMulligan == 6) {
-            // public MutableLiveData<ViewState> state = new MutableLiveData<>();
-
-            binding.mulliganCard1.setVisibility(View.VISIBLE);
-            binding.mulliganCard2.setVisibility(View.VISIBLE);
-            binding.mulliganCard3.setVisibility(View.VISIBLE);
-            binding.mulliganCard4.setVisibility(View.VISIBLE);
-            binding.mulliganCard5.setVisibility(View.VISIBLE);
-            binding.mulliganCard6.setVisibility(View.VISIBLE);
-
-
-            //if goBackButton ('Cancel') is clicked -> return to game
-        } else {
-            binding.goBackButton.setOnClickListener(View );
-
-        }
-        //Cardviews befüllen
-        // Cardviews hide/show (3/6)
-
-        mulli.setForeground(isSelected ? borderDrawable : null); // ? = Tenary Operator
-
-    }
+  }
 }
