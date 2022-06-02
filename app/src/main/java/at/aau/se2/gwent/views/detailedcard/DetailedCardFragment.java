@@ -16,13 +16,13 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import at.aau.se2.gwent.R;
-import at.aau.se2.gwent.databinding.DetailedCardFragmentBinding;
+import at.aau.se2.gwent.databinding.FragmentDetailedCardBinding;
 
 public class DetailedCardFragment extends Fragment {
   private static final String TAG = DetailedCardFragment.class.getSimpleName();
 
   private DetailedCardViewModel viewModel;
-  private DetailedCardFragmentBinding binding;
+  private FragmentDetailedCardBinding binding;
   private DetailedCardFragment.Listener listener;
 
   public static DetailedCardFragment newInstance() {
@@ -44,7 +44,7 @@ public class DetailedCardFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
     Objects.requireNonNull(getActivity())
         .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    binding = DetailedCardFragmentBinding.inflate(inflater, container, false);
+    binding = FragmentDetailedCardBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 

@@ -13,10 +13,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import at.aau.se2.gwent.R;
-import at.aau.se2.gwent.databinding.RulesFragmentBinding;
+import at.aau.se2.gwent.databinding.FragmentRulesBinding;
 
 public class RulesFragment extends Fragment {
-  private RulesFragmentBinding binding;
+  private FragmentRulesBinding binding;
   private AppBarConfiguration appBarConfiguration;
 
   public static RulesFragment newInstance() {
@@ -33,7 +33,7 @@ public class RulesFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    binding = RulesFragmentBinding.inflate(inflater, container, false);
+    binding = FragmentRulesBinding.inflate(inflater, container, false);
 
     ((AppCompatActivity) getActivity()).setSupportActionBar(binding.rulesToolBar);
     NavController navController =

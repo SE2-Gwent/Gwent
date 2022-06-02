@@ -19,19 +19,19 @@
         android:id="@+id/settings"
         android:name="at.aau.se2.gwent.views.settings.SettingsFragment"
         android:label="settings_fragment"
-        tools:layout="@layout/settings_fragment" />
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/game_debug_fragment"
         android:name="at.aau.se2.gwent.views.debug.GameDebugFragment"
         android:label="game_debug_fragment"
-        tools:layout="@layout/game_debug_fragment" />
+        tools:layout="@layout/fragment_game_debug" />
 
     <fragment
         android:id="@+id/detailed_card"
         android:name="at.aau.se2.gwent.views.detailedcard.DetailedCardFragment"
         android:label="@string/action_detailed_card"
-        tools:layout="@layout/detailed_card_fragment">
+        tools:layout="@layout/fragment_detailed_card">
         <argument
             android:name="cardId"
             app:argType="integer"
@@ -52,5 +52,5 @@
         android:id="@+id/rules"
         android:name="at.aau.se2.gwent.views.rules.RulesFragment"
         android:label="rules"
-        tools:layout="@layout/rules_fragment" />
+        tools:layout="@layout/fragment_rules" />
 </navigation>

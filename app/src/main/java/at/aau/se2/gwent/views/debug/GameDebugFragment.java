@@ -15,11 +15,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import at.aau.se2.gwent.R;
-import at.aau.se2.gwent.databinding.GameDebugFragmentBinding;
+import at.aau.se2.gwent.databinding.FragmentGameDebugBinding;
 
 public class GameDebugFragment extends Fragment {
   private GameDebugViewModel viewModel;
-  private GameDebugFragmentBinding binding;
+  private FragmentGameDebugBinding binding;
   private AppBarConfiguration appBarConfiguration;
 
   public static GameDebugFragment newInstance() {
@@ -31,7 +31,7 @@ public class GameDebugFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    binding = GameDebugFragmentBinding.inflate(inflater, container, false);
+    binding = FragmentGameDebugBinding.inflate(inflater, container, false);
 
     ((AppCompatActivity) getActivity()).setSupportActionBar(binding.debugToolBar);
     NavController navController =
