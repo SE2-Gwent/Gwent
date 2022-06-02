@@ -3,62 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/game_board_background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
+    <ImageButton
+        android:id="@+id/debugButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_related_margin"
+        android:layout_marginTop="@dimen/default_related_margin"
+        android:src="@drawable/ic_settings_24"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/roundDoneButton"
-            android:layout_width="105dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="Done"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:minWidth="40dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/roundDoneButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/editTextNumber4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                tools:text="99" />
-
-            <TextView
-                android:id="@+id/Pointsfromplayer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                tools:text="1" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/activatehero"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:text="Hero"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/primaryRoundButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardRowsLayout"
@@ -75,6 +42,45 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/opponentsRangeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/opponentsRangeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/opponentsRangeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/opponentsRangeRowLayout" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/opponentsMeleeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/opponentsMeleeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/opponentsMeleeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/opponentsMeleeRowLayout" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/playersMeleeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/playersMeleeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/playersMeleeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/playersMeleeRowLayout" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/game_board_row_background"
+            app:layout_constraintBottom_toBottomOf="@+id/playersRangeRowLayout"
+            app:layout_constraintEnd_toEndOf="@+id/playersRangeRowLayout"
+            app:layout_constraintStart_toStartOf="@+id/playersRangeRowLayout"
+            app:layout_constraintTop_toTopOf="@+id/playersRangeRowLayout" />
 
         <include
             android:id="@+id/playersRangeRowLayout"
@@ -128,7 +134,7 @@
 
         <include
             android:id="@+id/playersHandLayout"
-            layout="@layout/carddeck"
+            layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:orientation="horizontal"
@@ -138,7 +144,7 @@
 
         <include
             android:id="@+id/opponentsHandLayout"
-            layout="@layout/carddeck"
+            layout="@layout/cardarea"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             app:layout_constraintBottom_toTopOf="@+id/opponentsCardGuideLine"
@@ -163,5 +169,17 @@
             app:layout_constraintTop_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/overlayFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/primaryRoundButton" />
 
+</androidx.constraintlayout.widget.ConstraintLayout>
