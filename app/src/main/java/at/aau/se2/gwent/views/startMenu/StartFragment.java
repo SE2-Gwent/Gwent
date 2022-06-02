@@ -5,6 +5,7 @@ import java.util.Objects;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -106,6 +107,13 @@ public class StartFragment extends Fragment implements CardActionCallback {
                 .navigate(R.id.rules);
           }
         });
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    Objects.requireNonNull(getActivity())
+        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
   }
 
   @Override
