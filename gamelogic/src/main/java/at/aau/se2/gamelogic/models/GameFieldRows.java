@@ -53,4 +53,16 @@ public class GameFieldRows {
   public HashMap<String, Card> getP1MeleeRow() {
     return p1MeleeRow;
   }
+
+  public HashMap<String, Card> getP1RangeRow() {
+    return p1RangeRow;
+  }
+
+  public HashMap<String, Card> getP2MeleeRow() {
+    return p2MeleeRow;
+  }
+
+  public HashMap<String, Card> getP2RangeRow() {
+    return p2RangeRow;
+  }
 }

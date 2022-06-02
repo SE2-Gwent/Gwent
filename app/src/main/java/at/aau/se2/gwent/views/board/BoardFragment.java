@@ -116,25 +116,25 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           binding.opponentsMeleeRowLayout,
           RowType.MELEE,
           opponentRowCardViews,
-          InitialPlayer.OPPONENT);
+          viewData.getWhoAmI().other());
       updatePlayerRows(
           viewData,
           binding.opponentsRangeRowLayout,
           RowType.RANGED,
           opponentRowCardViews,
-          InitialPlayer.OPPONENT);
+          viewData.getWhoAmI().other());
       updatePlayerRows(
           viewData,
           binding.playersMeleeRowLayout,
           RowType.MELEE,
           playerRowCardViews,
-          InitialPlayer.INITIATOR);
+          viewData.getWhoAmI());
       updatePlayerRows(
           viewData,
           binding.playersRangeRowLayout,
           RowType.RANGED,
           playerRowCardViews,
-          InitialPlayer.INITIATOR);
+          viewData.getWhoAmI());
     }
 
     boolean cardIsSelected = viewData.getSelectedCardId() != null;

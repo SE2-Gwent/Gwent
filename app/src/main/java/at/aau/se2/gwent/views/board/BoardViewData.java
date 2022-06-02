@@ -82,6 +82,10 @@ public class BoardViewData implements Cloneable {
     return selectedCardId;
   }
 
+  public InitialPlayer getWhoAmI() {
+    return whoAmI;
+  }
+
   public boolean isGameFieldDirty() {
     return isGameFieldDirty;
   }
