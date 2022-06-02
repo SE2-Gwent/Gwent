@@ -1,5 +1,6 @@
 package at.aau.se2.gamelogic.util.json;
 
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -29,6 +30,10 @@ public class JsonConverter {
    * TypeToken<ArrayList<Card>>(){}.getType();
    */
   public static ArrayList<Card> deserializeCardList(String json, Type type) {
+    return new Gson().fromJson(json, type);
+  }
+
+  public static ArrayList<Card> deserializeCardList(Reader json, Type type) {
     return new Gson().fromJson(json, type);
   }
 
