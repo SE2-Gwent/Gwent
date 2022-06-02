@@ -480,6 +480,7 @@ public class GameLogic {
   private void deployCard(Card card, Row row, int position) {
     ArrayList<Card> cardRow = null;
 
+    /*
     switch (row.getRowType()) {
       case MELEE:
         cardRow =
@@ -495,6 +496,7 @@ public class GameLogic {
         break;
     }
     cardRow.add(position, card);
+     */
   }
 
   private void notifyCardActionCallbacks(CardAction action, ActionParams params) {

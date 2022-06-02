@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.InitialPlayer;
@@ -197,20 +198,20 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       HashMap<RowType, ArrayList<CardView>> cardRows,
       InitialPlayer player) {
 
-    ArrayList<Card> row = viewData.getGameField().getRows().meleeRowFor(player);
+    HashMap<String, Card> row = viewData.getGameField().getRows().meleeRowFor(player);
     if (type == RowType.RANGED) row = viewData.getGameField().getRows().rangedRowFor(player);
 
-    int index = -1;
-    for (Card card : row) {
-      index++;
+    for (int i = 0; i < GameLogic.HAND_CARD_NUMBER; i++) {
+      Card card = row.get(i + "_index");
+
       if (card == null) continue;
 
       CardView cardView = new CardView(getContext(), null);
       // TODO: Replace drawable with cards drawable
       cardView.setupWithCard(
           card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
-      rowLayout.getRoot().removeViewAt(index);
-      rowLayout.getRoot().addView(cardView, index);
+      rowLayout.getRoot().removeViewAt(i);
+      rowLayout.getRoot().addView(cardView, i);
       cardView.setOnClickListener(
           view -> {
             CardView clickedCardView = (CardView) view;
@@ -224,8 +225,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
             return true;
           });
 
-      cardRows.get(type).remove(index);
-      cardRows.get(type).add(index, cardView);
+      cardRows.get(type).remove(i);
+      cardRows.get(type).add(i, cardView);
     }
 
     rowLayout.getRoot().forceLayout();

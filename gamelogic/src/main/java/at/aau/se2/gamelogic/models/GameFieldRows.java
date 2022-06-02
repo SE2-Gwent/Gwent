@@ -1,27 +1,15 @@
 package at.aau.se2.gamelogic.models;
 
-import java.util.ArrayList;
-
-import androidx.annotation.Keep;
-import at.aau.se2.gamelogic.GameLogic;
+import java.util.HashMap;
 
 public class GameFieldRows {
-  private ArrayList<Card> p1MeleeRow = new ArrayList<>();
-  private ArrayList<Card> p1RangeRow = new ArrayList<>();
-  private ArrayList<Card> p2MeleeRow = new ArrayList<>();
-  private ArrayList<Card> p2RangeRow = new ArrayList<>();
-
-  @Keep
-  public GameFieldRows() {
-    for (ArrayList<Card> row : new ArrayList[] {p1MeleeRow, p1RangeRow, p2MeleeRow, p2RangeRow}) {
-      for (int i = 0; i < GameLogic.ROW_CARD_NUMBER; i++) {
-        row.add(null);
-      }
-    }
-  }
+  private HashMap<String, Card> p1MeleeRow = new HashMap<>(10);
+  private HashMap<String, Card> p1RangeRow = new HashMap<>(10);
+  private HashMap<String, Card> p2MeleeRow = new HashMap<>(10);
+  private HashMap<String, Card> p2RangeRow = new HashMap<>(10);
 
   // Still wrong, because we dont know who is me.
-  public ArrayList<Card> meleeRowFor(InitialPlayer player) {
+  public HashMap<String, Card> meleeRowFor(InitialPlayer player) {
     switch (player) {
       case INITIATOR:
         return p1MeleeRow;
@@ -32,7 +20,7 @@ public class GameFieldRows {
     }
   }
 
-  public ArrayList<Card> rangedRowFor(InitialPlayer player) {
+  public HashMap<String, Card> rangedRowFor(InitialPlayer player) {
     switch (player) {
       case INITIATOR:
         return p1RangeRow;
@@ -43,19 +31,26 @@ public class GameFieldRows {
     }
   }
 
-  public ArrayList<Card> getP1MeleeRow() {
+  public boolean setCardIfPossible(InitialPlayer player, RowType rowType, int location, Card card) {
+    HashMap<String, Card> row;
+    switch (rowType) {
+      case MELEE:
+        row = meleeRowFor(player);
+        break;
+      case RANGED:
+        row = rangedRowFor(player);
+        break;
+      default:
+        return false;
+    }
+
+    if (row.get(location + "_index") != null) return false;
+
+    row.put(location + "_index", card);
+    return true;
+  }
+
+  public HashMap<String, Card> getP1MeleeRow() {
     return p1MeleeRow;
-  }
-
-  public ArrayList<Card> getP1RangeRow() {
-    return p1RangeRow;
-  }
-
-  public ArrayList<Card> getP2MeleeRow() {
-    return p2MeleeRow;
-  }
-
-  public ArrayList<Card> getP2RangeRow() {
-    return p2RangeRow;
   }
 }

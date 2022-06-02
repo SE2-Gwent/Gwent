@@ -73,17 +73,20 @@ public class BoardViewModel extends ViewModel
   public void playSelectedCard(RowType rowType, int location) {
     // TODO: change when deploy mechanic is merged
 
-    ArrayList<Card> cardRow = gameLogic.getGameField().getRows().meleeRowFor(gameLogic.getWhoAmI());
-    if (rowType == RowType.RANGED)
-      cardRow = gameLogic.getGameField().getRows().rangedRowFor(gameLogic.getWhoAmI());
-    if (cardRow.get(location) != null) return;
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
     Card playedCard =
         gameLogic.getGameField().getCurrentHandCards().getCard(cardId, gameLogic.getWhoAmI());
-    cardRow.set(location, playedCard);
+    if (playedCard == null) {
+      Log.e(TAG, "Could not find card in players hand.");
+      return;
+    }
+
+    gameLogic
+        .getGameField()
+        .getRows()
+        .setCardIfPossible(gameLogic.getWhoAmI(), rowType, location, playedCard);
 
     createCurrentViewState(gameLogic.getGameField());
   }

@@ -6,6 +6,7 @@ import androidx.annotation.StringRes;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
+import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gwent.R;
 
 public class BoardViewData implements Cloneable {
@@ -29,11 +30,13 @@ public class BoardViewData implements Cloneable {
   private GameField gameField;
   private boolean myTurn;
   private boolean canPass;
+  private InitialPlayer whoAmI;
   private String selectedCardId;
   private boolean isGameFieldDirty;
 
   public BoardViewData(GameField gameField, GameLogic gameLogic) {
     this.gameField = gameField;
+    this.whoAmI = gameLogic.getWhoAmI();
     this.myTurn = gameLogic.isMyTurn();
     this.canPass = gameLogic.getCurrentPlayerCanPass();
     isGameFieldDirty = true;
@@ -61,14 +64,13 @@ public class BoardViewData implements Cloneable {
   public HashMap<String, Card> getPlayersHandCards() {
     if (gameField == null || gameField.getCurrentPlayer() == null) return null;
 
-    return gameField.getCurrentHandCardsFor(
-        gameField.getCurrentPlayer().getInitialPlayerInformation());
+    return gameField.getCurrentHandCardsFor(whoAmI);
   }
 
   public HashMap<String, Card> getOpponentsHandCards() {
     if (gameField == null || gameField.getOpponent() == null) return null;
 
-    return gameField.getCurrentHandCardsFor(gameField.getOpponent().getInitialPlayerInformation());
+    return gameField.getCurrentHandCardsFor(whoAmI.other());
   }
 
   public void setSelectedCardId(String selectedCardId) {
