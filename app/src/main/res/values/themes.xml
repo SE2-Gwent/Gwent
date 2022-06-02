@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/gwent_green_dark</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/teal_200</item>
+        <item name="colorAccent">@color/gwent_green_dark</item>
         <!-- Customize your theme here. -->
     </style>
 
