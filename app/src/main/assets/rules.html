@@ -1,0 +1,146 @@
+<html>
+<link rel="stylesheet" href="rules.css">
+<body>
+
+<ol class="list">
+    <li class="item">
+        <h2 class="headline">Goal of the game:</h2>
+
+        <ul>
+            <li>Every match consists of 3 separate rounds.</li>
+            <li>To win the match, you have to win 2 rounds.</li>
+        </ul>
+    </li>
+    <li class="item">
+        <h2 class="headline">Deck</h2>
+        <ul>
+            <li>Each deck contains 25 cards.</li>
+            <li>(optional) A player can always check which cards are remaining in his/her deck
+                during each
+                round.
+            </li>
+        </ul>
+    </li>
+    <li class="item">
+        <h2 class="headline">Hero</h2>
+        <ul>
+
+            <li>Each player has a hero with a unique ability.</li>
+            <li>The ability of the hero can be activated during the controlling players turn (if
+                there is no
+                cooldown).
+            </li>
+        </ul>
+    </li>
+    <li class="item">
+        <h2 class="headline">Graveyard</h2>
+        <ul>
+
+            <li>Cards which die during a round or which are whipped at the end of a round go to the
+                graveyard.
+            </li>
+            <li>(optional) A player can always check which cards are in his/her graveyard during
+                each
+                round.
+            </li>
+        </ul>
+    </li>
+    <li class="item">
+        <h2 class="headline">Hand</h2>
+        <ul>
+            <li>A hand can\'t hold more than 10 cards (0 = n = 10 | n = Cards in hand).</li>
+        </ul>
+    </li>
+    <li class="item">
+
+        <h2 class="headline">Card drawing and mulligans</h2>
+        <ul>
+            <li>At the start of the first round both players draw 10 cards.</li>
+            <li>After the first round 3 cards are drawn at the beginning of each round.</li>
+            <li>Each card which can\'t be drawn due to the maximum hand size is converted into an
+                additional
+                mulligan.
+            </li>
+            <li>After drawing, each player has the chance to replace n cards from his/her hand (n =
+                2 +
+                additional mulligans).
+            </li>
+            <li>Additional mulligans are reseted before each round.</li>
+        </ul>
+    </li>
+    <li class="item">
+        <h2 class="headline">Round</h2>
+        <ul>
+            <li>At the first round the player who plays first is determined at random</li>
+            <li>Each following round the winner of the previous round plays first.</li>
+            <li>A round ends if both players have either passed or ended the round (see Passing).
+            </li>
+            <li>After the round has ended the player with the most points wins the round (see
+                Rows).
+            </li>
+            <li>If the points are tie the winner is calculated randomly.</li>
+            <li>If there is a next round, the battlefield is cleared (i.e. all cards on the
+                battlefield go
+                to the graveyards).
+            </li>
+        </ul>
+    </li>
+    <li class="item">
+
+        <h2 class="headline">Turn</h2>
+        <ul>
+            <li>Turns are taken alternately by each player.</li>
+            <li>A player is allowed to pass if the conditions are met (see Passing).</li>
+            <li>Within each turn a player has to play exactly one card.</li>
+            <li>Within each turn a player is allowed to activate n abilities (0 = n = abilities
+                which can be
+                activated).
+            </li>
+        </ul>
+    </li>
+    <li class="item">
+
+        <h2 class="headline">Passing</h2>
+        <ul>
+            <li>A player is allowed to pass if he/ she has taken no previous actions this turn (play
+                card,
+                activate ability)
+            </li>
+        </ul>
+    </li>
+    <li class="item">
+
+        <h2 class="headline">Rows</h2>
+        <ul>
+            <li>The battlefield consists of rows divided into melee and ranged.</li>
+            <li>Each player has a melee and a ranged row.</li>
+            <li>The current points of a player are calculated by summing up the power of the
+                creature-cards
+                placed on his/her melee and ranged rows.
+            </li>
+            <li>Each row can be affected by statuses which are changing the behaviour of the row.
+            </li>
+            <li>The maximum number for cards on each row is 6.</li>
+        </ul>
+    </li>
+    <li class="item">
+        <h2 class="headline">Card</h2>
+        <ul>
+            <li>Each creature-card has a power associated to it.</li>
+            <li>Each creature-card may have an ability (for example a creature could deal damage,
+                when it
+                enters the battlefield).
+            </li>
+            <li>If the card is on the battlefield the power of the creature can change with the
+                progress of
+                a round.
+            </li>
+            <li>If a creature-card on the battlefield has 0 power it dies and goes to the
+                graveyard.
+            </li>
+        </ul>
+    </li>
+
+</ol>
+</body>
+</html>
