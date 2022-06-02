@@ -43,7 +43,10 @@ public class RulesFragment extends Fragment {
     NavigationUI.setupActionBarWithNavController(
         (AppCompatActivity) getActivity(), navController, appBarConfiguration);
 
+    // remove longClick to have not selectable text in webview
     binding.fullRules.setLongClickable(false);
+    binding.fullRules.setOnLongClickListener(
+            v -> true);
     binding.fullRules.loadUrl("file:///android_asset/rules.html");
 
     return binding.getRoot();
