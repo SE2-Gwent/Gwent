@@ -54,6 +54,8 @@ public class BoardViewModel extends ViewModel
 
   public void didClickHandCard(@NonNull String cardId) {
     if (cardId.equals(getCurrentState().getValue().getSelectedCardId())) return;
+    if (!getCurrentState().getValue().isMyTurn()) return;
+
     BoardViewData newState = null;
     try {
       newState = (BoardViewData) currentState.getValue().clone();

@@ -89,4 +89,8 @@ public class BoardViewData implements Cloneable {
   public boolean isGameFieldDirty() {
     return isGameFieldDirty;
   }
+
+  public boolean isMyTurn() {
+    return myTurn;
+  }
 }
