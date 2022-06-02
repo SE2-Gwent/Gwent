@@ -20,13 +20,14 @@
     font-size: 1.1rem;
     line-height: 1.375;
     position: relative;
+    padding-right:30px;
 }
 
 ul {
     list-style-type:none;
     }
     ul li {
-    padding-bottom: 0.5rem
+    padding-bottom: 0.5rem;
     }
 
 .item:before {
