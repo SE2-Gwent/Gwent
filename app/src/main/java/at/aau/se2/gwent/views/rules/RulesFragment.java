@@ -6,11 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.RulesFragmentBinding;
 
 public class RulesFragment extends Fragment {
   private RulesFragmentBinding binding;
+  private AppBarConfiguration appBarConfiguration;
 
   public static RulesFragment newInstance() {
     return new RulesFragment();
@@ -27,12 +34,17 @@ public class RulesFragment extends Fragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     binding = RulesFragmentBinding.inflate(inflater, container, false);
-    return binding.getRoot();
-  }
 
-  @Override
-  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+    ((AppCompatActivity) getActivity()).setSupportActionBar(binding.rulesToolBar);
+    NavController navController =
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+    appBarConfiguration =
+        new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
+    NavigationUI.setupActionBarWithNavController(
+        (AppCompatActivity) getActivity(), navController, appBarConfiguration);
+
     binding.fullRules.loadUrl("file:///android_asset/rules.html");
+
+    return binding.getRoot();
   }
 }

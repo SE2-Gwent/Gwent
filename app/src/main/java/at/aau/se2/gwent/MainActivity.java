@@ -5,13 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = MainActivity.class.getSimpleName();
 
-  private AppBarConfiguration appBarConfiguration;
   private ActivityMainBinding binding;
 
   @Override
