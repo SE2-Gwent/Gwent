@@ -63,8 +63,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   @Override
-  public void onStop() {
-    super.onStop();
+  public void onResume() {
+    super.onResume();
+    if (viewModel.getCurrentState().getValue() == null) return;
+    updateUI(viewModel.getCurrentState().getValue());
   }
 
   private void setupGameRows() {
