@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
@@ -96,6 +97,13 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     binding.primaryRoundButton.setOnClickListener(
         view -> {
           viewModel.didClickPrimaryButton();
+        });
+
+    binding.debugButton.setOnClickListener(
+        view -> {
+          Navigation.findNavController(
+                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+              .navigate(R.id.action_board_fragment_to_game_debug_fragment);
         });
   }
 

@@ -1,4 +1,4 @@
-package at.aau.se2.gwent;
+package at.aau.se2.gwent.views.debug;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,13 +7,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.GameDebugFragmentBinding;
 
 public class GameDebugFragment extends Fragment {
   private GameDebugViewModel viewModel;
   private GameDebugFragmentBinding binding;
+  private AppBarConfiguration appBarConfiguration;
 
   public static GameDebugFragment newInstance() {
     return new GameDebugFragment();
@@ -25,6 +32,15 @@ public class GameDebugFragment extends Fragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     binding = GameDebugFragmentBinding.inflate(inflater, container, false);
+
+    ((AppCompatActivity) getActivity()).setSupportActionBar(binding.debugToolBar);
+    NavController navController =
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+    appBarConfiguration =
+        new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
+    NavigationUI.setupActionBarWithNavController(
+        (AppCompatActivity) getActivity(), navController, appBarConfiguration);
+
     return binding.getRoot();
   }
 

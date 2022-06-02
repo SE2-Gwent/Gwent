@@ -1,4 +1,4 @@
-package at.aau.se2.gwent;
+package at.aau.se2.gwent.views.debug;
 
 import java.util.ArrayList;
 
@@ -16,6 +16,7 @@ import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.state.GameState;
+import at.aau.se2.gwent.Environment;
 import at.aau.se2.gwent.util.DebugHelper;
 
 public class GameDebugViewModel extends ViewModel

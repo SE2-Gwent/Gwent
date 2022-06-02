@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     android:background="@drawable/game_board_background">
 
+    <ImageButton
+        android:id="@+id/debugButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_related_margin"
+        android:layout_marginTop="@dimen/default_related_margin"
+        android:src="@drawable/ic_settings_24"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/primaryRoundButton"
         android:layout_width="wrap_content"
