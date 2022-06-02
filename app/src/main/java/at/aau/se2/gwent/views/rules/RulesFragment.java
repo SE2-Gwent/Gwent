@@ -43,6 +43,7 @@ public class RulesFragment extends Fragment {
     NavigationUI.setupActionBarWithNavController(
         (AppCompatActivity) getActivity(), navController, appBarConfiguration);
 
+    binding.fullRules.setLongClickable(false);
     binding.fullRules.loadUrl("file:///android_asset/rules.html");
 
     return binding.getRoot();
