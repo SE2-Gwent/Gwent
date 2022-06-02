@@ -1,6 +1,6 @@
 package at.aau.se2.gwent.views.detailedcard;
 
-class CardDetails {
+public class CardDetails {
   private String name;
   private String types;
   private int power;

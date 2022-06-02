@@ -1,10 +1,10 @@
 package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
+import androidx.annotation.Keep;
+import at.aau.se2.gamelogic.models.cardactions.triggers.DeployTrigger;
+import at.aau.se2.gamelogic.models.cardactions.triggers.OrderTrigger;
 
 public class Card {
   private int id;
@@ -13,8 +13,18 @@ public class Card {
   private int power;
   private int powerDiff;
   private String cardText;
-  private ArrayList<ActionParams> cardActions;
-  private Map<ActionParams, Integer> currentActionCooldown;
+  private DeployTrigger deployTrigger;
+  private OrderTrigger orderTrigger;
+  private String imgResourceBasic;
+  private String imgResourceDetail;
+
+  @Keep
+  public Card() {}
+
+  // TODO: tmp, please delete when boardView connected to GameLogic
+  public Card(int id) {
+    this.id = id;
+  }
 
   public Card(
       int id,
@@ -23,15 +33,20 @@ public class Card {
       int power,
       int powerDiff,
       String cardText,
-      ArrayList<ActionParams> cardActions) {
+      DeployTrigger deployTrigger,
+      OrderTrigger orderTrigger,
+      String imgResourceBasic,
+      String imgResourceDetail) {
     this.id = id;
     this.name = name;
     this.types = types;
     this.power = power;
     this.powerDiff = powerDiff;
     this.cardText = cardText;
-    this.cardActions = cardActions;
-    this.currentActionCooldown = new HashMap<>();
+    this.deployTrigger = deployTrigger;
+    this.orderTrigger = orderTrigger;
+    this.imgResourceBasic = imgResourceBasic;
+    this.imgResourceDetail = imgResourceDetail;
   }
 
   public int getId() {
@@ -82,19 +97,39 @@ public class Card {
     this.cardText = cardText;
   }
 
-  public ArrayList<ActionParams> getCardActions() {
-    return cardActions;
+  public String getImgResourceBasic() {
+    return imgResourceBasic;
   }
 
-  public void setCardActions(ArrayList<ActionParams> cardActions) {
-    this.cardActions = cardActions;
+  public void setImgResourceBasic(String imgResourceBasic) {
+    this.imgResourceBasic = imgResourceBasic;
   }
 
-  public Map<ActionParams, Integer> getCurrentActionCooldown() {
-    return currentActionCooldown;
+  public String getImgResourceDetail() {
+    return imgResourceDetail;
   }
 
-  public void setCurrentActionCooldown(Map<ActionParams, Integer> currentActionCooldown) {
-    this.currentActionCooldown = currentActionCooldown;
+  public void setImgResourceDetail(String imgResourceDetail) {
+    this.imgResourceDetail = imgResourceDetail;
+  }
+
+  public DeployTrigger getDeployTrigger() {
+    return deployTrigger;
+  }
+
+  public OrderTrigger getOrderTrigger() {
+    return orderTrigger;
+  }
+
+  public String getFirebaseId() {
+    return id + "_card";
+  }
+
+  public void setDeployTrigger(DeployTrigger deployTrigger) {
+    this.deployTrigger = deployTrigger;
+  }
+
+  public void setOrderTrigger(OrderTrigger orderTrigger) {
+    this.orderTrigger = orderTrigger;
   }
 }

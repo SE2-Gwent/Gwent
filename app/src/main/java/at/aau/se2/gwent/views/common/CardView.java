@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.DrawableRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import at.aau.se2.gwent.R;
 
 public class CardView extends FrameLayout {
@@ -19,7 +20,8 @@ public class CardView extends FrameLayout {
   private TextView pointTextView;
   private TextView nameTextView;
   private boolean isSelected = false;
-  private Drawable borderDrawable = getResources().getDrawable(R.drawable.cardview_border);
+  private final Drawable borderDrawable = getResources().getDrawable(R.drawable.cardview_border);
+  private String cardId;
 
   public CardView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -36,10 +38,20 @@ public class CardView extends FrameLayout {
     init(context);
   }
 
-  public void setupWithCard(int attackPoints, String name, @DrawableRes int cardImage) {
+  public void setupWithCard(
+      String cardId, int attackPoints, String name, @DrawableRes int cardImage) {
+    this.cardId = cardId;
     pointTextView.setText(String.valueOf(attackPoints));
     nameTextView.setText(name);
     cardImageView.setImageDrawable(getResources().getDrawable(cardImage));
+    setAlpha(1.0F);
+  }
+
+  public void showAsPlaceholder(boolean transparent) {
+    pointTextView.setText(null);
+    nameTextView.setText(null);
+    cardImageView.setImageDrawable(getResources().getDrawable(R.drawable.card_background));
+    setAlpha(transparent ? 0.4F : 1.0F);
   }
 
   public void setSelected(boolean selected) {
@@ -56,16 +68,25 @@ public class CardView extends FrameLayout {
     nameTextView = view.findViewById(R.id.textViewName);
     pointTextView = view.findViewById(R.id.textViewPoints);
 
-    setOnClickListener(
-        view -> {
-          setSelected(!isSelected);
-        });
+    ConstraintLayout.LayoutParams params =
+        new ConstraintLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+    params.leftMargin = getResources().getDimensionPixelSize(R.dimen.default_card_margin);
+    params.rightMargin = getResources().getDimensionPixelSize(R.dimen.default_card_margin);
+    setLayoutParams(params);
 
-    updateUI();
+    showAsPlaceholder(true);
+
+    updateUI(true);
   }
 
   private void updateUI() {
+    updateUI(false);
+  }
+
+  private void updateUI(boolean disableAnimation) {
     cardView.setForeground(isSelected ? borderDrawable : null); // ? = Tenary Operator
+
+    if (disableAnimation) return;
 
     Animation animation =
         new ScaleAnimation(
@@ -81,5 +102,13 @@ public class CardView extends FrameLayout {
     animation.setFillAfter(true);
     animation.setDuration(500);
     startAnimation(animation);
+  }
+
+  public String getCardId() {
+    return cardId;
+  }
+
+  public ImageView getCardImageView() {
+    return cardImageView;
   }
 }

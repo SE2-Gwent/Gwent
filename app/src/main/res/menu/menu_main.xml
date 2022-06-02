@@ -3,13 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="at.aau.se2.gwent.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/d"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_detailed_card"
         android:title="@string/action_detailed_card"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_debug"
+        android:title="Debug"
         app:showAsAction="never" />
 
 </menu>

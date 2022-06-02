@@ -27,7 +27,7 @@ android {
         minSdk 23
         targetSdk 28
         versionCode versionProps['buildnumber'].toInteger()
-        versionName "0.1.0"
+        versionName "0.2.0"
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -83,8 +83,6 @@ tasks.register('bumpBuildNumber') {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:29.3.0')
-    implementation 'com.google.firebase:firebase-database'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
