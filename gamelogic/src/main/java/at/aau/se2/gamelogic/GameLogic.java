@@ -246,6 +246,7 @@ public class GameLogic {
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
     if (cards.size() < HAND_CARD_NUMBER) {
       Log.w(TAG, "CardDecks not setup");
+      return;
     }
 
     Random random = new Random();
