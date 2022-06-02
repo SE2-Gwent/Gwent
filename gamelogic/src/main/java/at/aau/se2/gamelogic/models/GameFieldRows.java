@@ -2,11 +2,13 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.HashMap;
 
+import at.aau.se2.gamelogic.GameLogic;
+
 public class GameFieldRows {
-  private HashMap<String, Card> p1MeleeRow = new HashMap<>(10);
-  private HashMap<String, Card> p1RangeRow = new HashMap<>(10);
-  private HashMap<String, Card> p2MeleeRow = new HashMap<>(10);
-  private HashMap<String, Card> p2RangeRow = new HashMap<>(10);
+  private HashMap<String, Card> p1MeleeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
+  private HashMap<String, Card> p1RangeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
+  private HashMap<String, Card> p2MeleeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
+  private HashMap<String, Card> p2RangeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
 
   // Still wrong, because we dont know who is me.
   public HashMap<String, Card> meleeRowFor(InitialPlayer player) {
