@@ -41,15 +41,6 @@
         app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
 
     <Button
-        android:id="@+id/action_detailed_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="DetailedCard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fogButton" />
-
-    <Button
         android:id="@+id/startGameButton"
         android:layout_width="121dp"
         android:layout_height="49dp"
@@ -60,47 +51,6 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/deployButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Deploy"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/attackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Attack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/deployButton" />
-
-    <Button
-        android:id="@+id/fogButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Fog"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/attackButton" />
-
-
-    <at.aau.se2.gwent.views.common.CardView
-        android:id="@+id/cardView"
-        android:layout_width="50dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:cardBackgroundColor="@color/purple_500"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </at.aau.se2.gwent.views.common.CardView>
 
     <ImageView
         android:id="@+id/imageView"

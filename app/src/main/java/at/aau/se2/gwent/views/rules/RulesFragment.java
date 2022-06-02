@@ -45,8 +45,7 @@ public class RulesFragment extends Fragment {
 
     // remove longClick to have not selectable text in webview
     binding.fullRules.setLongClickable(false);
-    binding.fullRules.setOnLongClickListener(
-            v -> true);
+    binding.fullRules.setOnLongClickListener(v -> true);
     binding.fullRules.loadUrl("file:///android_asset/rules.html");
 
     return binding.getRoot();
