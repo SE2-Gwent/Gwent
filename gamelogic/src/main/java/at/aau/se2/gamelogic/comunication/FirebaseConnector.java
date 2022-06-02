@@ -115,19 +115,24 @@ public class FirebaseConnector {
     databaseRef = database.getReference("games");
   }
 
-  private void gameExists(int id, ResultObserver<Boolean, DatabaseError> observer) {
+  private void gameExists(int id, ResultObserver<Boolean, Error> observer) {
     Query test = databaseRef.orderByValue().equalTo(id);
 
     test.addListenerForSingleValueEvent(
         new ValueEventListener() {
           @Override
           public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.getValue() == null) {
+              observer.finished(Result.Failure(ConnectorError.GameNotFound()));
+              return;
+            }
+
             observer.finished(Result.Success(snapshot.exists()));
           }
 
           @Override
           public void onCancelled(@NonNull DatabaseError error) {
-            observer.finished(Result.Failure(error));
+            observer.finished(Result.Failure(ConnectorError.GameNotFound()));
           }
         });
   }

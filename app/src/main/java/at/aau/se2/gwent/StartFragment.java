@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,6 +117,7 @@ public class StartFragment extends Fragment implements CardActionCallback {
 
   private void showJoinDialog(Context context) {
     final EditText taskEditText = new EditText(context);
+    taskEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
     AlertDialog dialog =
         new AlertDialog.Builder(context)
             .setTitle("Join Game")
@@ -130,11 +132,20 @@ public class StartFragment extends Fragment implements CardActionCallback {
                     gameLogic.joinGame(
                         Integer.parseInt(gameId),
                         result -> {
-                          NavController controller =
-                              Navigation.findNavController(
-                                  Objects.requireNonNull(getActivity()),
-                                  R.id.nav_host_fragment_content_main);
-                          controller.navigate(R.id.action_StartFragment_to_gameDebugFragment);
+                          switch (result.getType()) {
+                            case SUCCESS:
+                              NavController controller =
+                                  Navigation.findNavController(
+                                      Objects.requireNonNull(getActivity()),
+                                      R.id.nav_host_fragment_content_main);
+                              controller.navigate(R.id.action_StartFragment_to_board_fragment);
+                              break;
+                            case FAILURE:
+                              Toast.makeText(
+                                      getContext(), "Could not join game", Toast.LENGTH_SHORT)
+                                  .show();
+                              break;
+                          }
                         });
                   }
                 })
