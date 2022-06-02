@@ -115,7 +115,7 @@ public class FirebaseConnector {
     databaseRef = database.getReference("games");
   }
 
-  private void gameExists(int id, ResultObserver<Boolean, DatabaseError> observer) {
+  private void gameExists(int id, ResultObserver<Boolean, Error> observer) {
     Query test = databaseRef.orderByValue().equalTo(id);
 
     test.addListenerForSingleValueEvent(
@@ -127,7 +127,7 @@ public class FirebaseConnector {
 
           @Override
           public void onCancelled(@NonNull DatabaseError error) {
-            observer.finished(Result.Failure(error));
+            observer.finished(Result.Failure(ConnectorError.GameNotFound()));
           }
         });
   }

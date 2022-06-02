@@ -14,11 +14,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import at.aau.se2.gwent.R;
-import at.aau.se2.gwent.databinding.SettingsFragmentBinding;
+import at.aau.se2.gwent.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
   private SettingsViewModel viewModel;
-  private SettingsFragmentBinding binding;
+  private FragmentSettingsBinding binding;
   private AppBarConfiguration appBarConfiguration;
 
   public static SettingsFragment newInstance() {
@@ -37,7 +37,7 @@ public class SettingsFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    binding = SettingsFragmentBinding.inflate(inflater, container, false);
+    binding = FragmentSettingsBinding.inflate(inflater, container, false);
 
     ((AppCompatActivity) getActivity()).setSupportActionBar(binding.rulesToolBar);
     NavController navController =

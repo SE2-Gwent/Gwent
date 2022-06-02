@@ -33,6 +33,8 @@ import at.aau.se2.gamelogic.util.SyncActionUtil;
 // TODO: SyncAction for CardActions (opt)
 
 public class GameLogic {
+  public static final int ROW_CARD_NUMBER = 10;
+  public static final int HAND_CARD_NUMBER = 10;
   private static final String TAG = GameLogic.class.getSimpleName();
   private int gameId = -1;
   private GameField gameField;
@@ -242,14 +244,15 @@ public class GameLogic {
 
   private void drawCards() {
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
-    if (cards.size() < 10) {
+    if (cards.size() < HAND_CARD_NUMBER) {
       Log.w(TAG, "CardDecks not setup");
+      return;
     }
 
     Random random = new Random();
     // 10 random unique cards from set cardDecks
     HashMap<Integer, Card> drawnCards = new HashMap<>();
-    while (drawnCards.size() < 10) {
+    while (drawnCards.size() < HAND_CARD_NUMBER) {
       int randomIndex = random.nextInt(cards.size());
       Card card = cards.get(randomIndex);
       drawnCards.put(card.getId(), card);
@@ -443,7 +446,9 @@ public class GameLogic {
         Card card =
             gameField
                 .getCardDecks()
-                .getCard(deployParams.getCardUUID(), gameField.getCurrentPlayer());
+                .getCard(
+                    deployParams.getCardUUID(),
+                    gameField.getCurrentPlayer().getInitialPlayerInformation());
         deployCard(card, deployParams.getRow(), deployParams.getPosition());
         // remove card from hand
         // TODO: Test removing of card
@@ -476,15 +481,23 @@ public class GameLogic {
   private void deployCard(Card card, Row row, int position) {
     ArrayList<Card> cardRow = null;
 
+    /*
     switch (row.getRowType()) {
       case MELEE:
-        cardRow = gameField.getRows().meleeRowFor(gameField.getCurrentPlayer());
+        cardRow =
+            gameField
+                .getRows()
+                .meleeRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
         break;
       case RANGED:
-        cardRow = gameField.getRows().rangedRowFor(gameField.getCurrentPlayer());
+        cardRow =
+            gameField
+                .getRows()
+                .rangedRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
         break;
     }
     cardRow.add(position, card);
+     */
   }
 
   private void notifyCardActionCallbacks(CardAction action, ActionParams params) {

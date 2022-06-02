@@ -14,4 +14,5 @@
     <color name="red">#FF0000</color>
     <color name="green">#006400</color>
     <color name="gwent_green_dark">#116553</color>
+    <color name="gwent_green_light">#FFEDBC</color>
 </resources>

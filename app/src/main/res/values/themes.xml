@@ -1,10 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Gwent" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Gwent" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/gwent_green_dark</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/teal_200</item>
+        <item name="colorAccent">@color/gwent_green_dark</item>
         <!-- Customize your theme here. -->
     </style>
 
