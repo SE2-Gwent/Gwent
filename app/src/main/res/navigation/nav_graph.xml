@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/StartFragment"
-        android:name="at.aau.se2.gwent.StartFragment"
+        android:name="at.aau.se2.gwent.views.startMenu.StartFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_start">
         <action
@@ -41,9 +41,16 @@
             android:defaultValue="0"
         />
     </fragment>
+
     <fragment
         android:id="@+id/board_fragment"
         android:name="at.aau.se2.gwent.views.board.BoardFragment"
         android:label="Game"
         tools:layout="@layout/fragment_boardview" />
+
+    <fragment
+        android:id="@+id/rules"
+        android:name="at.aau.se2.gwent.views.rules.RulesFragment"
+        android:label="rules"
+        tools:layout="@layout/rules_fragment" />
 </navigation>
