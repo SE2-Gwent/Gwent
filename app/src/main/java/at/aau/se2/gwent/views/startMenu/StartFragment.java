@@ -131,6 +131,16 @@ public class StartFragment extends Fragment implements CardActionCallback {
                 .navigate(R.id.detailed_card);
           }
         });
+
+    binding.rulesButton.setOnClickListener(
+        new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Navigation.findNavController(
+                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                .navigate(R.id.rules);
+          }
+        });
   }
 
   @Override

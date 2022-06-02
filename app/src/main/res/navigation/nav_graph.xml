@@ -38,4 +38,9 @@
             android:defaultValue="0"
         />
     </fragment>
+    <fragment
+        android:id="@+id/rules"
+        android:name="at.aau.se2.gwent.views.rules.RulesFragment"
+        android:label="rules"
+        tools:layout="@layout/rules_fragment" />
 </navigation>
