@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.CardType;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
 
 public class DebugHelper {
 
@@ -19,7 +18,10 @@ public class DebugHelper {
               i,
               0,
               "This is a test Card",
-              new ArrayList<ActionParams>()));
+              null,
+              null,
+              "rm_ard_feainn_crossbow_man_basic",
+              "rm_ard_feainn_crossbow_man_detail"));
     }
 
     return testCards;

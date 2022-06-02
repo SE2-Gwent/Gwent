@@ -182,7 +182,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         cardView.showAsPlaceholder(false);
       } else {
         cardView.setupWithCard(
-            entry.getKey(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+            entry.getKey(), card.getPower(), card.getName(), R.drawable.aguara_basic);
         cardView.setOnClickListener(
             view -> {
               CardView clickedCardView = (CardView) view;
@@ -219,7 +219,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       CardView cardView = new CardView(getContext(), null);
       // TODO: Replace drawable with cards drawable
       cardView.setupWithCard(
-          card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+          card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.aguara_basic);
       rowLayout.getRoot().removeViewAt(i);
       rowLayout.getRoot().addView(cardView, i);
       cardView.setOnClickListener(

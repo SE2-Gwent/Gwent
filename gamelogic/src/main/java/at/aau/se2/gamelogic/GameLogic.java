@@ -22,10 +22,6 @@ import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
-import at.aau.se2.gamelogic.models.cardactions.AttackParams;
-import at.aau.se2.gamelogic.models.cardactions.DeployParams;
-import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
@@ -40,7 +36,6 @@ public class GameLogic {
   private GameField gameField;
   private InitialPlayer whoAmI;
   private FirebaseConnector connector;
-  private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
   private int cardMulligansLeft = 3;
@@ -70,13 +65,6 @@ public class GameLogic {
 
     playerHasMulliganedCards.put(InitialPlayer.INITIATOR, false);
     playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
-  }
-
-  public void registerCardActionCallback(CardActionCallback callback) {
-    if (cardActionCallbacks.contains(callback)) {
-      return;
-    }
-    cardActionCallbacks.add(callback);
   }
 
   // GameState Manipulation
@@ -428,57 +416,13 @@ public class GameLogic {
 
   // Card Actions
 
-  public void performAction(CardAction action, ActionParams params) {
-    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) {
-      return;
-    }
+  /** @param card the card for which the deploy trigger should be executed. */
+  public void performDeployTrigger(Card card) {}
 
-    if (action.performed) {
-      Log.w(TAG, "Action is already performed.");
-      return;
-    }
+  /** @param card the card for which the order trigger should be executed. */
+  public void performOrderTrigger(Card card) {}
 
-    switch (action.getType()) {
-      case DEPLOY:
-        DeployParams deployParams = (params instanceof DeployParams ? (DeployParams) params : null);
-        if (deployParams == null) return;
-
-        Card card =
-            gameField
-                .getCardDecks()
-                .getCard(
-                    deployParams.getCardUUID(),
-                    gameField.getCurrentPlayer().getInitialPlayerInformation());
-        deployCard(card, deployParams.getRow(), deployParams.getPosition());
-        // remove card from hand
-        // TODO: Test removing of card
-        gameField
-            .getCardDeck(gameField.getCurrentPlayer().getInitialPlayerInformation())
-            .remove(card.getFirebaseId());
-
-        break;
-
-      case ATTACK:
-        AttackParams attackParams = (params instanceof AttackParams ? (AttackParams) params : null);
-        if (attackParams == null) return;
-        // TODO: implement card attacking
-        break;
-
-      case FOG:
-        FogParams fogParams = (params instanceof FogParams ? (FogParams) params : null);
-        if (fogParams == null) return;
-        // TODO: implement row fogging
-        break;
-
-      default:
-        Log.w(TAG, "Action not in performAction implemented");
-    }
-
-    action.performed = true;
-    notifyCardActionCallbacks(action, params);
-  }
-
-  private void deployCard(Card card, Row row, int position) {
+  public void deployCard(Card card, Row row, int position) {
     ArrayList<Card> cardRow = null;
 
     /*
@@ -498,12 +442,8 @@ public class GameLogic {
     }
     cardRow.add(position, card);
      */
-  }
-
-  private void notifyCardActionCallbacks(CardAction action, ActionParams params) {
-    for (CardActionCallback callback : cardActionCallbacks) {
-      callback.didPerformAction(action, params);
-    }
+    // here we call performDeployTrigger
+    performDeployTrigger(card);
   }
 
   public void registerGameFieldListener(GameFieldObserver observer) {
