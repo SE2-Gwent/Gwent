@@ -122,11 +122,6 @@ public class FirebaseConnector {
         new ValueEventListener() {
           @Override
           public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if (snapshot.getValue() == null) {
-              observer.finished(Result.Failure(ConnectorError.GameNotFound()));
-              return;
-            }
-
             observer.finished(Result.Success(snapshot.exists()));
           }
 
