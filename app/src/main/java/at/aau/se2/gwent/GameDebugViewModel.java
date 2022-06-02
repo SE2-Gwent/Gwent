@@ -195,7 +195,7 @@ public class GameDebugViewModel extends ViewModel
               i,
               0,
               "This is a test Card",
-              new DeployTrigger(null),
+              new DeployTrigger(null, null),
               null,
               "Hello",
               "World"));

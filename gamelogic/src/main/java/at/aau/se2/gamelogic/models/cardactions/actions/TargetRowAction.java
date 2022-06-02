@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class TargetRowAction {
   private int targetingCardUUID;
   private ArrayList<Integer> targetedRowsUUIDs;
-  private final boolean randomTargets;
-  private final boolean randomStatus;
+  private boolean randomTargets;
+  private boolean randomStatus;
 
   /**
    * @param targetingCardUUID UUID of the card which is targeting.

@@ -684,8 +684,8 @@ public class GameLogicTest {
               i,
               0,
               "This is a test Card",
-              new DeployTrigger(null),
-              new OrderTrigger(null, 1, true),
+              new DeployTrigger(null, null),
+              new OrderTrigger(null, null, 1, true),
               "hello",
               "world"));
     }

@@ -1,5 +1,6 @@
 package at.aau.se2.gamelogic.util.json;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
@@ -23,8 +24,12 @@ public class JsonConverter {
     return new Gson().fromJson(json, Card.class);
   }
 
-  public static ArrayList<Card> deserializeCardList(String json) {
-    return new Gson().fromJson(json, ArrayList.class);
+  /**
+   * here we pass an additional parameter due to type erasure at runtime use: Type t = new
+   * TypeToken<ArrayList<Card>>(){}.getType();
+   */
+  public static ArrayList<Card> deserializeCardList(String json, Type type) {
+    return new Gson().fromJson(json, type);
   }
 
   public static CardDecks deserializeCardDecks(String json) {

@@ -124,4 +124,12 @@ public class Card {
   public String getFirebaseId() {
     return id + "_card";
   }
+
+  public void setDeployTrigger(DeployTrigger deployTrigger) {
+    this.deployTrigger = deployTrigger;
+  }
+
+  public void setOrderTrigger(OrderTrigger orderTrigger) {
+    this.orderTrigger = orderTrigger;
+  }
 }
