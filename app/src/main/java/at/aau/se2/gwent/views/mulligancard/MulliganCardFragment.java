@@ -16,12 +16,13 @@ import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.FragmentMulliganCardBinding;
 import at.aau.se2.gwent.views.common.CardView;
+import at.aau.se2.gwent.views.common.FragmentBackPressListener;
 
 /**
  * A simple {@link Fragment} subclass. Use the {@link MulliganCardFragment#newInstance} factory
  * method to create an instance of this fragment.
  */
-public class MulliganCardFragment extends Fragment {
+public class MulliganCardFragment extends Fragment implements FragmentBackPressListener {
   // private androidx.cardview.widget.CardView getCardsToMulligan
 
   private MulliganCardViewModel viewModel;
@@ -50,12 +51,6 @@ public class MulliganCardFragment extends Fragment {
     binding = FragmentMulliganCardBinding.inflate(inflater, container, false);
     setUpUI();
     return binding.getRoot();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    viewModel.didClickCancel();
   }
 
   private void setUpUI() {
@@ -106,5 +101,10 @@ public class MulliganCardFragment extends Fragment {
       mulliganCardView.setupWithCard(
           card.getId(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    viewModel.didClickCancel();
   }
 }
