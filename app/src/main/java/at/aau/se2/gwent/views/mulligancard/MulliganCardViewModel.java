@@ -22,6 +22,14 @@ public class MulliganCardViewModel extends ViewModel {
     return state;
   }
 
+  public int mulligansLeft() {
+    return gameLogic.getCardMulligansLeft();
+  }
+
+  public int roundCounter() {
+    return gameLogic.getGameId();
+  }
+
   public void didClickCancel() {
     gameLogic.abortMulliganCards();
   }
