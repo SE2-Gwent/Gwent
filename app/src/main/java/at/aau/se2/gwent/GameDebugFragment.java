@@ -46,6 +46,7 @@ public class GameDebugFragment extends Fragment {
           binding.roundTextView.setText(viewState.getRoundNumber());
           binding.cardPointsView.setText(viewState.getCombinedPlayerPoints());
           binding.roundPointsView.setText(viewState.getRoundsWon());
+          binding.mulliganCardsLeft.setText("CardsToMulligan: " + viewState.getMulliganCardsLeft());
         });
 
     viewModel.errorMutableLiveData.observe(
