@@ -22,6 +22,8 @@ import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
+import at.aau.se2.gamelogic.models.RowType;
+import at.aau.se2.gamelogic.models.cardactions.triggers.DeployTrigger;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
@@ -417,33 +419,41 @@ public class GameLogic {
   // Card Actions
 
   /** @param card the card for which the deploy trigger should be executed. */
-  public void performDeployTrigger(Card card) {}
+  public void performDeployTrigger(Card card) {
+    DeployTrigger deployTrigger = card.getDeployTrigger();
+    if (deployTrigger == null) {
+      return;
+    }
+
+    // TODO: continue
+  }
 
   /** @param card the card for which the order trigger should be executed. */
   public void performOrderTrigger(Card card) {}
 
+  /**
+   * 1) Deploy card on target row. 2) Remove card from hand. 3) Perform deploy trigger.
+   *
+   * @param card The card which should be put on the given row.
+   * @param row The row where the card should get deployed.
+   * @param position The position on the given row where the card is put.
+   */
   public void deployCard(Card card, Row row, int position) {
-    ArrayList<Card> cardRow = null;
+    InitialPlayer initialPlayer = gameField.getCurrentPlayer().getInitialPlayerInformation();
+    RowType rowType = row.getRowType();
 
-    /*
-    switch (row.getRowType()) {
-      case MELEE:
-        cardRow =
-            gameField
-                .getRows()
-                .meleeRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
-        break;
-      case RANGED:
-        cardRow =
-            gameField
-                .getRows()
-                .rangedRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
-        break;
-    }
-    cardRow.add(position, card);
-     */
-    // here we call performDeployTrigger
+    // (1) deploy card
+    gameField.getRows().setCardIfPossible(initialPlayer, rowType, position, card);
+
+    // (2) remove card from hand
+    HashMap<String, Card> currentHand = gameField.getCurrentHandCardsFor(initialPlayer);
+    String key = String.valueOf(card.getId()) + "_card";
+    currentHand.remove(key);
+
+    // (3) perform deploy trigger
     performDeployTrigger(card);
+
+    connector.syncGameField(this.gameField);
   }
 
   public void registerGameFieldListener(GameFieldObserver observer) {
