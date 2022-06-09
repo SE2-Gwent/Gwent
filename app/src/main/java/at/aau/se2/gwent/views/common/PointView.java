@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.databinding.ViewPointBinding;
 import at.aau.se2.gwent.views.board.BoardViewData;
 
@@ -32,6 +33,11 @@ public class PointView extends FrameLayout {
 
     binding.turnTextView.setText(viewData.isMyTurn() ? "Your turn" : "Opponents turn");
     binding.roundTextView.setText("Round " + viewData.getRoundNumber());
+    if (viewData.getCurrentGameState() == GameState.WAIT_FOR_OPPONENT) {
+      binding.turnTextView.setText("Waiting for opponent");
+      binding.roundTextView.setText("GameId " + viewData.getGameId());
+    }
+
     binding.currentPlayerPoints.setText(viewData.getCurrentPlayersPoints());
     binding.opponentPlayerPoints.setText(viewData.getOpponentPoints());
 

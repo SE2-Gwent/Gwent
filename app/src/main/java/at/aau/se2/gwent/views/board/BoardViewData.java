@@ -8,6 +8,7 @@ import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
+import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.R;
 
 public class BoardViewData implements Cloneable {
@@ -39,6 +40,8 @@ public class BoardViewData implements Cloneable {
   private String opponentPoints;
   private int currentPlayerRoundsWon;
   private int opponentRoundsWon;
+  private GameState currentGameState;
+  private String gameId;
 
   public BoardViewData(GameField gameField, GameLogic gameLogic) {
     Player currentPlayer = gameField.getPlayer(gameLogic.getWhoAmI());
@@ -57,6 +60,9 @@ public class BoardViewData implements Cloneable {
     this.currentPlayerRoundsWon =
         (currentPlayer != null) ? currentPlayer.getCurrentMatchPoints() : 0;
     this.opponentRoundsWon = (opponent != null) ? opponent.getCurrentMatchPoints() : 0;
+    this.currentGameState = gameLogic.getCurrentGameState();
+    this.gameId = String.valueOf(gameLogic.getGameId());
+
     isGameFieldDirty = true;
   }
 
@@ -130,5 +136,13 @@ public class BoardViewData implements Cloneable {
 
   public int getOpponentRoundsWon() {
     return opponentRoundsWon;
+  }
+
+  public GameState getCurrentGameState() {
+    return currentGameState;
+  }
+
+  public String getGameId() {
+    return gameId;
   }
 }
