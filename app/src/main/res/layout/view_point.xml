@@ -24,7 +24,7 @@
         android:layout_height="60dp"
         android:background="@drawable/button_round_gold_background"
         android:text="@string/pass_round"
-        android:textColor="@color/white"
+        android:textColor="@drawable/button_round_gold_textcolor"
         android:elevation="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
