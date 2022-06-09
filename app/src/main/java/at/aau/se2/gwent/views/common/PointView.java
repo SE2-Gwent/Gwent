@@ -26,5 +26,7 @@ public class PointView extends FrameLayout {
     updateUI();
   }
 
-  private void updateUI() {}
+  private void updateUI() {
+    view.findViewById(R.id.mainButton).setEnabled(false);
+  }
 }
