@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="false"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -24,7 +25,7 @@
         android:background="@drawable/button_round_gold_background"
         android:text="@string/pass_round"
         android:textColor="@color/white"
-        android:translationZ="10dp"
+        android:elevation="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

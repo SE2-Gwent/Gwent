@@ -96,10 +96,14 @@ public class GameDebugViewModel extends ViewModel
             gameLogic.getStartingPlayer(),
             gameLogic.getPlayerToTurn(),
             String.valueOf(gameLogic.getGameField().getRoundNumber()),
-            gameLogic
-                .getGameField()
-                .getPointsForPlayer(gameLogic.getGameField().getCurrentPlayer()),
-            gameLogic.getGameField().getPointsForPlayer(gameLogic.getGameField().getOpponent()),
+            (current != null)
+                ? gameLogic.getGameField().getPointsForPlayer(current.getInitialPlayerInformation())
+                : 0,
+            (opponent != null)
+                ? gameLogic
+                    .getGameField()
+                    .getPointsForPlayer(opponent.getInitialPlayerInformation())
+                : 0,
             (current != null) ? current.getCurrentMatchPoints() : 0,
             (opponent != null) ? opponent.getCurrentMatchPoints() : 0,
             gameLogic.isMyTurn());

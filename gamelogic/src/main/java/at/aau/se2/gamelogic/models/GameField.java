@@ -48,29 +48,27 @@ public class GameField {
 
   @Exclude
   public @Nullable Player getPointLeadingPlayer() {
-    int currentPoints = getPointsForPlayer(currentPlayer);
-    int opponentPoints = getPointsForPlayer(opponent);
+    int currentPoints = getPointsForPlayer(currentPlayer.getInitialPlayerInformation());
+    int opponentPoints = getPointsForPlayer(opponent.getInitialPlayerInformation());
 
     if (currentPoints == opponentPoints) {
       return null;
     }
 
-    return (getPointsForPlayer(currentPlayer) > getPointsForPlayer(opponent))
-        ? currentPlayer
-        : opponent;
+    return (currentPoints > opponentPoints) ? currentPlayer : opponent;
   }
 
   @Exclude
-  public int getPointsForPlayer(Player player) {
+  public int getPointsForPlayer(InitialPlayer player) {
     if (player == null) return 0;
 
     int points = 0;
 
-    for (Card card : getRows().meleeRowFor(player.getInitialPlayerInformation()).values()) {
+    for (Card card : getRows().meleeRowFor(player).values()) {
       if (card == null) continue;
       points = +card.getPower() + card.getPowerDiff();
     }
-    for (Card card : getRows().rangedRowFor(player.getInitialPlayerInformation()).values()) {
+    for (Card card : getRows().rangedRowFor(player).values()) {
       if (card == null) continue;
       points = +card.getPower() + card.getPowerDiff();
     }

@@ -94,10 +94,13 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void setupButtons() {
-    binding.primaryRoundButton.setOnClickListener(
-        view -> {
-          viewModel.didClickPrimaryButton();
-        });
+    binding
+        .pointView
+        .getMainButton()
+        .setOnClickListener(
+            view -> {
+              viewModel.didClickPrimaryButton();
+            });
 
     binding.debugButton.setOnClickListener(
         view -> {
@@ -108,9 +111,6 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void updateUI(BoardViewData viewData) {
-    binding.primaryRoundButton.setText(viewData.getPrimaryButtonMode().getText());
-    binding.primaryRoundButton.setEnabled(viewData.isPrimaryButtonEnabled());
-
     if (viewData.isGameFieldDirty()) {
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
@@ -160,6 +160,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       playersHandCardViews.get(viewData.getSelectedCardId()).setSelected(true);
       // TODO: selection for rowCardViews
     }
+
+    binding.pointView.bind(viewData);
   }
 
   private void updateCurrentHandCardRow(
