@@ -66,11 +66,11 @@ public class GameField {
 
     for (Card card : getRows().meleeRowFor(player).values()) {
       if (card == null) continue;
-      points = +card.getPower() + card.getPowerDiff();
+      points += card.getPower() + card.getPowerDiff();
     }
     for (Card card : getRows().rangedRowFor(player).values()) {
       if (card == null) continue;
-      points = +card.getPower() + card.getPowerDiff();
+      points += card.getPower() + card.getPowerDiff();
     }
 
     return points;
