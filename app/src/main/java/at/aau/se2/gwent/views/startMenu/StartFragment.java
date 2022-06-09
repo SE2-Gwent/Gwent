@@ -1,8 +1,7 @@
 package at.aau.se2.gwent.views.startMenu;
 
-import java.util.Objects;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -64,8 +63,7 @@ public class StartFragment extends Fragment {
 
                       NavController controller =
                           Navigation.findNavController(
-                              Objects.requireNonNull(getActivity()),
-                              R.id.nav_host_fragment_content_main);
+                              requireActivity(), R.id.nav_host_fragment_content_main);
                       controller.navigate(R.id.action_StartFragment_to_board_fragment);
 
                       break;
@@ -87,8 +85,7 @@ public class StartFragment extends Fragment {
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            Navigation.findNavController(
-                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
                 .navigate(R.id.settings);
           }
         });
@@ -97,8 +94,7 @@ public class StartFragment extends Fragment {
         new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            Navigation.findNavController(
-                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
                 .navigate(R.id.rules);
           }
         });
@@ -107,8 +103,7 @@ public class StartFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
-    Objects.requireNonNull(getActivity())
-        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
   }
 
   @Override
@@ -125,39 +120,35 @@ public class StartFragment extends Fragment {
   private void showJoinDialog(Context context) {
     final EditText taskEditText = new EditText(context);
     taskEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
-    AlertDialog dialog =
-        new AlertDialog.Builder(context)
-            .setTitle("Join Game")
-            .setMessage("Input GameId from other Player.")
-            .setView(taskEditText)
-            .setPositiveButton(
-                "Join",
-                new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                    String gameId = String.valueOf(taskEditText.getText());
-                    gameLogic.joinGame(
-                        Integer.parseInt(gameId),
-                        result -> {
-                          switch (result.getType()) {
-                            case SUCCESS:
-                              NavController controller =
-                                  Navigation.findNavController(
-                                      Objects.requireNonNull(getActivity()),
-                                      R.id.nav_host_fragment_content_main);
-                              controller.navigate(R.id.action_StartFragment_to_board_fragment);
-                              break;
-                            case FAILURE:
-                              Toast.makeText(
-                                      getContext(), "Could not join game", Toast.LENGTH_SHORT)
-                                  .show();
-                              break;
-                          }
-                        });
-                  }
-                })
-            .setNegativeButton("Cancel", null)
-            .create();
-    dialog.show();
+    new MaterialAlertDialogBuilder(context)
+        .setTitle("Join Game")
+        .setMessage("Input GameId from other Player.")
+        .setView(taskEditText)
+        .setPositiveButton(
+            "Join",
+            new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                String gameId = String.valueOf(taskEditText.getText());
+                gameLogic.joinGame(
+                    Integer.parseInt(gameId),
+                    result -> {
+                      switch (result.getType()) {
+                        case SUCCESS:
+                          NavController controller =
+                              Navigation.findNavController(
+                                  requireActivity(), R.id.nav_host_fragment_content_main);
+                          controller.navigate(R.id.action_StartFragment_to_board_fragment);
+                          break;
+                        case FAILURE:
+                          Toast.makeText(getContext(), "Could not join game", Toast.LENGTH_SHORT)
+                              .show();
+                          break;
+                      }
+                    });
+              }
+            })
+        .setNegativeButton("Cancel", null)
+        .show();
   }
 }

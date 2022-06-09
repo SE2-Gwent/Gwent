@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/mainButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView"
         app:layout_constraintTop_toBottomOf="@+id/currentPlayerFirstRoundWon" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/opponentFirstRoundWon"
         android:layout_width="12dp"
         android:layout_height="12dp"
@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toStartOf="@+id/opponentSecondRoundWon"
         app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/opponentSecondRoundWon"
         android:layout_width="12dp"
         android:layout_height="12dp"
@@ -82,7 +82,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/opponentFirstRoundWon" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/currentPlayerFirstRoundWon"
         android:layout_width="12dp"
         android:layout_height="12dp"
@@ -94,7 +94,7 @@
         app:layout_constraintEnd_toStartOf="@+id/opponentSecondRoundWon"
         app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/currentPlayerSecondRoundWon"
         android:layout_width="12dp"
         android:layout_height="12dp"
