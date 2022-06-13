@@ -461,7 +461,6 @@ public class GameLogic {
 
     for (TargetRowAction t : targetRowActions) {
       // determine targeted rows
-      ArrayList<Integer> targetedRowsUUIDs = new ArrayList<>();
       if (t.hasRandomTargets()) {
         Random rand = new Random();
         int n = rand.nextInt() % 2;
@@ -610,12 +609,12 @@ public class GameLogic {
     if (p1MeleeRow.containsKey(targetCard.getFirebaseId())) {
       if (p1RangedRow.size() < ROW_CARD_NUMBER) {
         p1RangedRow.put(targetCard.getFirebaseId(), targetCard);
-        p1MeleeRow.remove(targetCard.getFirebaseId(), targetCard);
+        p1MeleeRow.remove(targetCard.getFirebaseId());
       }
     } else if (p1RangedRow.containsKey(targetCard.getFirebaseId())) {
       if (p1MeleeRow.size() < ROW_CARD_NUMBER) {
         p1MeleeRow.put(targetCard.getFirebaseId(), targetCard);
-        p1RangedRow.remove(targetCard.getFirebaseId(), targetCard);
+        p1RangedRow.remove(targetCard.getFirebaseId());
       }
     }
 
@@ -623,12 +622,12 @@ public class GameLogic {
     if (p2MeleeRow.containsKey(targetCard.getFirebaseId())) {
       if (p2RangedRow.size() < ROW_CARD_NUMBER) {
         p2RangedRow.put(targetCard.getFirebaseId(), targetCard);
-        p2MeleeRow.remove(targetCard.getFirebaseId(), targetCard);
+        p2MeleeRow.remove(targetCard.getFirebaseId());
       }
     } else if (p2RangedRow.containsKey(targetCard.getFirebaseId())) {
       if (p2MeleeRow.size() < ROW_CARD_NUMBER) {
         p2MeleeRow.put(targetCard.getFirebaseId(), targetCard);
-        p2RangedRow.remove(targetCard.getFirebaseId(), targetCard);
+        p2RangedRow.remove(targetCard.getFirebaseId());
       }
     }
   }
