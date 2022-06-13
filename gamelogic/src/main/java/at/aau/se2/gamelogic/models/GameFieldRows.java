@@ -38,8 +38,6 @@ public class GameFieldRows {
     }
   }
 
-  // two helper functions which return the row for the given player not only the hashmap within the
-  // row
   public Row getMeleeRowFor(InitialPlayer player) {
     switch (player) {
       case INITIATOR:

@@ -26,6 +26,7 @@ import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
+import at.aau.se2.gamelogic.models.RowStatus;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.models.cardactions.actions.TargetRowAction;
 import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
@@ -40,6 +41,7 @@ import at.aau.se2.gamelogic.util.SyncActionUtil;
 public class GameLogic {
   public static final int ROW_CARD_NUMBER = 10;
   public static final int HAND_CARD_NUMBER = 10;
+  public static final int STATUS_DURATION = 2;
   private static final String TAG = GameLogic.class.getSimpleName();
   private int gameId = -1;
   private GameField gameField;
@@ -455,19 +457,21 @@ public class GameLogic {
     }
   }
 
+  /** @param targetRowActions */
   private void performTargetRowActions(ArrayList<TargetRowAction> targetRowActions) {
     InitialPlayer initiator = gameField.getCurrentPlayer().getInitialPlayerInformation();
     InitialPlayer opponent = gameField.getOpponent().getInitialPlayerInformation();
 
     for (TargetRowAction t : targetRowActions) {
+      Row targetRow = null;
       // determine targeted rows
       if (t.hasRandomTargets()) {
         Random rand = new Random();
         int n = rand.nextInt() % 2;
         if (n == 0) {
-          // TODO: set opponent's ranged row as target
+          targetRow = gameField.getRows().getMeleeRowFor(opponent);
         } else {
-          // TODO: set opponent's melee row as target
+          targetRow = gameField.getRows().getRangedRowFor(opponent);
         }
       } else {
         // all our cards have random targets, but this branch could be used in the future to extend
@@ -475,17 +479,34 @@ public class GameLogic {
       }
 
       // determine status to apply
+      RowStatus status = null;
       if (t.hasRandomStatus()) {
+        ArrayList<RowStatus> statuses = new ArrayList<>();
+        statuses.add(RowStatus.FROST);
+        statuses.add(RowStatus.FOG);
+        statuses.add(RowStatus.RAIN);
 
+        Collections.shuffle(statuses);
+        status = statuses.get(0);
       } else {
         // all our cards apply random statuses, but this branch could be used in the future to
         // extend functionality
       }
 
-      // TODO: apply status on row
+      // apply status
+      if (targetRow != null && status != null) {
+        targetRow.setRowStatus(status);
+        targetRow.setRemainingStatusRounds(STATUS_DURATION);
+      }
     }
   }
 
+  /**
+   * Executes all targetUnitActions (i.e. DAMAGE, HEAL, BOOST, SWAP) on random targets or targets
+   * chosen by the executing player.
+   *
+   * @param targetUnitActions List of actions to execute.
+   */
   private void performTargetUnitActions(ArrayList<TargetUnitAction> targetUnitActions) {
     InitialPlayer initiator = gameField.getCurrentPlayer().getInitialPlayerInformation();
     InitialPlayer opponent = gameField.getOpponent().getInitialPlayerInformation();
@@ -573,7 +594,7 @@ public class GameLogic {
       } else {
         /*
          * here we subtract, because powerDiff is neg. when the card is dmg. (results in
-         * increasing the cards power)
+         * increasing the cards power to it's initial power)
          */
         targetCard.setPower(targetCard.getPower() - targetCard.getPowerDiff());
         targetCard.setPowerDiff(0);
@@ -643,30 +664,26 @@ public class GameLogic {
     HashMap<String, Card> p2RangedRow = gameField.getRows().getP2RangeRow();
 
     ArrayList<String> destroyedCardsUUIDs = new ArrayList<>();
-    p1MeleeRow.forEach(
-        (key, value) -> {
-          if (value.getPower() <= 0) {
-            destroyedCardsUUIDs.add(value.getFirebaseId());
-          }
-        });
-    p1RangedRow.forEach(
-        (key, value) -> {
-          if (value.getPower() <= 0) {
-            destroyedCardsUUIDs.add(value.getFirebaseId());
-          }
-        });
-    p2MeleeRow.forEach(
-        (key, value) -> {
-          if (value.getPower() <= 0) {
-            destroyedCardsUUIDs.add(value.getFirebaseId());
-          }
-        });
-    p2RangedRow.forEach(
-        (key, value) -> {
-          if (value.getPower() <= 0) {
-            destroyedCardsUUIDs.add(value.getFirebaseId());
-          }
-        });
+    for (Card c : p1MeleeRow.values()) {
+      if (c.getPower() <= 0) {
+        destroyedCardsUUIDs.add(c.getFirebaseId());
+      }
+    }
+    for (Card c : p1RangedRow.values()) {
+      if (c.getPower() <= 0) {
+        destroyedCardsUUIDs.add(c.getFirebaseId());
+      }
+    }
+    for (Card c : p2MeleeRow.values()) {
+      if (c.getPower() <= 0) {
+        destroyedCardsUUIDs.add(c.getFirebaseId());
+      }
+    }
+    for (Card c : p2RangedRow.values()) {
+      if (c.getPower() <= 0) {
+        destroyedCardsUUIDs.add(c.getFirebaseId());
+      }
+    }
 
     for (String cardUUID : destroyedCardsUUIDs) {
       p1MeleeRow.remove(cardUUID);
@@ -680,8 +697,63 @@ public class GameLogic {
    * checks if a row has currently a status applied on it if yes perform status action on row and
    * decrement remRounds by 1. if remRounds reaches 0 remove the status from the row.
    */
-  private void performRowStatusActions() {
-    // TODO: perfom the Row action (this function has to be called at each allied turn)
+  // TODO: call at the beginning of a players turn
+  private void performRowStatusAction() {
+    InitialPlayer currentPlayer = getPlayerToTurn();
+
+    ArrayList<Row> rows = new ArrayList<>();
+    rows.add(gameField.getRows().getMeleeRowFor(currentPlayer));
+    rows.add(gameField.getRows().getRangedRowFor(currentPlayer));
+    for (Row r : rows) {
+      RowStatus status = r.getRowStatus();
+      if (status != null) {
+        ArrayList<Card> currentCardsOnRow = new ArrayList<>(r.getPlayerRow().values());
+        switch (status) {
+          case FOG:
+            if (currentCardsOnRow.size() > 0) {
+              Card maxPowerCard = currentCardsOnRow.get(0);
+              for (int i = 1; i < currentCardsOnRow.size(); i++) {
+                Card currentCard = currentCardsOnRow.get(i);
+                if (currentCard.getPower() > maxPowerCard.getPower()) {
+                  maxPowerCard = currentCard;
+                }
+              }
+
+              maxPowerCard.setPower(maxPowerCard.getPower() - 2);
+              maxPowerCard.setPowerDiff(maxPowerCard.getPowerDiff() - 2);
+            }
+            break;
+          case FROST:
+            if (currentCardsOnRow.size() > 0) {
+              Card minPowerCard = currentCardsOnRow.get(0);
+              for (int i = 1; i < currentCardsOnRow.size(); i++) {
+                Card currentCard = currentCardsOnRow.get(i);
+                if (currentCard.getPower() < minPowerCard.getPower()) {
+                  minPowerCard = currentCard;
+                }
+              }
+
+              minPowerCard.setPower(minPowerCard.getPower() - 2);
+              minPowerCard.setPowerDiff(minPowerCard.getPowerDiff() - 2);
+            }
+            break;
+          case RAIN:
+            if (currentCardsOnRow.size() > 0) {
+              Collections.shuffle(currentCardsOnRow);
+
+              Card randomCardOnRow = currentCardsOnRow.get(0);
+              randomCardOnRow.setPower(randomCardOnRow.getPower() - 2);
+              randomCardOnRow.setPowerDiff(randomCardOnRow.getPowerDiff() - 2);
+            }
+        }
+        r.setRemainingStatusRounds(r.getRemainingStatusRounds() - 1);
+        if (r.getRemainingStatusRounds() == 0) {
+          r.setRowStatus(null);
+        }
+
+        checkForDestroyedCards();
+      }
+    }
   }
 
   /**
