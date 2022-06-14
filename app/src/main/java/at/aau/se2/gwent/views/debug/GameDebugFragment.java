@@ -27,26 +27,9 @@ public class GameDebugFragment extends Fragment {
   }
 
   @Override
-  public View onCreateView(
-      @NonNull LayoutInflater inflater,
-      @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    binding = FragmentGameDebugBinding.inflate(inflater, container, false);
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-    ((AppCompatActivity) getActivity()).setSupportActionBar(binding.debugToolBar);
-    NavController navController =
-        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
-    appBarConfiguration =
-        new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
-    NavigationUI.setupActionBarWithNavController(
-        (AppCompatActivity) getActivity(), navController, appBarConfiguration);
-
-    return binding.getRoot();
-  }
-
-  @Override
-  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
     viewModel = new ViewModelProvider(this).get(GameDebugViewModel.class);
     viewModel.state.observe(
         this,
@@ -66,6 +49,22 @@ public class GameDebugFragment extends Fragment {
         error -> {
           Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
         });
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    binding = FragmentGameDebugBinding.inflate(inflater, container, false);
+
+    ((AppCompatActivity) getActivity()).setSupportActionBar(binding.debugToolBar);
+    NavController navController =
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+    appBarConfiguration =
+        new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
+    NavigationUI.setupActionBarWithNavController(
+        (AppCompatActivity) getActivity(), navController, appBarConfiguration);
 
     binding.cancelMulliganCardButton.setOnClickListener(
         view -> {
@@ -83,5 +82,7 @@ public class GameDebugFragment extends Fragment {
         view -> {
           viewModel.passRound();
         });
+
+    return binding.getRoot();
   }
 }
