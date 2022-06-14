@@ -54,10 +54,11 @@ public class StartFragment extends Fragment {
             gameLogic.startGame(
                 result -> {
                   switch (result.getType()) {
-                    case SUCCESS: // TODO: go to gameboard
+                    case SUCCESS:
                       Toast.makeText(
                               getContext(),
-                              "Game Created: " + result.getValue(),
+                              String.format(
+                                  "%s %d", getString(R.string.game_created), result.getValue()),
                               Toast.LENGTH_SHORT)
                           .show();
 
@@ -68,7 +69,8 @@ public class StartFragment extends Fragment {
 
                       break;
                     case FAILURE:
-                      Toast.makeText(getContext(), "Could not create game", Toast.LENGTH_SHORT)
+                      Toast.makeText(
+                              getContext(), R.string.could_not_create_game, Toast.LENGTH_SHORT)
                           .show();
                       break;
                   }
@@ -121,11 +123,11 @@ public class StartFragment extends Fragment {
     final EditText taskEditText = new EditText(context);
     taskEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
     new MaterialAlertDialogBuilder(context)
-        .setTitle("Join Game")
-        .setMessage("Input GameId from other Player.")
+        .setTitle(R.string.join_game)
+        .setMessage(R.string.join_game_instructions)
         .setView(taskEditText)
         .setPositiveButton(
-            "Join",
+            R.string.join,
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
@@ -141,14 +143,15 @@ public class StartFragment extends Fragment {
                           controller.navigate(R.id.action_StartFragment_to_board_fragment);
                           break;
                         case FAILURE:
-                          Toast.makeText(getContext(), "Could not join game", Toast.LENGTH_SHORT)
+                          Toast.makeText(
+                                  getContext(), R.string.could_not_join_game, Toast.LENGTH_SHORT)
                               .show();
                           break;
                       }
                     });
               }
             })
-        .setNegativeButton("Cancel", null)
+        .setNegativeButton(R.string.cancel, null)
         .show();
   }
 }

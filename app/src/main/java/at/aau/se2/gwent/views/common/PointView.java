@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import at.aau.se2.gamelogic.state.GameState;
+import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.ViewPointBinding;
 import at.aau.se2.gwent.views.board.BoardViewData;
 
@@ -31,11 +32,16 @@ public class PointView extends FrameLayout {
     binding.mainButton.setText(viewData.getPrimaryButtonMode().getText());
     binding.mainButton.setEnabled(viewData.isPrimaryButtonEnabled());
 
-    binding.turnTextView.setText(viewData.isMyTurn() ? "Your turn" : "Opponents turn");
-    binding.roundTextView.setText("Round " + viewData.getRoundNumber());
+    binding.turnTextView.setText(
+        viewData.isMyTurn()
+            ? getContext().getString(R.string.your_turn)
+            : getContext().getString(R.string.opponents_turn));
+    binding.roundTextView.setText(
+        String.format("%s %s", getResources().getText(R.string.round), viewData.getRoundNumber()));
     if (viewData.getCurrentGameState() == GameState.WAIT_FOR_OPPONENT) {
-      binding.turnTextView.setText("Waiting for opponent");
-      binding.roundTextView.setText("GameId " + viewData.getGameId());
+      binding.turnTextView.setText(R.string.waiting_for_opponent);
+      binding.roundTextView.setText(
+          String.format("%s %s", getResources().getText(R.string.game_id), viewData.getGameId()));
     }
 
     binding.currentPlayerPoints.setText(viewData.getCurrentPlayersPoints());
