@@ -1,7 +1,5 @@
 package at.aau.se2.gwent.views.detailedcard;
 
-import java.util.Objects;
-
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -42,8 +40,7 @@ public class DetailedCardFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    Objects.requireNonNull(getActivity())
-        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     binding = FragmentDetailedCardBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
@@ -88,9 +85,7 @@ public class DetailedCardFragment extends Fragment {
 
     int imgId =
         res.getIdentifier(
-            imgResource,
-            "drawable",
-            Objects.requireNonNull(DetailedCardFragment.this.getActivity()).getPackageName());
+            imgResource, "drawable", DetailedCardFragment.this.requireActivity().getPackageName());
     Log.v(TAG, "imgId retrieved: " + imgId);
 
     Drawable artwork = ResourcesCompat.getDrawable(res, imgId, null);

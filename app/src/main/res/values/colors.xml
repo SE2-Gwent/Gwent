@@ -6,6 +6,7 @@
     <color name="teal_200">#5C7572</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="black_50">#80000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_blue_400">#FF29B6F6</color>
     <color name="light_blue_600">#FF039BE5</color>
@@ -15,4 +16,8 @@
     <color name="green">#006400</color>
     <color name="gwent_green_dark">#116553</color>
     <color name="gwent_green_light">#FFEDBC</color>
+    <color name="gwent_gold">#9F8D5E</color>
+    <color name="gwent_gold_80">#CC9F8D5E</color>
+    <color name="gwent_dark_gold">#6B553A</color>
+    <color name="gwent_dark_gold_50">#806B553A</color>
 </resources>

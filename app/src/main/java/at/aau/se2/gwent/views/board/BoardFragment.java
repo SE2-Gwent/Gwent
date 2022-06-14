@@ -3,7 +3,6 @@ package at.aau.se2.gwent.views.board;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -59,8 +58,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     binding = FragmentBoardviewBinding.inflate(inflater, container, false);
     setupGameRows();
     setupButtons();
-    Objects.requireNonNull(getActivity())
-        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     return binding.getRoot();
   }
 
@@ -94,23 +92,22 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void setupButtons() {
-    binding.primaryRoundButton.setOnClickListener(
-        view -> {
-          viewModel.didClickPrimaryButton();
-        });
+    binding
+        .pointView
+        .getMainButton()
+        .setOnClickListener(
+            view -> {
+              viewModel.didClickPrimaryButton();
+            });
 
     binding.debugButton.setOnClickListener(
         view -> {
-          Navigation.findNavController(
-                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+          Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_board_fragment_to_game_debug_fragment);
         });
   }
 
   private void updateUI(BoardViewData viewData) {
-    binding.primaryRoundButton.setText(viewData.getPrimaryButtonMode().getText());
-    binding.primaryRoundButton.setEnabled(viewData.isPrimaryButtonEnabled());
-
     if (viewData.isGameFieldDirty()) {
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
@@ -160,6 +157,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       playersHandCardViews.get(viewData.getSelectedCardId()).setSelected(true);
       // TODO: selection for rowCardViews
     }
+
+    binding.pointView.bind(viewData);
   }
 
   private void updateCurrentHandCardRow(
