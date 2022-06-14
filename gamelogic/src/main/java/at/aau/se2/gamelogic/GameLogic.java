@@ -457,13 +457,25 @@ public class GameLogic {
     }
   }
 
+  /** This function gets called from the updateBoardState function at the beginning of a turn. */
+  private void updateOrderRemCoolDown(Card card) {
+    OrderTrigger orderTrigger = card.getOrderTrigger();
+    if (orderTrigger == null) {
+      return;
+    }
+    int remCoolDown = orderTrigger.getRemCoolDown();
+    if (remCoolDown > 0) {
+      orderTrigger.setRemCoolDown(remCoolDown - 1);
+    }
+  }
+
   /** @param targetRowActions */
   private void performTargetRowActions(ArrayList<TargetRowAction> targetRowActions) {
-    InitialPlayer initiator = gameField.getCurrentPlayer().getInitialPlayerInformation();
     InitialPlayer opponent = gameField.getOpponent().getInitialPlayerInformation();
 
     for (TargetRowAction t : targetRowActions) {
       Row targetRow = null;
+
       // determine targeted rows
       if (t.hasRandomTargets()) {
         Random rand = new Random();
@@ -694,10 +706,10 @@ public class GameLogic {
   }
 
   /**
-   * checks if a row has currently a status applied on it if yes perform status action on row and
-   * decrement remRounds by 1. if remRounds reaches 0 remove the status from the row.
+   * This function gets called from the updateBoardState function at the beginning of a turn. checks
+   * if a row has currently a status applied on it if yes perform status action on row and decrement
+   * remRounds by 1. if remRounds reaches 0 remove the status from the row.
    */
-  // TODO: call at the beginning of a players turn
   private void performRowStatusAction() {
     InitialPlayer currentPlayer = getPlayerToTurn();
 
@@ -756,6 +768,21 @@ public class GameLogic {
     }
   }
 
+  // TODO: call at the beginning of a turn + call sync gamefield
+  private void updateBoardState() {
+    performRowStatusAction();
+
+    InitialPlayer currentPlayer = getPlayerToTurn();
+    HashMap<String, Card> currentPlayerMeleeRow = gameField.getRows().meleeRowFor(currentPlayer);
+    HashMap<String, Card> currentPlayerRangedRow = gameField.getRows().rangedRowFor(currentPlayer);
+    for (Card c : currentPlayerMeleeRow.values()) {
+      updateOrderRemCoolDown(c);
+    }
+    for (Card c : currentPlayerRangedRow.values()) {
+      updateOrderRemCoolDown(c);
+    }
+  }
+
   /**
    * 1) Deploy card on target row. 2) Remove card from hand. 3) Perform deploy trigger.
    *
@@ -764,12 +791,12 @@ public class GameLogic {
    * @param position The position on the given row where the card is put.
    */
   public void deployCard(Card card, Row row, int position) {
-    InitialPlayer initiator = gameField.getCurrentPlayer().getInitialPlayerInformation();
+    InitialPlayer currentPlayer = getPlayerToTurn();
     RowType rowType = row.getRowType();
 
-    gameField.getRows().setCardIfPossible(initiator, rowType, position, card);
+    gameField.getRows().setCardIfPossible(currentPlayer, rowType, position, card);
 
-    HashMap<String, Card> currentHand = gameField.getCurrentHandCardsFor(initiator);
+    HashMap<String, Card> currentHand = gameField.getCurrentHandCardsFor(currentPlayer);
     String key = card.getFirebaseId();
     currentHand.remove(key);
 
