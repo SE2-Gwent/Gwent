@@ -441,7 +441,7 @@ public class GameLogicTest {
     gameField.setOpponent(otherPlayer);
     gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, testCards);
     gameField.setPlayingCardsFor(InitialPlayer.OPPONENT, testCards);
-    gameField.getRows().getP1MeleeRow().put("0_index", testCards.get(0));
+    gameField.getRows().getMeleeRowForP1().put("0_index", testCards.get(0));
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_ROUND);
     when(mockGameStateMachine.restartRound()).thenReturn(true);
@@ -466,7 +466,7 @@ public class GameLogicTest {
     currentPlayer.setCurrentMatchPoints(1);
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(otherPlayer);
-    gameField.getRows().getP1MeleeRow().put("0_index", testCards.get(0));
+    gameField.getRows().getMeleeRowForP1().put("0_index", testCards.get(0));
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_ROUND);
     when(mockGameStateMachine.endGame()).thenReturn(true);
@@ -493,7 +493,7 @@ public class GameLogicTest {
     currentPlayer.setHasLastPlayed(true);
     currentPlayer.setHasPassed(true);
     gameField.setOpponent(otherPlayer);
-    gameField.getRows().getP1MeleeRow().put("0_index", testCards.get(0));
+    gameField.getRows().getMeleeRowForP1().put("0_index", testCards.get(0));
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockGameStateMachine.getCurrent()).thenReturn(GameState.END_ROUND);
     when(mockGameStateMachine.restartRound()).thenReturn(true);

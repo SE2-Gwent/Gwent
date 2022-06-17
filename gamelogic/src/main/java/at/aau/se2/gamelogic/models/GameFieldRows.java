@@ -1,7 +1,5 @@
 package at.aau.se2.gamelogic.models;
 
-import static at.aau.se2.gamelogic.models.InitialPlayer.OPPONENT;
-
 import java.util.HashMap;
 
 import androidx.annotation.Keep;
@@ -79,19 +77,39 @@ public class GameFieldRows {
     return true;
   }
 
-  public HashMap<String, Card> getP1MeleeRow() {
+  /*
+  IMPORTANT NOTE: Pay close attention when calling the getter methods! Normally the getter functions,
+  which return the HashMap don't belong here (they should be within the Row Class)!
+   */
+  public HashMap<String, Card> getMeleeRowForP1() {
     return p1MeleeRow.getPlayerRow();
   }
 
-  public HashMap<String, Card> getP1RangeRow() {
+  public HashMap<String, Card> getRangeRowForP1() {
     return p1RangeRow.getPlayerRow();
   }
 
-  public HashMap<String, Card> getP2MeleeRow() {
+  public HashMap<String, Card> getMeleeRowForP2() {
     return p2MeleeRow.getPlayerRow();
   }
 
-  public HashMap<String, Card> getP2RangeRow() {
+  public HashMap<String, Card> getRangeRowForP2() {
     return p2RangeRow.getPlayerRow();
+  }
+
+  public Row getP1MeleeRow() {
+    return p1MeleeRow;
+  }
+
+  public Row getP1RangeRow() {
+    return p1RangeRow;
+  }
+
+  public Row getP2MeleeRow() {
+    return p2MeleeRow;
+  }
+
+  public Row getP2RangeRow() {
+    return p2RangeRow;
   }
 }

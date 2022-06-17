@@ -150,7 +150,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
 
     if (viewModel.getOldViewData() != null
         && viewModel.getOldViewData().getSelectedCardId() != null) {
-      playersHandCardViews.get(viewModel.getOldViewData().getSelectedCardId()).setSelected(false);
+      // playersHandCardViews.get(viewModel.getOldViewData().getSelectedCardId()).setSelected(false);
       // TODO: selection for rowCardViews
     }
     if (viewData.getSelectedCardId() != null) {
