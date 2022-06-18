@@ -33,103 +33,133 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.114"
+        app:layout_constraintVertical_bias="0.105"
         tools:ignore="RtlCompat"
         tools:layout_editor_absoluteX="0dp" />
 
     <at.aau.se2.gwent.views.common.CardView
         android:id="@+id/mulliganCard1"
-        android:layout_width="45dp"
+        android:layout_width="48dp"
         android:layout_height="80dp"
         android:alpha="0.4"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.354"
+        app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323"
-        android:visibility="visible"
+        app:layout_constraintVertical_bias="0.322"
         app:srcCompat="@drawable/card_background" />
 
     <at.aau.se2.gwent.views.common.CardView
         android:id="@+id/mulliganCard2"
-        android:layout_width="45dp"
+        android:layout_width="48dp"
         android:layout_height="80dp"
         android:alpha="0.4"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.323"
-        android:visibility="visible"
         app:srcCompat="@drawable/card_background" />
 
     <at.aau.se2.gwent.views.common.CardView
         android:id="@+id/mulliganCard3"
-        android:layout_width="45dp"
+        android:layout_width="48dp"
         android:layout_height="80dp"
         android:adjustViewBounds="true"
         android:alpha="0.4"
         android:scaleType="centerInside"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.642"
+        app:layout_constraintHorizontal_bias="0.774"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323"
-        android:visibility="visible"
+        app:layout_constraintVertical_bias="0.322"
         app:srcCompat="@drawable/card_background" />
 
     <at.aau.se2.gwent.views.common.CardView
         android:id="@+id/mulliganCard4"
-        android:layout_width="45dp"
+        android:layout_width="48dp"
         android:layout_height="80dp"
         android:adjustViewBounds="true"
         android:alpha="0.4"
         android:scaleType="centerInside"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.743"
-        android:visibility="visible"
         app:srcCompat="@drawable/card_background">
 
     </at.aau.se2.gwent.views.common.CardView>
 
     <at.aau.se2.gwent.views.common.CardView
         android:id="@+id/mulliganCard5"
-        android:layout_width="45dp"
+        android:layout_width="48dp"
         android:layout_height="80dp"
         android:adjustViewBounds="true"
         android:alpha="0.4"
         android:scaleType="centerInside"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.642"
+        app:layout_constraintHorizontal_bias="0.774"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.743"
-        android:visibility="visible"
         app:srcCompat="@drawable/card_background" />
 
     <at.aau.se2.gwent.views.common.CardView
         android:id="@+id/mulliganCard6"
-        android:layout_width="45dp"
+        android:layout_width="48dp"
         android:layout_height="80dp"
         android:adjustViewBounds="true"
         android:alpha="0.4"
         android:scaleType="centerInside"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.354"
+        app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.743"
-        android:visibility="visible"
         app:srcCompat="@drawable/card_background">
 
     </at.aau.se2.gwent.views.common.CardView>
+
+    <TextView
+        android:id="@+id/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Card(s) remaining"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.878"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.887" />
+
+    <TextView
+        android:id="@+id/mulliganCountByLogic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "1"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.563"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.895" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
