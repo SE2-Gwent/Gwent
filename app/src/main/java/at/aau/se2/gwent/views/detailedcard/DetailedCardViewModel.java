@@ -31,7 +31,10 @@ public class DetailedCardViewModel extends ViewModel {
             power,
             powerDiff,
             cardText,
-            null);
+            null,
+            null,
+            "rm_ard_feainn_crossbow_man_basic",
+            "rm_ard_feainn_crossbow_man_detail");
     // -- END REMOVE --
 
     this.card =
@@ -41,7 +44,7 @@ public class DetailedCardViewModel extends ViewModel {
             testCard.getPower(),
             testCard.getPowerDiff(),
             testCard.getCardText(),
-            generateImgResName(testCard.getName()));
+            testCard.getImgResourceDetail());
     currentState.setValue(CardDetails.ViewState.LOADED);
   }
 
@@ -55,27 +58,6 @@ public class DetailedCardViewModel extends ViewModel {
 
   public CardDetails getCard() {
     return card;
-  }
-
-  /*
-  generate res-string by using the name of the card
-  we reference resources according to detailed-card-view by taking the name of the card
-  first we replace all spaces by an underscore
-  second we convert the string to lowercase
-  third we append '_detail' to it
-
-  for example:
-  Ard Feainn Crossbow Man -> ard_feainn_crossbow_man_detail
-
-  NOTE: we can add a property to class Card, which refers to the Res
-   */
-  private String generateImgResName(String cardName) {
-    String imgResName = "";
-
-    imgResName += cardName.replaceAll(" ", "_").toLowerCase();
-    imgResName += "_detail";
-
-    return imgResName;
   }
 
   // set textView cardTypes (convert Array of enums to string)

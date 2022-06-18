@@ -7,27 +7,26 @@
 
     <fragment
         android:id="@+id/StartFragment"
-        android:name="at.aau.se2.gwent.StartFragment"
-        android:label="@string/first_fragment_label"
+        android:name="at.aau.se2.gwent.views.startMenu.StartFragment"
         tools:layout="@layout/fragment_start">
         <action
-            android:id="@+id/action_StartFragment_to_gameDebugFragment"
-            app:destination="@id/gameDebugFragment" />
+            android:id="@+id/action_StartFragment_to_board_fragment"
+            app:destination="@id/board_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/settings"
         android:name="at.aau.se2.gwent.views.settings.SettingsFragment"
         android:label="settings_fragment"
-        tools:layout="@layout/settings_fragment" />
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
-        android:id="@+id/gameDebugFragment"
-        android:name="at.aau.se2.gwent.GameDebugFragment"
+        android:id="@+id/game_debug_fragment"
+        android:name="at.aau.se2.gwent.views.debug.GameDebugFragment"
         android:label="game_debug_fragment"
-        tools:layout="@layout/game_debug_fragment" >
+        tools:layout="@layout/fragment_game_debug" >
         <action
-            android:id="@+id/action_gameDebugFragment_to_mulliganCardFragment"
+            android:id="@+id/action_game_debug_fragment_to_mulliganCardFragment"
             app:destination="@id/mulliganCardFragment" />
     </fragment>
 
@@ -35,15 +34,31 @@
         android:id="@+id/detailed_card"
         android:name="at.aau.se2.gwent.views.detailedcard.DetailedCardFragment"
         android:label="@string/action_detailed_card"
-        tools:layout="@layout/detailed_card_fragment" >
+        tools:layout="@layout/fragment_detailed_card">
         <argument
             android:name="cardId"
             app:argType="integer"
-            android:defaultValue="0"
-        />
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/mulliganCardFragment"
         android:name="at.aau.se2.gwent.views.mulligancard.MulliganCardFragment"
         android:label="MulliganCardFragment" />
+
+
+    <fragment
+        android:id="@+id/board_fragment"
+        android:name="at.aau.se2.gwent.views.board.BoardFragment"
+        android:label="Game"
+        tools:layout="@layout/fragment_boardview">
+        <action
+            android:id="@+id/action_board_fragment_to_game_debug_fragment"
+            app:destination="@id/game_debug_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/rules"
+        android:name="at.aau.se2.gwent.views.rules.RulesFragment"
+        android:label="rules"
+        tools:layout="@layout/fragment_rules" />
 </navigation>

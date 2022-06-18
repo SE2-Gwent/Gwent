@@ -17,12 +17,16 @@ public class CardDecks {
     setDeck(InitialPlayer.OPPONENT, p2Deck);
   }
 
-  public Card getCard(int cardId, Player player) {
-    switch (player.getInitialPlayerInformation()) {
+  public Card getCard(int cardId, InitialPlayer player) {
+    return getCard(cardId + "_card", player);
+  }
+
+  public Card getCard(String cardId, InitialPlayer player) {
+    switch (player) {
       case INITIATOR:
-        return p1Deck.get(cardId + "_card");
+        return p1Deck.get(cardId);
       case OPPONENT:
-        return p2Deck.get(cardId + "_card");
+        return p2Deck.get(cardId);
       default:
         return null;
     }

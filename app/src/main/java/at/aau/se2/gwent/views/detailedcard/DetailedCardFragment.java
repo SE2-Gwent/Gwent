@@ -1,7 +1,5 @@
 package at.aau.se2.gwent.views.detailedcard;
 
-import java.util.Objects;
-
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -15,15 +13,15 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import at.aau.se2.gwent.R;
-import at.aau.se2.gwent.databinding.DetailedCardFragmentBinding;
+import at.aau.se2.gwent.databinding.FragmentDetailedCardBinding;
 
 public class DetailedCardFragment extends Fragment {
   private static final String TAG = DetailedCardFragment.class.getSimpleName();
 
   private DetailedCardViewModel viewModel;
-  private DetailedCardFragmentBinding binding;
+  private FragmentDetailedCardBinding binding;
+  private DetailedCardFragment.Listener listener;
 
   public static DetailedCardFragment newInstance() {
     return new DetailedCardFragment();
@@ -42,9 +40,8 @@ public class DetailedCardFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    Objects.requireNonNull(getActivity())
-        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    binding = DetailedCardFragmentBinding.inflate(inflater, container, false);
+    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    binding = FragmentDetailedCardBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
@@ -55,17 +52,9 @@ public class DetailedCardFragment extends Fragment {
     // this should destroy the fragment if the button is clicked
     binding.backgroundImageButton.setOnClickListener(
         view -> {
-          Navigation.findNavController(
-                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
-              .popBackStack();
+          if (listener == null) return;
+          listener.didClickDetailCardFragment();
         });
-  }
-
-  @Override
-  public void onStop() {
-    super.onStop();
-    Objects.requireNonNull(getActivity())
-        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
   }
 
   private void updateUI(CardDetails.ViewState state) {
@@ -96,12 +85,18 @@ public class DetailedCardFragment extends Fragment {
 
     int imgId =
         res.getIdentifier(
-            imgResource,
-            "drawable",
-            Objects.requireNonNull(DetailedCardFragment.this.getActivity()).getPackageName());
+            imgResource, "drawable", DetailedCardFragment.this.requireActivity().getPackageName());
     Log.v(TAG, "imgId retrieved: " + imgId);
 
     Drawable artwork = ResourcesCompat.getDrawable(res, imgId, null);
     binding.backgroundImageButton.setImageDrawable(artwork);
+  }
+
+  public void setListener(Listener listener) {
+    this.listener = listener;
+  }
+
+  public interface Listener {
+    void didClickDetailCardFragment();
   }
 }

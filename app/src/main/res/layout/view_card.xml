@@ -26,10 +26,10 @@
             android:id="@+id/imageViewCardBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
             android:background="#1AE192"
             android:scaleType="centerCrop"
-            android:src="@drawable/an_craite_amorsmith"
+            android:adjustViewBounds="true"
+            android:src="@drawable/rm_an_craite_amorsmith"
             android:visibility="visible" />
 
         <TextView

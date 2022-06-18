@@ -22,10 +22,6 @@ import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
-import at.aau.se2.gamelogic.models.cardactions.ActionParams;
-import at.aau.se2.gamelogic.models.cardactions.AttackParams;
-import at.aau.se2.gamelogic.models.cardactions.DeployParams;
-import at.aau.se2.gamelogic.models.cardactions.FogParams;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
@@ -33,12 +29,13 @@ import at.aau.se2.gamelogic.util.SyncActionUtil;
 // TODO: SyncAction for CardActions (opt)
 
 public class GameLogic {
+  public static final int ROW_CARD_NUMBER = 10;
+  public static final int HAND_CARD_NUMBER = 10;
   private static final String TAG = GameLogic.class.getSimpleName();
   private int gameId = -1;
   private GameField gameField;
   private InitialPlayer whoAmI;
   private FirebaseConnector connector;
-  private ArrayList<CardActionCallback> cardActionCallbacks = new ArrayList<>();
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
   private int cardMulligansLeft = 3;
@@ -68,13 +65,6 @@ public class GameLogic {
 
     playerHasMulliganedCards.put(InitialPlayer.INITIATOR, false);
     playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
-  }
-
-  public void registerCardActionCallback(CardActionCallback callback) {
-    if (cardActionCallbacks.contains(callback)) {
-      return;
-    }
-    cardActionCallbacks.add(callback);
   }
 
   // GameState Manipulation
@@ -242,14 +232,15 @@ public class GameLogic {
 
   private void drawCards() {
     ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
-    if (cards.size() < 10) {
+    if (cards.size() < HAND_CARD_NUMBER) {
       Log.w(TAG, "CardDecks not setup");
+      return;
     }
 
     Random random = new Random();
     // 10 random unique cards from set cardDecks
     HashMap<Integer, Card> drawnCards = new HashMap<>();
-    while (drawnCards.size() < 10) {
+    while (drawnCards.size() < HAND_CARD_NUMBER) {
       int randomIndex = random.nextInt(cards.size());
       Card card = cards.get(randomIndex);
       drawnCards.put(card.getId(), card);
@@ -425,72 +416,34 @@ public class GameLogic {
 
   // Card Actions
 
-  public void performAction(CardAction action, ActionParams params) {
-    if (!gameStateMachine.stateEquals(GameState.START_PLAYER_TURN)) {
-      return;
-    }
+  /** @param card the card for which the deploy trigger should be executed. */
+  public void performDeployTrigger(Card card) {}
 
-    if (action.performed) {
-      Log.w(TAG, "Action is already performed.");
-      return;
-    }
+  /** @param card the card for which the order trigger should be executed. */
+  public void performOrderTrigger(Card card) {}
 
-    switch (action.getType()) {
-      case DEPLOY:
-        DeployParams deployParams = (params instanceof DeployParams ? (DeployParams) params : null);
-        if (deployParams == null) return;
-
-        Card card =
-            gameField
-                .getCardDecks()
-                .getCard(deployParams.getCardUUID(), gameField.getCurrentPlayer());
-        deployCard(card, deployParams.getRow(), deployParams.getPosition());
-        // remove card from hand
-        // TODO: Test removing of card
-        gameField
-            .getCardDeck(gameField.getCurrentPlayer().getInitialPlayerInformation())
-            .remove(card.getFirebaseId());
-
-        break;
-
-      case ATTACK:
-        AttackParams attackParams = (params instanceof AttackParams ? (AttackParams) params : null);
-        if (attackParams == null) return;
-        // TODO: implement card attacking
-        break;
-
-      case FOG:
-        FogParams fogParams = (params instanceof FogParams ? (FogParams) params : null);
-        if (fogParams == null) return;
-        // TODO: implement row fogging
-        break;
-
-      default:
-        Log.w(TAG, "Action not in performAction implemented");
-    }
-
-    action.performed = true;
-    notifyCardActionCallbacks(action, params);
-  }
-
-  private void deployCard(Card card, Row row, int position) {
+  public void deployCard(Card card, Row row, int position) {
     ArrayList<Card> cardRow = null;
 
+    /*
     switch (row.getRowType()) {
       case MELEE:
-        cardRow = gameField.getRows().meleeRowFor(gameField.getCurrentPlayer());
+        cardRow =
+            gameField
+                .getRows()
+                .meleeRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
         break;
       case RANGED:
-        cardRow = gameField.getRows().rangedRowFor(gameField.getCurrentPlayer());
+        cardRow =
+            gameField
+                .getRows()
+                .rangedRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
         break;
     }
     cardRow.add(position, card);
-  }
-
-  private void notifyCardActionCallbacks(CardAction action, ActionParams params) {
-    for (CardActionCallback callback : cardActionCallbacks) {
-      callback.didPerformAction(action, params);
-    }
+     */
+    // here we call performDeployTrigger
+    performDeployTrigger(card);
   }
 
   public void registerGameFieldListener(GameFieldObserver observer) {

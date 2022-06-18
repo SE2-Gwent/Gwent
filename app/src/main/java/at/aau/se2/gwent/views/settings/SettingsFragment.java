@@ -6,13 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import at.aau.se2.gwent.databinding.SettingsFragmentBinding;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import at.aau.se2.gwent.R;
+import at.aau.se2.gwent.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
   private SettingsViewModel viewModel;
-  private SettingsFragmentBinding binding;
+  private FragmentSettingsBinding binding;
+  private AppBarConfiguration appBarConfiguration;
 
   public static SettingsFragment newInstance() {
     return new SettingsFragment();
@@ -30,7 +37,16 @@ public class SettingsFragment extends Fragment {
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    binding = SettingsFragmentBinding.inflate(inflater, container, false);
+    binding = FragmentSettingsBinding.inflate(inflater, container, false);
+
+    ((AppCompatActivity) getActivity()).setSupportActionBar(binding.rulesToolBar);
+    NavController navController =
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+    appBarConfiguration =
+        new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main).build();
+    NavigationUI.setupActionBarWithNavController(
+        (AppCompatActivity) getActivity(), navController, appBarConfiguration);
+
     return binding.getRoot();
   }
 
