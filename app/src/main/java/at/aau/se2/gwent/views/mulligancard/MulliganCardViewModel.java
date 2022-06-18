@@ -22,8 +22,12 @@ public class MulliganCardViewModel extends ViewModel {
     return state;
   }
 
-  public int mulligansLeft() {
-    return gameLogic.getCardMulligansLeft();
+  public String mulligansLeftText() {
+    return String.valueOf(gameLogic.getCardMulligansLeft());
+  }
+
+  public boolean hasMulligansLeft() {
+    return gameLogic.getCardMulligansLeft() > 0;
   }
 
   public int roundCounter() {
