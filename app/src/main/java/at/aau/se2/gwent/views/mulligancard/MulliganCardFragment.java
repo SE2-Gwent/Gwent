@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,12 +58,12 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
   // TODO Runden checken wieviel Cards angezeigt werden. (R0-6K, R1&2-3K)✅  visibility gone
   private void setUpUI() {
     if (viewModel.roundCounter() == 0) {
-      binding.mulliganCard1.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard2.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard3.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard4.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard5.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard6.setupWithCard(0, 0, "", R.drawable.card_background);
+      binding.mulliganCard1.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard2.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard3.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard4.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard5.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard6.setupWithCard("0", 0, "", R.drawable.card_background);
       binding.goBackButton.setOnClickListener(
           view -> {
             viewModel.didClickCancel();
@@ -77,9 +79,9 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
       binding.mulliganCard6.setOnClickListener(mulliganCardListener);
 
     } else if (viewModel.roundCounter() == 1 || viewModel.roundCounter() == 2) {
-      binding.mulliganCard1.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard2.setupWithCard(0, 0, "", R.drawable.card_background);
-      binding.mulliganCard3.setupWithCard(0, 0, "", R.drawable.card_background);
+      binding.mulliganCard1.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard2.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard3.setupWithCard("0", 0, "", R.drawable.card_background);
       binding.goBackButton.setOnClickListener(
           view -> {
             viewModel.didClickCancel();
@@ -98,11 +100,14 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
         @Override
         public void onClick(View view) {
           CardView cardView = (CardView) view;
-          viewModel.didClickCard(cardView.getCardId());
+          viewModel.didClickCard(Integer.parseInt(cardView.getCardId()));
         }
       };
 
   private void updateUI(ArrayList<Card> cards) {
+    if (cards == null) { // early returns
+      return;
+    }
     // fill cardViews
     ArrayList<CardView> mulliganCardViews = null;
 
@@ -126,10 +131,19 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
       return;
     }
     for (int i = 0; cards.size() > i; i++) {
-      CardView mulliganCardView = mulliganCardViews.get(i);
       Card card = cards.get(i);
+      Context context = getActivity().getApplicationContext();
+      Resources resources = context.getResources();
+      int resourceId =
+          resources.getIdentifier(card.getImgResourceBasic(), "drawable", context.getPackageName());
+
+      if (resourceId == 0) {
+        resourceId = R.drawable.card_background;
+      }
+
+      CardView mulliganCardView = mulliganCardViews.get(i);
       mulliganCardView.setupWithCard(
-          card.getId(), card.getPower(), card.getName(), R.drawable.an_craite_amorsmith);
+          String.valueOf(card.getId()), card.getPower(), card.getName(), resourceId);
     }
     // TODO sollte sich schließen. (transfer to UpdateUI)✅
     if (!viewModel.hasMulligansLeft()) {
