@@ -27,7 +27,7 @@ public class MulliganCardViewModel extends ViewModel {
   }
 
   public int roundCounter() {
-    return gameLogic.getGameId();
+    return gameLogic.getGameField().getRoundNumber();
   }
 
   public void didClickCancel() {
