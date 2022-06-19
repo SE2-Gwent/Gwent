@@ -21,6 +21,7 @@ import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.RowType;
+import at.aau.se2.gwent.Environment;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
@@ -296,8 +297,34 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         dialog.show();
 
         break;
+
+      case SHOW_WINNER:
+        showWinner();
+        break;
+
       default:
         break;
     }
+  }
+
+  private void showWinner() {
+    if (viewModel.haveIWon() == null) return;
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    builder.setTitle(R.string.game_ended);
+    builder.setCancelable(false);
+
+    builder.setMessage(viewModel.haveIWon() ? R.string.you_have_won : R.string.opponents_has_won);
+    builder.setNegativeButton(
+        R.string.ok,
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+            Environment.getSharedInstance().resetGameLogic();
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
+                .popBackStack();
+          }
+        });
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 }

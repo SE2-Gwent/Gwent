@@ -32,4 +32,8 @@
     <string name="game_created">Game Created:</string>
     <string name="could_not_create_game">Could not create game</string>
 
+    <string name="game_ended">Game Ended</string>
+    <string name="you_have_won">You have won!</string>
+    <string name="opponents_has_won">Your opponent has won!</string>
+
 </resources>

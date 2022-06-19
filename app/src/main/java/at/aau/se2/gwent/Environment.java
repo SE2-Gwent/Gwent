@@ -20,4 +20,8 @@ public class Environment {
   public GameLogic getGameLogic() {
     return gameLogic;
   }
+
+  public void resetGameLogic() {
+    gameLogic = new GameLogic(null, null);
+  }
 }
