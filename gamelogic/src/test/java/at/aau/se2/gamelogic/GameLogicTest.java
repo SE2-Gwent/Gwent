@@ -336,6 +336,7 @@ public class GameLogicTest {
     GameField gameField = new GameField();
     gameField.setCardDecks(cardDecks);
     currentPlayer.setHasLastPlayed(true);
+    sut.setStartingPlayer(currentPlayer.getInitialPlayerInformation());
     gameField.setCurrentPlayer(currentPlayer);
     gameField.setOpponent(currentPlayer);
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
