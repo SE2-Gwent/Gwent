@@ -47,9 +47,12 @@ public class GameLogic {
   private FirebaseConnector connector;
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
+
   private int cardMulligansLeft = 3;
   // set when playing card or using hero activity
   private boolean currentPlayerCanPass = true;
+  private boolean currentPlayerPlayCard = true;
+
   private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
   private int lastSavedActionSize = 0;
   private ArrayList<InitialPlayer> playersRoundsWon = new ArrayList<>();
@@ -284,6 +287,7 @@ public class GameLogic {
     gameField.getCurrentPlayer().setHasLastPlayed(false);
     gameField.getOpponent().setHasLastPlayed(false);
     currentPlayerCanPass = true;
+    currentPlayerPlayCard = true;
   }
 
   private void roundReset() {
@@ -788,6 +792,8 @@ public class GameLogic {
    * @param position The position on the given row where the card is put.
    */
   public void deployCard(Card card, RowType rowType, int position) {
+    if (!currentPlayerPlayCard) return;
+
     InitialPlayer currentPlayer = getPlayerToTurn();
 
     gameField.getRows().setCardIfPossible(currentPlayer, rowType, position, card);
@@ -797,6 +803,7 @@ public class GameLogic {
     currentHand.remove(key);
 
     currentPlayerCanPass = false;
+    currentPlayerPlayCard = false;
 
     performDeployTrigger(card);
 
@@ -953,6 +960,10 @@ public class GameLogic {
 
   public boolean getCurrentPlayerCanPass() {
     return currentPlayerCanPass;
+  }
+
+  public boolean canCurrentPlayerPlayCard() {
+    return currentPlayerPlayCard;
   }
 
   protected void setPlayersRoundsWon(ArrayList<InitialPlayer> playersRoundsWon) {

@@ -142,11 +142,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           viewData.getWhoAmI());
     }
 
-    boolean cardIsSelected = viewData.getSelectedCardId() != null;
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.MELEE), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.MELEE),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.RANGED), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.RANGED),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
 
     if (viewModel.getOldViewData() != null
         && viewModel.getOldViewData().getSelectedCardId() != null
