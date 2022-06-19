@@ -2,7 +2,6 @@ package at.aau.se2.gwent.views.mulligancard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import at.aau.se2.gamelogic.GameLogic.*;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gwent.R;
@@ -30,11 +28,12 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
   private MulliganCardViewModel viewModel;
   private FragmentMulliganCardBinding binding;
   private static final String TAG = MulliganCardFragment.class.getSimpleName();
+  private Listener listener;
 
   public MulliganCardFragment() {}
   // private MulliganCardFragment binding;
 
-  public MulliganCardFragment newInstance() {
+  public static MulliganCardFragment newInstance() {
     // Required empty public constructor
     return new MulliganCardFragment();
   }
@@ -67,9 +66,7 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
       binding.goBackButton.setOnClickListener(
           view -> {
             viewModel.didClickCancel();
-            Navigation.findNavController(
-                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
-                .popBackStack();
+            notifyClose();
           });
       binding.mulliganCard1.setOnClickListener(mulliganCardListener);
       binding.mulliganCard2.setOnClickListener(mulliganCardListener);
@@ -85,9 +82,7 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
       binding.goBackButton.setOnClickListener(
           view -> {
             viewModel.didClickCancel();
-            Navigation.findNavController(
-                    Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
-                .popBackStack();
+            notifyClose();
           });
       binding.mulliganCard1.setOnClickListener(mulliganCardListener);
       binding.mulliganCard2.setOnClickListener(mulliganCardListener);
@@ -147,9 +142,7 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
     }
     // TODO sollte sich schließen. (transfer to UpdateUI)✅
     if (!viewModel.hasMulligansLeft()) {
-      Navigation.findNavController(
-              Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
-          .popBackStack();
+      notifyClose();
     }
     binding.mulliganCountByLogic.setText(viewModel.mulligansLeftText());
   }
@@ -157,6 +150,21 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
   @Override
   public void onBackPressed() {
     viewModel.didClickCancel();
+  }
+
+  public void setListener(MulliganCardFragment.Listener listener) {
+    this.listener = listener;
+  }
+
+  public interface Listener {
+    void didClickCancel();
+  }
+
+  private void notifyClose() {
+    if (listener == null) {
+      return;
+    }
+    listener.didClickCancel();
   }
 }
 // TODO

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +25,7 @@ import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
 import at.aau.se2.gwent.util.CardRowHelper;
 import at.aau.se2.gwent.views.common.CardView;
 import at.aau.se2.gwent.views.detailedcard.DetailedCardFragment;
+import at.aau.se2.gwent.views.mulligancard.MulliganCardFragment;
 
 // TODO: Hide NavBar
 
@@ -40,6 +39,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   private HashMap<RowType, ArrayList<CardView>> opponentRowCardViews = new HashMap<>();
   private HashMap<RowType, ArrayList<CardView>> playerRowCardViews = new HashMap<>();
   private DetailedCardFragment detailedCardFragment;
+  private MulliganCardFragment mulliganCardFragment;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -276,23 +276,29 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void handleEvents(SingleEvent<BoardViewModel.Event> event) {
+    if (mulliganCardFragment == null) {
+      mulliganCardFragment = MulliganCardFragment.newInstance();
+      mulliganCardFragment.setListener(
+          new MulliganCardFragment.Listener() {
+            @Override
+            public void didClickCancel() {
+              if (mulliganCardFragment == null) return;
+              getChildFragmentManager().beginTransaction().remove(mulliganCardFragment).commit();
+            }
+          });
+    }
     BoardViewModel.Event eventValue = event.getValueIfNotHandled();
     if (eventValue == null) return;
 
     switch (eventValue) {
       case SHOW_MULLIGAN:
         // TODO: Replace with Mulligan Fragment
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.mulligan);
-        builder.setNegativeButton(
-            R.string.cancel,
-            new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int id) {
-                viewModel.cancelMulligan();
-              }
-            });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        // TODO: configure DetailFragment with card data
+        getChildFragmentManager()
+            .beginTransaction()
+            .add(R.id.overlayFrameLayout, mulliganCardFragment)
+            .commit();
 
         break;
       default:
