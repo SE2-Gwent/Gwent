@@ -33,7 +33,13 @@ public class CardRowHelper {
     }
   }
 
-  public static void removeCardViews(CardareaBinding binding) {
+  public static void makeAllPlaceholder(ArrayList<CardView> cardViews) {
+    for (CardView cardView : cardViews) {
+      cardView.showAsPlaceholder(true);
+    }
+  }
+
+  public static void removeAllViews(CardareaBinding binding) {
     binding.getRoot().removeAllViews();
   }
 

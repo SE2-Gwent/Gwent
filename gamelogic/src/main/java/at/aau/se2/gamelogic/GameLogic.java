@@ -292,9 +292,12 @@ public class GameLogic {
 
   private void roundReset() {
     turnReset();
+    gameField.getRows().cleanRows();
     gameField.getCurrentPlayer().setHasPassed(false);
     gameField.getOpponent().setHasPassed(false);
+
     cardMulligansLeft = 1;
+
     playerHasMulliganedCards.put(InitialPlayer.INITIATOR, false);
     playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
   }

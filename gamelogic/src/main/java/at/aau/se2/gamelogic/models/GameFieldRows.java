@@ -2,6 +2,7 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.HashMap;
 
+import android.util.Log;
 import androidx.annotation.Keep;
 
 public class GameFieldRows {
@@ -75,6 +76,16 @@ public class GameFieldRows {
 
     row.put(location + "_index", card);
     return true;
+  }
+
+  public void cleanRows() {
+    Row[] rows = {p1MeleeRow, p1RangeRow, p2MeleeRow, p2RangeRow};
+    for (Row row : rows) {
+      row.getPlayerRow().clear();
+      row.setRemainingStatusRounds(0);
+      row.setRowStatus(null);
+    }
+    Log.v("TAG", "What");
   }
 
   /*
