@@ -149,8 +149,9 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         playerRowCardViews.get(RowType.RANGED), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
 
     if (viewModel.getOldViewData() != null
-        && viewModel.getOldViewData().getSelectedCardId() != null) {
-      // playersHandCardViews.get(viewModel.getOldViewData().getSelectedCardId()).setSelected(false);
+        && viewModel.getOldViewData().getSelectedCardId() != null
+        && playersHandCardViews.containsKey(viewModel.getOldViewData().getSelectedCardId())) {
+      playersHandCardViews.get(viewModel.getOldViewData().getSelectedCardId()).setSelected(false);
       // TODO: selection for rowCardViews
     }
     if (viewData.getSelectedCardId() != null) {
