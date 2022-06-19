@@ -3,6 +3,8 @@ package at.aau.se2.gamelogic;
 import static java.lang.Math.max;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -22,6 +24,12 @@ import at.aau.se2.gamelogic.models.Hero;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.Row;
+import at.aau.se2.gamelogic.models.RowStatus;
+import at.aau.se2.gamelogic.models.RowType;
+import at.aau.se2.gamelogic.models.cardactions.actions.TargetRowAction;
+import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
+import at.aau.se2.gamelogic.models.cardactions.triggers.DeployTrigger;
+import at.aau.se2.gamelogic.models.cardactions.triggers.OrderTrigger;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gamelogic.util.SyncActionUtil;
 
@@ -31,6 +39,7 @@ import at.aau.se2.gamelogic.util.SyncActionUtil;
 public class GameLogic {
   public static final int ROW_CARD_NUMBER = 10;
   public static final int HAND_CARD_NUMBER = 10;
+  public static final int STATUS_DURATION = 2;
   private static final String TAG = GameLogic.class.getSimpleName();
   private int gameId = -1;
   private GameField gameField;
@@ -44,6 +53,8 @@ public class GameLogic {
   private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
   private int lastSavedActionSize = 0;
   private ArrayList<InitialPlayer> playersRoundsWon = new ArrayList<>();
+  private ArrayList<RowStatus> statuses =
+      new ArrayList<>(Arrays.asList(RowStatus.FOG, RowStatus.RAIN, RowStatus.FROST));
 
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
@@ -336,6 +347,8 @@ public class GameLogic {
         break;
 
       case START_PLAYER_TURN:
+        updateBoardState();
+
         if (!bothPlayerHavePlayed()) {
           Log.w(TAG, "Not both players played");
           return;
@@ -416,34 +429,377 @@ public class GameLogic {
 
   // Card Actions
 
-  /** @param card the card for which the deploy trigger should be executed. */
-  public void performDeployTrigger(Card card) {}
+  /**
+   * Performs the deploy trigger of the a card (if card has a deploy trigger).
+   *
+   * @param card the card for which the deploy trigger should be executed.
+   */
+  private void performDeployTrigger(Card card) {
+    DeployTrigger deployTrigger = card.getDeployTrigger();
+    if (deployTrigger == null) {
+      return;
+    }
+    performTargetRowActions(deployTrigger.getTargetRowActions());
+    performTargetUnitActions(deployTrigger.getTargetUnitActions());
+  }
 
   /** @param card the card for which the order trigger should be executed. */
-  public void performOrderTrigger(Card card) {}
-
-  public void deployCard(Card card, Row row, int position) {
-    ArrayList<Card> cardRow = null;
-
-    /*
-    switch (row.getRowType()) {
-      case MELEE:
-        cardRow =
-            gameField
-                .getRows()
-                .meleeRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
-        break;
-      case RANGED:
-        cardRow =
-            gameField
-                .getRows()
-                .rangedRowFor(gameField.getCurrentPlayer().getInitialPlayerInformation());
-        break;
+  public void performOrderTrigger(Card card) {
+    OrderTrigger orderTrigger = card.getOrderTrigger();
+    if (orderTrigger == null) {
+      return;
     }
-    cardRow.add(position, card);
-     */
-    // here we call performDeployTrigger
+    if (orderTrigger.getRemCoolDown() == 0) {
+      performTargetRowActions(orderTrigger.getTargetRowActions());
+      performTargetUnitActions(orderTrigger.getTargetUnitActions());
+
+      orderTrigger.setRemCoolDown(orderTrigger.getCoolDown());
+    } else {
+      Log.w(TAG, "Order trigger can't be activated due to remaining cooldown.");
+    }
+  }
+
+  /** This function gets called from the updateBoardState function at the beginning of a turn. */
+  private void updateOrderRemCoolDown(Card card) {
+    OrderTrigger orderTrigger = card.getOrderTrigger();
+    if (orderTrigger == null) {
+      return;
+    }
+    int remCoolDown = orderTrigger.getRemCoolDown();
+    if (remCoolDown > 0) {
+      orderTrigger.setRemCoolDown(remCoolDown - 1);
+    }
+  }
+
+  /** @param targetRowActions */
+  private void performTargetRowActions(ArrayList<TargetRowAction> targetRowActions) {
+    InitialPlayer opponent = whoAmI.other();
+
+    for (TargetRowAction targetRowAction : targetRowActions) {
+      Row targetRow = null;
+
+      // determine targeted rows
+      if (targetRowAction.hasRandomTargets()) {
+        Random rand = new Random();
+        int n = rand.nextInt() % 2;
+        if (n == 0) {
+          targetRow = gameField.getRows().getMeleeRowFor(opponent);
+        } else {
+          targetRow = gameField.getRows().getRangedRowFor(opponent);
+        }
+      } else {
+        // all our cards have random targets, but this branch could be used in the future to extend
+        // functionality
+      }
+
+      // determine status to apply
+      RowStatus status = null;
+      if (targetRowAction.hasRandomStatus()) {
+        Collections.shuffle(statuses);
+        status = statuses.get(0);
+      } else {
+        // all our cards apply random statuses, but this branch could be used in the future to
+        // extend functionality
+      }
+
+      // apply status
+      if (targetRow != null && status != null) {
+        targetRow.setRowStatus(status);
+        targetRow.setRemainingStatusRounds(STATUS_DURATION);
+      }
+    }
+  }
+
+  /**
+   * Executes all targetUnitActions (i.e. DAMAGE, HEAL, BOOST, SWAP) on random targets or targets
+   * chosen by the executing player.
+   *
+   * @param targetUnitActions List of actions to execute.
+   */
+  private void performTargetUnitActions(ArrayList<TargetUnitAction> targetUnitActions) {
+    InitialPlayer initiator = whoAmI;
+    InitialPlayer opponent = whoAmI.other();
+
+    for (TargetUnitAction targetUnitAction : targetUnitActions) {
+      // determine targeted units
+      ArrayList<Card> targetedCards = new ArrayList<>();
+      if (targetUnitAction.hasRandomTargets()) {
+        ArrayList<Card> legalTargets = new ArrayList<>();
+        if (targetUnitAction.canTargetAlliedUnits() && targetUnitAction.canTargetEnemyUnits()) {
+          legalTargets.addAll(gameField.getRows().meleeRowFor(initiator).values());
+          legalTargets.addAll(gameField.getRows().rangedRowFor(initiator).values());
+          legalTargets.addAll(gameField.getRows().meleeRowFor(opponent).values());
+          legalTargets.addAll(gameField.getRows().rangedRowFor(opponent).values());
+        } else if (targetUnitAction.canTargetAlliedUnits()) {
+          legalTargets.addAll(gameField.getRows().meleeRowFor(initiator).values());
+          legalTargets.addAll(gameField.getRows().rangedRowFor(initiator).values());
+        } else {
+          legalTargets.addAll(gameField.getRows().meleeRowFor(opponent).values());
+          legalTargets.addAll(gameField.getRows().rangedRowFor(opponent).values());
+        }
+        Collections.shuffle(legalTargets);
+
+        for (int i = 0; i < targetUnitAction.getNumTargets() && i < legalTargets.size(); i++) {
+          targetedCards.add(legalTargets.get(i));
+        }
+
+        ArrayList<Integer> targetedCardsUUIDs = new ArrayList();
+        for (Card card : targetedCards) {
+          targetedCardsUUIDs.add(card.getId());
+        }
+        targetUnitAction.setTargetedCardsUUIDs(targetedCardsUUIDs);
+
+      } else {
+        // TODO: select targets by hand (currently not possible due to missing selectCard within UI)
+      }
+
+      // determine action to take and execute it
+      for (Card card : targetedCards) {
+        switch (targetUnitAction.getActionType()) {
+          case DAMAGE:
+            damageTargetCard(card, targetUnitAction);
+            break;
+          case HEAL:
+            healTargetCard(card, targetUnitAction);
+            break;
+          case BOOST:
+            boostTargetCard(card, targetUnitAction);
+            break;
+          case SWAP:
+            swapTargetCard(card, targetUnitAction);
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Damage the targeted card. Afterwards the checkForDestroyedCards function is called to remove
+   * destroyed cards from the board.
+   *
+   * @param targetCard
+   * @param damageAction
+   */
+  private void damageTargetCard(Card targetCard, TargetUnitAction damageAction) {
+    targetCard.setPower(targetCard.getPower() - damageAction.getPoints());
+    targetCard.setPowerDiff(targetCard.getPowerDiff() - damageAction.getPoints());
+
+    checkForDestroyedCards();
+  }
+
+  /**
+   * Heal the targeted card. A heal can't extend the cards base power. If a card is damaged
+   * powerDiff is set to a neg. value. We have to ensure that a heal with points greater than the
+   * current damage points on the card doesn't extend the cards initial power.
+   *
+   * @param targetCard
+   * @param healAction
+   */
+  private void healTargetCard(Card targetCard, TargetUnitAction healAction) {
+    if (targetCard.getPowerDiff() < 0) {
+      if ((targetCard.getPowerDiff() + healAction.getPoints()) <= 0) {
+        targetCard.setPower(targetCard.getPower() + healAction.getPoints());
+        targetCard.setPowerDiff(targetCard.getPowerDiff() + healAction.getPoints());
+      } else {
+        /*
+         * here we subtract, because powerDiff is neg. when the card is dmg. (results in
+         * increasing the cards power to it's initial power)
+         */
+        targetCard.setPower(targetCard.getPower() - targetCard.getPowerDiff());
+        targetCard.setPowerDiff(0);
+      }
+    }
+  }
+
+  /**
+   * Boost the targeted card. A boost can extend the cards base power. If a card has more power than
+   * it's initial power, powerDiff is set to a positive value.
+   *
+   * @param targetCard
+   * @param boostAction
+   */
+  private void boostTargetCard(Card targetCard, TargetUnitAction boostAction) {
+    targetCard.setPower(targetCard.getPower() + boostAction.getPoints());
+    targetCard.setPowerDiff(targetCard.getPowerDiff() + boostAction.getPoints());
+  }
+
+  /**
+   * Moves the targeted card to the other row (MELEE -> RANGED, RANGED -> MELEE) if possible.
+   *
+   * @param targetCard
+   * @param swapAction
+   */
+  private void swapTargetCard(Card targetCard, TargetUnitAction swapAction) {
+    HashMap<String, Card> p1MeleeRow = gameField.getRows().getMeleeRowForP1();
+    HashMap<String, Card> p1RangedRow = gameField.getRows().getRangeRowForP1();
+    HashMap<String, Card> p2MeleeRow = gameField.getRows().getMeleeRowForP2();
+    HashMap<String, Card> p2RangedRow = gameField.getRows().getRangeRowForP2();
+
+    // swaps between p1 rows
+    if (p1MeleeRow.containsKey(targetCard.getFirebaseId())) {
+      if (p1RangedRow.size() < ROW_CARD_NUMBER) {
+        p1RangedRow.put(targetCard.getFirebaseId(), targetCard);
+        p1MeleeRow.remove(targetCard.getFirebaseId());
+      }
+    } else if (p1RangedRow.containsKey(targetCard.getFirebaseId())) {
+      if (p1MeleeRow.size() < ROW_CARD_NUMBER) {
+        p1MeleeRow.put(targetCard.getFirebaseId(), targetCard);
+        p1RangedRow.remove(targetCard.getFirebaseId());
+      }
+    }
+
+    // swaps between p2 rows
+    if (p2MeleeRow.containsKey(targetCard.getFirebaseId())) {
+      if (p2RangedRow.size() < ROW_CARD_NUMBER) {
+        p2RangedRow.put(targetCard.getFirebaseId(), targetCard);
+        p2MeleeRow.remove(targetCard.getFirebaseId());
+      }
+    } else if (p2RangedRow.containsKey(targetCard.getFirebaseId())) {
+      if (p2MeleeRow.size() < ROW_CARD_NUMBER) {
+        p2MeleeRow.put(targetCard.getFirebaseId(), targetCard);
+        p2RangedRow.remove(targetCard.getFirebaseId());
+      }
+    }
+  }
+
+  /**
+   * check if the power of a card on the board is currently <= 0 if yes the card is removed from the
+   * board.
+   */
+  private void checkForDestroyedCards() {
+    HashMap<String, Card> p1MeleeRow = gameField.getRows().getMeleeRowForP1();
+    HashMap<String, Card> p1RangedRow = gameField.getRows().getRangeRowForP1();
+    HashMap<String, Card> p2MeleeRow = gameField.getRows().getMeleeRowForP2();
+    HashMap<String, Card> p2RangedRow = gameField.getRows().getRangeRowForP2();
+
+    ArrayList<String> destroyedCardsUUIDs = new ArrayList<>();
+    for (Card card : p1MeleeRow.values()) {
+      if (card.getPower() <= 0) {
+        destroyedCardsUUIDs.add(card.getFirebaseId());
+      }
+    }
+    for (Card card : p1RangedRow.values()) {
+      if (card.getPower() <= 0) {
+        destroyedCardsUUIDs.add(card.getFirebaseId());
+      }
+    }
+    for (Card card : p2MeleeRow.values()) {
+      if (card.getPower() <= 0) {
+        destroyedCardsUUIDs.add(card.getFirebaseId());
+      }
+    }
+    for (Card card : p2RangedRow.values()) {
+      if (card.getPower() <= 0) {
+        destroyedCardsUUIDs.add(card.getFirebaseId());
+      }
+    }
+
+    for (String cardUUID : destroyedCardsUUIDs) {
+      p1MeleeRow.remove(cardUUID);
+      p1RangedRow.remove(cardUUID);
+      p2MeleeRow.remove(cardUUID);
+      p2RangedRow.remove(cardUUID);
+    }
+  }
+
+  /**
+   * This function gets called from the updateBoardState function at the beginning of a turn. checks
+   * if a row has currently a status applied on it if yes perform status action on row and decrement
+   * remRounds by 1. if remRounds reaches 0 remove the status from the row.
+   */
+  private void performRowStatusAction() {
+    InitialPlayer currentPlayer = getPlayerToTurn();
+
+    ArrayList<Row> rows = new ArrayList<>();
+    rows.add(gameField.getRows().getMeleeRowFor(currentPlayer));
+    rows.add(gameField.getRows().getRangedRowFor(currentPlayer));
+    for (Row row : rows) {
+      RowStatus status = row.getRowStatus();
+      if (status != null) {
+        ArrayList<Card> currentCardsOnRow = new ArrayList<>(row.getPlayerRow().values());
+        switch (status) {
+          case FOG:
+            if (currentCardsOnRow.size() > 0) {
+              Card maxPowerCard = currentCardsOnRow.get(0);
+              for (int i = 1; i < currentCardsOnRow.size(); i++) {
+                Card currentCard = currentCardsOnRow.get(i);
+                if (currentCard.getPower() > maxPowerCard.getPower()) {
+                  maxPowerCard = currentCard;
+                }
+              }
+
+              maxPowerCard.setPower(maxPowerCard.getPower() - 2);
+              maxPowerCard.setPowerDiff(maxPowerCard.getPowerDiff() - 2);
+            }
+            break;
+          case FROST:
+            if (currentCardsOnRow.size() > 0) {
+              Card minPowerCard = currentCardsOnRow.get(0);
+              for (int i = 1; i < currentCardsOnRow.size(); i++) {
+                Card currentCard = currentCardsOnRow.get(i);
+                if (currentCard.getPower() < minPowerCard.getPower()) {
+                  minPowerCard = currentCard;
+                }
+              }
+
+              minPowerCard.setPower(minPowerCard.getPower() - 2);
+              minPowerCard.setPowerDiff(minPowerCard.getPowerDiff() - 2);
+            }
+            break;
+          case RAIN:
+            if (currentCardsOnRow.size() > 0) {
+              Collections.shuffle(currentCardsOnRow);
+
+              Card randomCardOnRow = currentCardsOnRow.get(0);
+              randomCardOnRow.setPower(randomCardOnRow.getPower() - 2);
+              randomCardOnRow.setPowerDiff(randomCardOnRow.getPowerDiff() - 2);
+            }
+        }
+        row.setRemainingStatusRounds(row.getRemainingStatusRounds() - 1);
+        if (row.getRemainingStatusRounds() == 0) {
+          row.setRowStatus(null);
+        }
+
+        checkForDestroyedCards();
+      }
+    }
+  }
+
+  private void updateBoardState() {
+    performRowStatusAction();
+
+    InitialPlayer currentPlayer = getPlayerToTurn();
+    HashMap<String, Card> currentPlayerMeleeRow = gameField.getRows().meleeRowFor(currentPlayer);
+    HashMap<String, Card> currentPlayerRangedRow = gameField.getRows().rangedRowFor(currentPlayer);
+    for (Card card : currentPlayerMeleeRow.values()) {
+      updateOrderRemCoolDown(card);
+    }
+    for (Card card : currentPlayerRangedRow.values()) {
+      updateOrderRemCoolDown(card);
+    }
+  }
+
+  /**
+   * 1) Deploy card on target row. 2) Remove card from hand. 3) Perform deploy trigger.
+   *
+   * @param card The card which should be put on the given row.
+   * @param rowType Type of row where the card should get deployed.
+   * @param position The position on the given row where the card is put.
+   */
+  public void deployCard(Card card, RowType rowType, int position) {
+    InitialPlayer currentPlayer = getPlayerToTurn();
+
+    gameField.getRows().setCardIfPossible(currentPlayer, rowType, position, card);
+
+    HashMap<String, Card> currentHand = gameField.getCurrentHandCardsFor(currentPlayer);
+    String key = card.getFirebaseId();
+    currentHand.remove(key);
+
+    currentPlayerCanPass = false;
+
     performDeployTrigger(card);
+
+    connector.syncGameField(this.gameField);
   }
 
   public void registerGameFieldListener(GameFieldObserver observer) {

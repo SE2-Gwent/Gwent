@@ -85,10 +85,7 @@ public class BoardViewModel extends ViewModel
       return;
     }
 
-    gameLogic
-        .getGameField()
-        .getRows()
-        .setCardIfPossible(gameLogic.getWhoAmI(), rowType, location, playedCard);
+    gameLogic.deployCard(playedCard, rowType, location);
 
     createCurrentViewState(gameLogic.getGameField());
   }
