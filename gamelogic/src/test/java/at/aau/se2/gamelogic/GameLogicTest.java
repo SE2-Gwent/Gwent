@@ -544,6 +544,25 @@ public class GameLogicTest {
   }
 
   @Test
+  public void testMulliganCardsCountForLaterRounds() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.getCurrentHandCardsFor(InitialPlayer.INITIATOR).remove("1_card");
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    gameField.setOpponent(currentPlayer);
+    currentPlayer.setCurrentMatchPoints(1);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+
+    // normaly 1, but 3, because drawing 3 cards overflowed handCardsMaximum by 2
+    assertEquals(3, sut.getCardMulligansLeft());
+  }
+
+  @Test
   public void testGetCardsToMulliganFailed() {
     when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(false);
 

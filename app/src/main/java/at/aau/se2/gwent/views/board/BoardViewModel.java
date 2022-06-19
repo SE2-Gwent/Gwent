@@ -73,8 +73,6 @@ public class BoardViewModel extends ViewModel
   }
 
   public void playSelectedCard(RowType rowType, int location) {
-    // TODO: change when deploy mechanic is merged
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
