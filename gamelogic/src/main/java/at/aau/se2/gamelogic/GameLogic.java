@@ -283,6 +283,7 @@ public class GameLogic {
   private void turnReset() {
     gameField.getCurrentPlayer().setHasLastPlayed(false);
     gameField.getOpponent().setHasLastPlayed(false);
+    currentPlayerCanPass = true;
   }
 
   private void roundReset() {
