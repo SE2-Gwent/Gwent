@@ -29,7 +29,7 @@
             android:background="#1AE192"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:src="@drawable/rm_an_craite_amorsmith"
+            android:src="@drawable/aguara_basic"
             android:visibility="visible" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textColorLink="#FFFFFF"
-            android:textSize="4sp"
+            android:textSize="6sp"
             tools:ignore="RtlCompat" />
 
     </androidx.cardview.widget.CardView>
