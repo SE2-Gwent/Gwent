@@ -3,11 +3,16 @@ package at.aau.se2.gwent.views.board;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -295,6 +300,18 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+        break;
+      case VIBRATE:
+        Vibrator v =
+            (Vibrator)
+                Objects.requireNonNull(getActivity()).getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+          // deprecated in API 26
+          v.vibrate(200);
+        }
         break;
       default:
         break;

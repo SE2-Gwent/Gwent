@@ -11,6 +11,7 @@ import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.GameLogicDataProvider;
 import at.aau.se2.gamelogic.GameStateCallback;
+import at.aau.se2.gamelogic.UIActionListener;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
@@ -20,10 +21,11 @@ import at.aau.se2.gwent.Environment;
 import at.aau.se2.gwent.util.DebugHelper;
 
 public class BoardViewModel extends ViewModel
-    implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
+    implements GameFieldObserver, GameLogicDataProvider, GameStateCallback, UIActionListener {
 
   public enum Event {
-    SHOW_MULLIGAN
+    SHOW_MULLIGAN,
+    VIBRATE
   }
 
   private static final String TAG = BoardViewModel.class.getSimpleName();
@@ -37,6 +39,7 @@ public class BoardViewModel extends ViewModel
     gameLogic.registerGameFieldListener(this);
     gameLogic.setGameLogicDataProvider(this);
     gameLogic.getGameStateMachine().registerListener(this);
+    gameLogic.registeruiActionListener(this);
   }
 
   public void didClickPrimaryButton() {
@@ -117,6 +120,12 @@ public class BoardViewModel extends ViewModel
       default:
         break;
     }
+  }
+
+  @Override
+  public void sendVibration() {
+    Log.v(TAG, "VIBRATE VIBRATE VIBRATE ");
+    actionLiveData.setValue(new SingleEvent<>(Event.VIBRATE));
   }
 
   @Override

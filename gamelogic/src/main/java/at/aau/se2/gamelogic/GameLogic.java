@@ -58,6 +58,7 @@ public class GameLogic {
 
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
+  private ArrayList<UIActionListener> uiActionListenerArrayList = new ArrayList<>();
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
       sync -> {
@@ -185,6 +186,7 @@ public class GameLogic {
     return mulliganedCardId;
   }
 
+  // TODO send same syncAction with Vibration Type
   public void abortMulliganCards() {
     cardMulligansLeft = 0;
     connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
@@ -294,6 +296,7 @@ public class GameLogic {
     playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
   }
 
+  // checks curent game state + more
   protected void handleGameSyncUpdates(SyncRoot syncRoot) {
     if (syncRoot == null) return;
 
@@ -318,7 +321,7 @@ public class GameLogic {
           Log.w(TAG, "Only one Player has choosen his deck");
           return;
         }
-
+        // TODO wichtig lastSavedActionSize (call)
         InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
         if (gameStateMachine.roundCanStart()) {
           lastSavedActionSize = syncRoot.getSyncActions().size();
@@ -348,7 +351,8 @@ public class GameLogic {
 
       case START_PLAYER_TURN:
         updateBoardState();
-
+        // syncActionUtil methode hier auslesen
+        // listener für vibrations (eigenen Listener schreiben only gamelogic)
         if (!bothPlayerHavePlayed()) {
           Log.w(TAG, "Not both players played");
           return;
@@ -799,6 +803,8 @@ public class GameLogic {
 
     performDeployTrigger(card);
 
+    sendVibrationAction();
+
     connector.syncGameField(this.gameField);
   }
 
@@ -806,6 +812,11 @@ public class GameLogic {
     if (gameFieldObservers.contains(observer)) return;
     gameFieldObservers.add(observer);
     observer.updateGameField(gameField);
+  }
+
+  public void registeruiActionListener(UIActionListener uiListener) {
+    if (uiActionListenerArrayList.contains(uiListener)) return;
+    uiActionListenerArrayList.add(uiListener);
   }
 
   public ArrayList<Card> getCardsToMulligan() {
@@ -883,6 +894,35 @@ public class GameLogic {
     Player currentPlayer = gameField.getCurrentPlayer();
     Player opponent = gameField.getOpponent();
     return currentPlayer.isHasPassed() && opponent.isHasPassed();
+  }
+
+  /* private int whoStarted() {
+      int yourHero = Hero.getId();
+      if () {
+
+      }
+      //checks if you started the gema
+      //the one who started the game is automatically 'Gerald', the other one is 'Tress'
+
+  }
+
+  private int heroAbility() {
+
+      if () {
+      } // Cooldown = 1 Round
+      if (Calls whoStarted == Gerald) {
+          //Ability = remove 2 Points at every Card
+
+      } else {
+          //Wenn whoStarted nicht Gerald ist, ist der Hero Tress
+          //Abitlity = heal/add 2 Point at every Card
+      }
+  */
+
+  private void sendVibrationAction() {
+    for (UIActionListener actionListener : uiActionListenerArrayList) {
+      actionListener.sendVibration();
+    }
   }
 
   // Getters & Setters
