@@ -442,7 +442,6 @@ public class GameLogic {
     if (myHero == null) return;
     if (myHero.isOnCooldown()) return;
 
-    // TODO: check action and execute
     switch (myHero.getHeroAction()) {
       case ATTACK:
         if (!myHero.cardsForActionArePresent(gameField.getRows())) return;
@@ -460,6 +459,7 @@ public class GameLogic {
     }
 
     myHero.didActivateAction(); // sets cooldown
+    currentPlayerCanPass = false;
     // TODO: let other device vibrate @max
 
     connector.syncGameField(gameField);
