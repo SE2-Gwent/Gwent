@@ -700,22 +700,22 @@ public class GameLogic {
 
     ArrayList<String> destroyedCardsUUIDs = new ArrayList<>();
     for (Card card : p1MeleeRow.values()) {
-      if (card.getPower() <= 0) {
+      if (card.getCurrentAttackPoints() <= 0) {
         destroyedCardsUUIDs.add(card.getFirebaseId());
       }
     }
     for (Card card : p1RangedRow.values()) {
-      if (card.getPower() <= 0) {
+      if (card.getCurrentAttackPoints() <= 0) {
         destroyedCardsUUIDs.add(card.getFirebaseId());
       }
     }
     for (Card card : p2MeleeRow.values()) {
-      if (card.getPower() <= 0) {
+      if (card.getCurrentAttackPoints() <= 0) {
         destroyedCardsUUIDs.add(card.getFirebaseId());
       }
     }
     for (Card card : p2RangedRow.values()) {
-      if (card.getPower() <= 0) {
+      if (card.getCurrentAttackPoints() <= 0) {
         destroyedCardsUUIDs.add(card.getFirebaseId());
       }
     }
