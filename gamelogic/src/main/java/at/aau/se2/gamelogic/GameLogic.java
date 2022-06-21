@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import android.util.Log;
@@ -698,33 +699,25 @@ public class GameLogic {
     HashMap<String, Card> p2MeleeRow = gameField.getRows().getMeleeRowForP2();
     HashMap<String, Card> p2RangedRow = gameField.getRows().getRangeRowForP2();
 
-    ArrayList<String> destroyedCardsUUIDs = new ArrayList<>();
-    for (Card card : p1MeleeRow.values()) {
-      if (card.getCurrentAttackPoints() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p1MeleeRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p1MeleeRow.remove(entry.getKey());
       }
     }
-    for (Card card : p1RangedRow.values()) {
-      if (card.getCurrentAttackPoints() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p1RangedRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p1RangedRow.remove(entry.getKey());
       }
     }
-    for (Card card : p2MeleeRow.values()) {
-      if (card.getCurrentAttackPoints() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p2MeleeRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p2MeleeRow.remove(entry.getKey());
       }
     }
-    for (Card card : p2RangedRow.values()) {
-      if (card.getCurrentAttackPoints() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p2RangedRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p2RangedRow.remove(entry.getKey());
       }
-    }
-
-    for (String cardUUID : destroyedCardsUUIDs) {
-      p1MeleeRow.remove(cardUUID);
-      p1RangedRow.remove(cardUUID);
-      p2MeleeRow.remove(cardUUID);
-      p2RangedRow.remove(cardUUID);
     }
   }
 
