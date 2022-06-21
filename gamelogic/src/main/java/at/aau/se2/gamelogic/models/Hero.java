@@ -1,18 +1,24 @@
 package at.aau.se2.gamelogic.models;
 
-import at.aau.se2.gamelogic.models.heroactions.HeroActionParams;
+import androidx.annotation.Keep;
 
 public class Hero {
+  public enum Action {
+    ATTACK,
+    HEAL
+  }
+
   private int id;
-  private String name;
-  private HeroActionParams heroAction;
+  private Action heroAction;
   private int heroActionCoolDown; // Cooldown in Zuegen
 
-  public Hero(int id, String name, HeroActionParams heroAction) {
+  @Keep
+  public Hero() {}
+
+  public Hero(int id, Action heroAction, int heroActionCoolDown) {
     this.id = id;
-    this.name = name;
     this.heroAction = heroAction;
-    this.heroActionCoolDown = 0;
+    this.heroActionCoolDown = heroActionCoolDown;
   }
 
   public int getId() {
@@ -23,24 +29,12 @@ public class Hero {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public HeroActionParams getHeroAction() {
-    return heroAction;
-  }
-
-  public void setHeroAction(HeroActionParams heroAction) {
-    this.heroAction = heroAction;
-  }
-
   public int getHeroActionCoolDown() {
     return heroActionCoolDown;
+  }
+
+  public Action getHeroAction() {
+    return heroAction;
   }
 
   public void setHeroActionCoolDown(int heroActionCoolDown) {

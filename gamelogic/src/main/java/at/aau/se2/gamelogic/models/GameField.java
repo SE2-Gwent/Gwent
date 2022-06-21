@@ -19,7 +19,7 @@ public class GameField {
   private CardDecks cardDecks = new CardDecks();
   // Cards the player should get displayed in their hand
   private CardDecks currentHandCards = new CardDecks();
-  private ArrayList<Hero> heroes;
+  private HashMap<String, Hero> heroes;
 
   @Keep
   public GameField() {}
@@ -29,7 +29,7 @@ public class GameField {
       Player currentPlayer,
       Player opponent,
       CardDecks cardDecks,
-      ArrayList<Hero> heroes) {
+      HashMap<String, Hero> heroes) {
     this.rows = rows;
     this.currentPlayer = currentPlayer;
     this.opponent = opponent;
@@ -141,7 +141,7 @@ public class GameField {
         : currentHandCards.getP2Deck();
   }
 
-  public ArrayList<Hero> getHeroes() {
+  public HashMap<String, Hero> getHeroes() {
     return heroes;
   }
 

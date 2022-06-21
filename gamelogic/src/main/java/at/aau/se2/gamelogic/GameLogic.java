@@ -100,8 +100,7 @@ public class GameLogic {
 
               initializeGame(
                   new Player(1, InitialPlayer.INITIATOR),
-                  new CardDecks(new ArrayList<>(), new ArrayList<>()),
-                  new ArrayList<>());
+                  new CardDecks(new ArrayList<>(), new ArrayList<>()));
             }
 
             observer.finished(result);
@@ -231,12 +230,16 @@ public class GameLogic {
         new SyncAction(SyncAction.Type.STARTING_PLAYER, startingPlayer.name()));
   }
 
-  private void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
+  private void initializeGame(Player currentPlayer, CardDecks cardDecks) {
     if (!gameStateMachine.stateEquals(GameState.WAIT_FOR_OPPONENT)) {
       return;
     }
 
-    gameField = new GameField(new GameFieldRows(), currentPlayer, null, cardDecks, heroes);
+    HashMap<String, Hero> heros = new HashMap<>();
+    heros.put(InitialPlayer.INITIATOR.name(), new Hero(1, Hero.Action.ATTACK, 2));
+    heros.put(InitialPlayer.OPPONENT.name(), new Hero(2, Hero.Action.HEAL, 2));
+
+    gameField = new GameField(new GameFieldRows(), currentPlayer, null, cardDecks, heros);
 
     connector.syncGameField(gameField);
   }
@@ -426,6 +429,10 @@ public class GameLogic {
         break;
     }
   }
+
+  // Hero Actions
+
+  public void activateHeroAction() {}
 
   // Card Actions
 
