@@ -114,10 +114,12 @@
         android:layout_marginStart="@dimen/default_related_margin"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="@dimen/default_related_margin"
+        android:layout_marginBottom="32dp"
         android:text="23"
-        android:textSize="20sp"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/roundTextView"
         app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
         app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView"
         app:layout_constraintTop_toTopOf="@+id/pointBackgroundImageView" />
@@ -135,15 +137,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_related_margin"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="@dimen/default_related_margin"
         android:layout_marginBottom="32dp"
         android:text="23"
-        android:textSize="20sp"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/pointBackgroundImageView"
         app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
-        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView" />
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView"
+        app:layout_constraintTop_toBottomOf="@+id/turnTextView" />
 
     <View
         android:layout_width="0dp"
