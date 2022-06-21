@@ -2,6 +2,7 @@ package at.aau.se2.gwent.views.board;
 
 import java.util.HashMap;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import at.aau.se2.gamelogic.GameLogic;
@@ -30,6 +31,21 @@ public class BoardViewData implements Cloneable {
     }
   }
 
+  public enum HeroView {
+    GERALD,
+    TRISS;
+
+    public @DrawableRes int backgroundDrawable() {
+      return this == GERALD
+          ? R.drawable.button_round_hero_gerald_background
+          : R.drawable.button_round_hero_triss_background;
+    }
+
+    public HeroView other() {
+      return this == GERALD ? TRISS : GERALD;
+    }
+  }
+
   private GameField gameField;
   private boolean myTurn;
   private boolean canPass;
@@ -45,6 +61,7 @@ public class BoardViewData implements Cloneable {
   private String gameId;
   // TODO: replace with value from gamelogic, when hero is implemented
   private boolean heroEnabled = true;
+  private HeroView myHeroView;
 
   public BoardViewData(@NonNull GameField gameField, @NonNull GameLogic gameLogic) {
     Player currentPlayer = gameField.getPlayer(gameLogic.getWhoAmI());
@@ -66,6 +83,7 @@ public class BoardViewData implements Cloneable {
     this.currentGameState = gameLogic.getCurrentGameState();
     this.gameId = String.valueOf(gameLogic.getGameId());
     this.heroEnabled = !gameField.getHeroFor(whoAmI).isOnCooldown();
+    this.myHeroView = whoAmI == InitialPlayer.INITIATOR ? HeroView.GERALD : HeroView.TRISS;
 
     isGameFieldDirty = true;
   }
@@ -152,5 +170,9 @@ public class BoardViewData implements Cloneable {
 
   public String getGameId() {
     return gameId;
+  }
+
+  public HeroView getMyHeroView() {
+    return myHeroView;
   }
 }

@@ -172,6 +172,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       // TODO: selection for rowCardViews
     }
 
+    binding.currentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().backgroundDrawable()));
+    binding.opponentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().other().backgroundDrawable()));
     binding.currentHeroButton.setEnabled(viewData.isHeroEnabled());
     binding.pointView.bind(viewData);
   }
