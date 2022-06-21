@@ -65,6 +65,7 @@ public class BoardViewData implements Cloneable {
     this.opponentRoundsWon = (opponent != null) ? opponent.getCurrentMatchPoints() : 0;
     this.currentGameState = gameLogic.getCurrentGameState();
     this.gameId = String.valueOf(gameLogic.getGameId());
+    this.heroEnabled = !gameField.getHeroFor(whoAmI).isOnCooldown();
 
     isGameFieldDirty = true;
   }
@@ -146,7 +147,7 @@ public class BoardViewData implements Cloneable {
   }
 
   public boolean isHeroEnabled() {
-    return heroEnabled;
+    return heroEnabled && myTurn;
   }
 
   public String getGameId() {
