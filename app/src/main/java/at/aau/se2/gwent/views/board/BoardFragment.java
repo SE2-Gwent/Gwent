@@ -260,6 +260,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   private void showDetailOverlay(String cardId) {
     if (detailedCardFragment == null) {
       detailedCardFragment = DetailedCardFragment.newInstance();
+      Bundle args = new Bundle();
+      args.putString("key_0", cardId);
+      detailedCardFragment.setArguments(args);
+
       detailedCardFragment.setListener(
           new DetailedCardFragment.Listener() {
             @Override
@@ -268,9 +272,13 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
               getChildFragmentManager().beginTransaction().remove(detailedCardFragment).commit();
             }
           });
+    } else {
+      // detailedCardFragment.updateCardId(cardId);
+      Bundle args = new Bundle();
+      args.putString("key_0", cardId);
+      detailedCardFragment.setArguments(args);
     }
 
-    // TODO: configure DetailFragment with card data
     getChildFragmentManager()
         .beginTransaction()
         .add(R.id.overlayFrameLayout, detailedCardFragment)
