@@ -2,67 +2,61 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/startfragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/startfragment"
     android:background="@mipmap/ic_launcher_gwent_background"
     tools:context=".views.startMenu.StartFragment">
 
     <Button
         android:id="@+id/joinGameButton"
-        android:layout_width="0dp"
+        android:layout_width="132dp"
         android:layout_height="49dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:text="Join Game"
         app:layout_constraintEnd_toEndOf="@+id/startGameButton"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/startGameButton"
         app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
 
     <Button
         android:id="@+id/action_settings"
-        android:layout_width="0dp"
+        android:layout_width="132dp"
         android:layout_height="49dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="32dp"
         android:text="Settings"
         app:layout_constraintEnd_toEndOf="@+id/joinGameButton"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/joinGameButton"
-        app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+        app:layout_constraintTop_toBottomOf="@+id/joinGameButton" />
 
     <Button
         android:id="@+id/rulesButton"
-        android:layout_width="0dp"
+        android:layout_width="132dp"
         android:layout_height="49dp"
-        android:layout_marginTop="248dp"
+        android:layout_marginTop="32dp"
         android:text="Rules"
         app:layout_constraintEnd_toEndOf="@+id/action_settings"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/action_settings"
-        app:layout_constraintTop_toBottomOf="@+id/startGameButton" />
+        app:layout_constraintTop_toBottomOf="@+id/action_settings" />
 
     <Button
         android:id="@+id/startGameButton"
         android:layout_width="wrap_content"
         android:layout_height="49dp"
-        android:layout_marginBottom="488dp"
+        android:layout_marginTop="64dp"
         android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="516dp"
-        android:layout_height="365dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="138dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher_gwent_foreground"
-        app:layout_constraintBottom_toTopOf="@+id/startGameButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
