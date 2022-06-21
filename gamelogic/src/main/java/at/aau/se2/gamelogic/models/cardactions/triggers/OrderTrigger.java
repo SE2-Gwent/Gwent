@@ -2,6 +2,7 @@ package at.aau.se2.gamelogic.models.cardactions.triggers;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.actions.TargetRowAction;
 import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
 
@@ -24,6 +25,9 @@ public class OrderTrigger {
     this.remCoolDown = zeal ? 0 : coolDown;
     this.zeal = zeal;
   }
+
+  @Keep
+  public OrderTrigger() {}
 
   public ArrayList<TargetRowAction> getTargetRowActions() {
     return targetRowActions;

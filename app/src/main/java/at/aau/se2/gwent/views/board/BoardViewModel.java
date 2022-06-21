@@ -18,7 +18,7 @@ import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
-import at.aau.se2.gwent.util.DebugHelper;
+import at.aau.se2.gwent.util.DeckGeneration;
 
 public class BoardViewModel extends ViewModel
     implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
@@ -125,7 +125,7 @@ public class BoardViewModel extends ViewModel
 
   @Override
   public ArrayList<Card> needsCardDeck() {
-    return DebugHelper.generateTestCards();
+    return DeckGeneration.generateCardDeck();
   }
 
   // Getters & Setters

@@ -81,7 +81,11 @@ public class GameDebugViewModel extends ViewModel
 
   @Override
   public ArrayList<Card> needsCardDeck() {
-    return DebugHelper.generateTestCards();
+    try {
+      return DebugHelper.generateTestCards();
+    } catch (Exception e) {
+      return new ArrayList<>();
+    }
   }
 
   private void createCurrentViewState() {

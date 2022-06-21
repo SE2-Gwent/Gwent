@@ -2,6 +2,8 @@ package at.aau.se2.gamelogic.models.cardactions.actions;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
+
 /** This class is used to implement actions which target units (damage, heal, boost, swap) */
 public class TargetUnitAction {
   /**
@@ -54,6 +56,9 @@ public class TargetUnitAction {
     this.targetsEnemyUnits = targetsEnemyUnits;
     this.actionType = actionType;
   }
+
+  @Keep
+  public TargetUnitAction() {}
 
   public int getTargetingCardUUID() {
     return targetingCardUUID;

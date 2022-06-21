@@ -3,12 +3,12 @@ package at.aau.se2.gwent.util;
 import java.util.ArrayList;
 
 import at.aau.se2.gamelogic.models.Card;
-import at.aau.se2.gamelogic.models.CardType;
 
 public class DebugHelper {
 
-  public static ArrayList<Card> generateTestCards() {
-    ArrayList<Card> testCards = new ArrayList<>();
+  public static ArrayList<Card> generateTestCards() throws Exception {
+    return DeckGeneration.generateCardDeck();
+    /*ArrayList<Card> testCards = new ArrayList<>();
     for (int i = 1; i <= 25; i++) {
       testCards.add(
           new Card(
@@ -24,6 +24,6 @@ public class DebugHelper {
               "rm_ard_feainn_crossbow_man_detail"));
     }
 
-    return testCards;
+    return testCards;*/
   }
 }

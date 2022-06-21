@@ -182,8 +182,11 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       if (isOpponent) {
         cardView.showAsPlaceholder(false);
       } else {
-        cardView.setupWithCard(
-            entry.getKey(), card.getPower(), card.getName(), R.drawable.aguara_basic);
+        final int imageRessourceID =
+            getResources()
+                .getIdentifier(
+                    card.getImgResourceBasic(), "drawable", getContext().getPackageName());
+        cardView.setupWithCard(entry.getKey(), card.getPower(), card.getName(), imageRessourceID);
         cardView.setOnClickListener(
             view -> {
               CardView clickedCardView = (CardView) view;
@@ -218,9 +221,11 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       if (card == null) continue;
 
       CardView cardView = new CardView(getContext(), null);
-      // TODO: Replace drawable with cards drawable
+      final int imageRessourceID =
+          getResources()
+              .getIdentifier(card.getImgResourceBasic(), "drawable", getContext().getPackageName());
       cardView.setupWithCard(
-          card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.aguara_basic);
+          card.getFirebaseId(), card.getPower(), card.getName(), imageRessourceID);
       rowLayout.getRoot().removeViewAt(i);
       rowLayout.getRoot().addView(cardView, i);
       cardView.setOnClickListener(
