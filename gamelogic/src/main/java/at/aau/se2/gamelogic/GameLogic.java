@@ -321,7 +321,6 @@ public class GameLogic {
           Log.w(TAG, "Only one Player has choosen his deck");
           return;
         }
-        // TODO wichtig lastSavedActionSize (call)
         InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
         if (gameStateMachine.roundCanStart()) {
           lastSavedActionSize = syncRoot.getSyncActions().size();
@@ -351,8 +350,15 @@ public class GameLogic {
 
       case START_PLAYER_TURN:
         updateBoardState();
-        // syncActionUtil methode hier auslesen
-        // listener für vibrations (eigenen Listener schreiben only gamelogic)
+
+        InitialPlayer playerToVibrate = SyncActionUtil.findVibrationOn2ndDevice(newSyncActions);
+        if (playerToVibrate != null) {
+          lastSavedActionSize = syncRoot.getSyncActions().size();
+          if (whoAmI == playerToVibrate) {
+            notifyVibrationActionListener();
+          }
+        }
+
         if (!bothPlayerHavePlayed()) {
           Log.w(TAG, "Not both players played");
           return;
@@ -896,30 +902,12 @@ public class GameLogic {
     return currentPlayer.isHasPassed() && opponent.isHasPassed();
   }
 
-  /* private int whoStarted() {
-      int yourHero = Hero.getId();
-      if () {
-
-      }
-      //checks if you started the gema
-      //the one who started the game is automatically 'Gerald', the other one is 'Tress'
-
+  private void sendVibrationAction() {
+    notifyVibrationActionListener();
+    connector.sendSyncAction(new SyncAction(SyncAction.Type.VIBRATION, whoAmI.other().name()));
   }
 
-  private int heroAbility() {
-
-      if () {
-      } // Cooldown = 1 Round
-      if (Calls whoStarted == Gerald) {
-          //Ability = remove 2 Points at every Card
-
-      } else {
-          //Wenn whoStarted nicht Gerald ist, ist der Hero Tress
-          //Abitlity = heal/add 2 Point at every Card
-      }
-  */
-
-  private void sendVibrationAction() {
+  private void notifyVibrationActionListener() {
     for (UIActionListener actionListener : uiActionListenerArrayList) {
       actionListener.sendVibration();
     }
