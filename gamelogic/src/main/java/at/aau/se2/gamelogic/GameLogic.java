@@ -250,11 +250,23 @@ public class GameLogic {
    * If cards exceed 10, difference will get added to mulligans;
    */
   private void drawCards() {
-    ArrayList<Card> cardDeck = new ArrayList(gameField.getCardDeck(whoAmI).values());
-    ArrayList<Card> playersCards = new ArrayList(gameField.getCurrentHandCardsFor(whoAmI).values());
+    if (whoAmI != InitialPlayer.INITIATOR) return;
+
+    for (InitialPlayer player : InitialPlayer.values()) {
+      ArrayList<Card> cardDeck = new ArrayList(gameField.getCardDeck(player).values());
+      ArrayList<Card> playersCards =
+          new ArrayList(gameField.getCurrentHandCardsFor(player).values());
+
+      playersCards = drawCardsFor(cardDeck, playersCards);
+
+      gameField.setPlayingCardsFor(player, playersCards);
+    }
+  }
+
+  private ArrayList<Card> drawCardsFor(ArrayList<Card> cardDeck, ArrayList<Card> playersCards) {
     if (cardDeck.size() < HAND_CARD_NUMBER) {
       Log.w(TAG, "CardDecks not setup");
-      return;
+      return new ArrayList<>();
     }
 
     int maxCardsInHand = HAND_CARD_NUMBER;
@@ -275,7 +287,7 @@ public class GameLogic {
       playersCards.add(card);
     }
 
-    gameField.setPlayingCardsFor(whoAmI, playersCards);
+    return playersCards;
   }
 
   // Need to do it person per person to prevent race-condidition, where both players
@@ -346,16 +358,25 @@ public class GameLogic {
         if (gameStateMachine.roundCanStart()) {
           lastSavedActionSize = syncRoot.getSyncActions().size();
           this.startingPlayer = startingPlayer;
+          handleGameSyncUpdates(syncRoot); // trigger that draw cards get accessed
         }
         break;
 
       case DRAW_CARDS:
         if (gameField == null || gameField.getCurrentPlayer() == null) return;
-        drawCards();
 
-        if (gameStateMachine.cardsDrawn()) {
-          connector.syncGameField(this.gameField);
+        if (whoAmI == InitialPlayer.INITIATOR) {
+          drawCards();
+          if (gameStateMachine.cardsDrawn()) {
+            connector.syncGameField(this.gameField);
+          }
+        } else {
+          // opponent gets cards drawn by initiator
+          if (gameField.getCurrentHandCards().hasDecksForBothPlayers()) {
+            gameStateMachine.cardsDrawn();
+          }
         }
+
         break;
 
       case MULLIGAN_CARDS:
