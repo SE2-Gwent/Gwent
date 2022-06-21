@@ -2,6 +2,7 @@ package at.aau.se2.gwent.views.board;
 
 import java.util.HashMap;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.models.Card;
@@ -42,8 +43,10 @@ public class BoardViewData implements Cloneable {
   private int opponentRoundsWon;
   private GameState currentGameState;
   private String gameId;
+  // TODO: replace with value from gamelogic, when hero is implemented
+  private boolean heroEnabled = true;
 
-  public BoardViewData(GameField gameField, GameLogic gameLogic) {
+  public BoardViewData(@NonNull GameField gameField, @NonNull GameLogic gameLogic) {
     Player currentPlayer = gameField.getPlayer(gameLogic.getWhoAmI());
     Player opponent = gameField.getPlayer(gameLogic.getWhoAmI().other());
 
@@ -140,6 +143,10 @@ public class BoardViewData implements Cloneable {
 
   public GameState getCurrentGameState() {
     return currentGameState;
+  }
+
+  public boolean isHeroEnabled() {
+    return heroEnabled;
   }
 
   public String getGameId() {

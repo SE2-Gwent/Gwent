@@ -68,6 +68,10 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickHero() {
+    // TODO: Call hero ability
+  }
+
   public void didClickRowCard(String cardId) {}
 
   public void cancelMulligan() {
@@ -75,8 +79,6 @@ public class BoardViewModel extends ViewModel
   }
 
   public void playSelectedCard(RowType rowType, int location) {
-    // TODO: change when deploy mechanic is merged
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
@@ -99,6 +101,8 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
+    if (gameField == null) return;
+
     BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
     notifyStateChange(boardViewState);

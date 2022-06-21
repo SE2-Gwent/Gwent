@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -106,6 +107,17 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_board_fragment_to_game_debug_fragment);
         });
+
+    binding.currentHeroButton.setOnClickListener(
+        view -> {
+          viewModel.didClickHero();
+        });
+
+    binding.opponentHeroButton.setOnClickListener(
+        view -> {
+          // we could show here some information about hero
+          Toast.makeText(getContext(), R.string.this_is_triss_merigold, Toast.LENGTH_SHORT).show();
+        });
   }
 
   private void updateUI(BoardViewData viewData) {
@@ -160,6 +172,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       // TODO: selection for rowCardViews
     }
 
+    binding.currentHeroButton.setEnabled(viewData.isHeroEnabled());
     binding.pointView.bind(viewData);
   }
 
