@@ -1,6 +1,7 @@
 package at.aau.se2.gamelogic;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -440,7 +441,7 @@ public class GameLogic {
     // TODO: check action and execute
     switch (myHero.getHeroAction()) {
       case ATTACK:
-          if (gameField.cardCountForPlayer(whoAmI.other()) == 0) return;
+        if (gameField.cardCountForPlayer(whoAmI.other()) == 0) return;
         ArrayList<TargetUnitAction> actions = new ArrayList<>();
         actions.add(
             new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE));
@@ -451,7 +452,7 @@ public class GameLogic {
         if (gameField.cardCountForPlayer(whoAmI) == 0) return;
         actions = new ArrayList<>();
         actions.add(
-                new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.HEAL));
+            new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.HEAL));
         performTargetUnitActions(actions);
         break;
     }
@@ -616,7 +617,6 @@ public class GameLogic {
    * @param damageAction
    */
   private void damageTargetCard(Card targetCard, TargetUnitAction damageAction) {
-    targetCard.setPower(targetCard.getPower() - damageAction.getPoints());
     targetCard.setPowerDiff(targetCard.getPowerDiff() - damageAction.getPoints());
 
     checkForDestroyedCards();
@@ -631,19 +631,7 @@ public class GameLogic {
    * @param healAction
    */
   private void healTargetCard(Card targetCard, TargetUnitAction healAction) {
-    if (targetCard.getPowerDiff() < 0) {
-      if ((targetCard.getPowerDiff() + healAction.getPoints()) <= 0) {
-        targetCard.setPower(targetCard.getPower() + healAction.getPoints());
-        targetCard.setPowerDiff(targetCard.getPowerDiff() + healAction.getPoints());
-      } else {
-        /*
-         * here we subtract, because powerDiff is neg. when the card is dmg. (results in
-         * increasing the cards power to it's initial power)
-         */
-        targetCard.setPower(targetCard.getPower() - targetCard.getPowerDiff());
-        targetCard.setPowerDiff(0);
-      }
-    }
+    targetCard.setPowerDiff(min(0, targetCard.getPowerDiff() + healAction.getPoints()));
   }
 
   /**
@@ -654,7 +642,6 @@ public class GameLogic {
    * @param boostAction
    */
   private void boostTargetCard(Card targetCard, TargetUnitAction boostAction) {
-    targetCard.setPower(targetCard.getPower() + boostAction.getPoints());
     targetCard.setPowerDiff(targetCard.getPowerDiff() + boostAction.getPoints());
   }
 
@@ -763,7 +750,6 @@ public class GameLogic {
                 }
               }
 
-              maxPowerCard.setPower(maxPowerCard.getPower() - 2);
               maxPowerCard.setPowerDiff(maxPowerCard.getPowerDiff() - 2);
             }
             break;
@@ -777,7 +763,6 @@ public class GameLogic {
                 }
               }
 
-              minPowerCard.setPower(minPowerCard.getPower() - 2);
               minPowerCard.setPowerDiff(minPowerCard.getPowerDiff() - 2);
             }
             break;
@@ -786,7 +771,6 @@ public class GameLogic {
               Collections.shuffle(currentCardsOnRow);
 
               Card randomCardOnRow = currentCardsOnRow.get(0);
-              randomCardOnRow.setPower(randomCardOnRow.getPower() - 2);
               randomCardOnRow.setPowerDiff(randomCardOnRow.getPowerDiff() - 2);
             }
         }
