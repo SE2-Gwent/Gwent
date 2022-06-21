@@ -36,5 +36,6 @@
     <string name="you_have_won">You have won!</string>
     <string name="opponents_has_won">Your opponent has won!</string>
     <string name="this_is_triss_merigold">"This is Triss Merigold, your opponent"</string>
+    <string name="this_is_gerald_riva">This is Gerald of Riva, your opponent</string>
 
 </resources>

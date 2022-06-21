@@ -116,7 +116,11 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     binding.opponentHeroButton.setOnClickListener(
         view -> {
           // we could show here some information about hero
-          Toast.makeText(getContext(), R.string.this_is_triss_merigold, Toast.LENGTH_SHORT).show();
+          Toast.makeText(
+                  getContext(),
+                  viewModel.getCurrentState().getValue().getMyHeroView().other().getAlertText(),
+                  Toast.LENGTH_SHORT)
+              .show();
         });
   }
 

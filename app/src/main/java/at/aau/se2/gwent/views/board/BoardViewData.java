@@ -41,6 +41,10 @@ public class BoardViewData implements Cloneable {
           : R.drawable.button_round_hero_triss_background;
     }
 
+    public @StringRes int getAlertText() {
+      return this == GERALD ? R.string.this_is_gerald_riva : R.string.this_is_triss_merigold;
+    }
+
     public HeroView other() {
       return this == GERALD ? TRISS : GERALD;
     }
