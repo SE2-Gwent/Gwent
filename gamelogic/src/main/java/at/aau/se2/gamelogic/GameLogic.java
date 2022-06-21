@@ -432,7 +432,35 @@ public class GameLogic {
 
   // Hero Actions
 
-  public void activateHeroAction() {}
+  public void activateHeroAction() {
+    Hero myHero = gameField.getHeroFor(whoAmI);
+    if (myHero == null) return;
+    if (myHero.isOnCooldown()) return;
+
+    // TODO: check action and execute
+    switch (myHero.getHeroAction()) {
+      case ATTACK:
+          if (gameField.cardCountForPlayer(whoAmI.other()) == 0) return;
+        ArrayList<TargetUnitAction> actions = new ArrayList<>();
+        actions.add(
+            new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE));
+        performTargetUnitActions(actions);
+        break;
+
+      case HEAL:
+        if (gameField.cardCountForPlayer(whoAmI) == 0) return;
+        actions = new ArrayList<>();
+        actions.add(
+                new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.HEAL));
+        performTargetUnitActions(actions);
+        break;
+    }
+
+    myHero.didActivateAction(); // sets cooldown
+    // TODO: let other device vibrate @max
+
+    connector.syncGameField(gameField);
+  }
 
   // Card Actions
 

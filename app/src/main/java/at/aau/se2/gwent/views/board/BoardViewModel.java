@@ -69,7 +69,7 @@ public class BoardViewModel extends ViewModel
   }
 
   public void didClickHero() {
-    // TODO: Call hero ability
+    gameLogic.activateHeroAction();
   }
 
   public void didClickRowCard(String cardId) {}

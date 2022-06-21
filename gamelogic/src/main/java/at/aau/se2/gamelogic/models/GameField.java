@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 import android.util.Log;
 import androidx.annotation.Keep;
@@ -101,6 +102,10 @@ public class GameField {
     cardDecks.setDeck(player, cards);
   }
 
+  public int cardCountForPlayer(InitialPlayer player) {
+    return getRows().meleeRowFor(player).size() + getRows().rangedRowFor(player).size();
+  }
+
   public GameFieldRows getRows() {
     return rows;
   }
@@ -151,5 +156,9 @@ public class GameField {
 
   public void setCardDecks(CardDecks cardDecks) {
     this.cardDecks = cardDecks;
+  }
+
+  public Hero getHeroFor(InitialPlayer initialPlayer) {
+    return heroes.get(initialPlayer.name());
   }
 }
