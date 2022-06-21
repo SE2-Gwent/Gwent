@@ -19,7 +19,7 @@ public class GameField {
   private CardDecks cardDecks = new CardDecks();
   // Cards the player should get displayed in their hand
   private CardDecks currentHandCards = new CardDecks();
-  private HashMap<String, Hero> heroes;
+  private HashMap<String, Hero> heroes = new HashMap();
 
   @Keep
   public GameField() {}
