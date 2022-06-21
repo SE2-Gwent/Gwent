@@ -21,6 +21,13 @@ public class CardRowHelper {
     }
   }
 
+  // TODO: Replace when merging with `makeAllCardsPlaceholder`
+  public static void showCardsAsPlaceholder(ArrayList<CardView> cardViews) {
+    for (CardView cardView : cardViews) {
+      cardView.showAsPlaceholder(true);
+    }
+  }
+
   public static void setCardsVisibilityForPlaceholders(
       ArrayList<CardView> cardViews, int visibility) {
     for (CardView cardView : cardViews) {

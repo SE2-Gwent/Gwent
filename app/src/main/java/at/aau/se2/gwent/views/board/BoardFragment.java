@@ -124,8 +124,21 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         });
   }
 
+  private void resetCardRowsToInitialState() {
+    for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+      CardRowHelper.showCardsAsPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsOnClickListener(cardViews, this);
+    }
+    for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+      CardRowHelper.showCardsAsPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+    }
+  }
+
   private void updateUI(BoardViewData viewData) {
     if (viewData.isGameFieldDirty()) {
+      resetCardRowsToInitialState();
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
       updateCurrentHandCardRow(
