@@ -75,7 +75,13 @@ public class DetailedCardFragment extends Fragment {
 
   // update textColor of textView power according to powerDiff
   private void updateColorCardPower(int powerDiff) {
-    int color = powerDiff == 0 ? R.color.green : R.color.red;
+    int color = R.color.green;
+    if (powerDiff < 0) {
+      color = R.color.red;
+    } else if (powerDiff > 0) {
+      color = R.color.light_blue_400;
+    }
+
     binding.cardPower.setTextColor(getResources().getColor(color, null));
   }
 
