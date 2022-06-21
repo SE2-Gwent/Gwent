@@ -9,7 +9,7 @@ public class Hero {
   public static final TargetUnitAction ACTION_GERALD =
       new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE);
   public static final TargetUnitAction ACTION_TRISS =
-      new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.BOOST);
+      new TargetUnitAction(3, 1, true, true, false, TargetUnitAction.ActionType.BOOST);
 
   public enum Action {
     ATTACK,
