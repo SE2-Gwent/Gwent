@@ -443,16 +443,14 @@ public class GameLogic {
       case ATTACK:
         if (gameField.cardCountForPlayer(whoAmI.other()) == 0) return;
         ArrayList<TargetUnitAction> actions = new ArrayList<>();
-        actions.add(
-            new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE));
+        actions.add(Hero.ACTION_GERALD);
         performTargetUnitActions(actions);
         break;
 
       case HEAL:
         if (gameField.cardCountForPlayer(whoAmI) == 0) return;
         actions = new ArrayList<>();
-        actions.add(
-            new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.HEAL));
+        actions.add(Hero.ACTION_TRISS);
         performTargetUnitActions(actions);
         break;
     }
@@ -596,6 +594,8 @@ public class GameLogic {
             damageTargetCard(card, targetUnitAction);
             break;
           case HEAL:
+            // TODO: What happens, when random selected card is not damaged? Does not heal and does
+            // notify about that problem
             healTargetCard(card, targetUnitAction);
             break;
           case BOOST:

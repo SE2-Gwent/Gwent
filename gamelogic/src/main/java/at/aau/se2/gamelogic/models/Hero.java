@@ -3,8 +3,14 @@ package at.aau.se2.gamelogic.models;
 import static java.lang.Math.max;
 
 import androidx.annotation.Keep;
+import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
 
 public class Hero {
+  public static final TargetUnitAction ACTION_GERALD =
+      new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE);
+  public static final TargetUnitAction ACTION_TRISS =
+      new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.BOOST);
+
   public enum Action {
     ATTACK,
     HEAL
