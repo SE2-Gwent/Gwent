@@ -183,7 +183,8 @@ public class GameLogicTest {
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockSyncRoot.getLastActions(eq(0)))
         .thenReturn(new ArrayList(Collections.singletonList(startingSyncAction)));
-    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
+    when(mockGameStateMachine.getCurrent())
+        .thenReturn(GameState.START_GAME_ROUND, GameState.WAIT_FOR_OPPONENT);
     when(mockGameStateMachine.roundCanStart()).thenReturn(true);
 
     sut.handleGameSyncUpdates(mockSyncRoot);
