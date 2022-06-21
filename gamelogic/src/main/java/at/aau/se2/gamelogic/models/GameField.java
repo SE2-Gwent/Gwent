@@ -101,10 +101,6 @@ public class GameField {
     cardDecks.setDeck(player, cards);
   }
 
-  public int cardCountForPlayer(InitialPlayer player) {
-    return getRows().meleeRowFor(player).size() + getRows().rangedRowFor(player).size();
-  }
-
   public GameFieldRows getRows() {
     return rows;
   }
@@ -159,5 +155,9 @@ public class GameField {
 
   public Hero getHeroFor(InitialPlayer initialPlayer) {
     return heroes.get(initialPlayer.name());
+  }
+
+  public boolean canHeroUseAction(InitialPlayer player) {
+    return !getHeroFor(player).isOnCooldown() && getHeroFor(player).cardsForActionArePresent(rows);
   }
 }

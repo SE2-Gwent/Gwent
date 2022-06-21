@@ -445,14 +445,14 @@ public class GameLogic {
     // TODO: check action and execute
     switch (myHero.getHeroAction()) {
       case ATTACK:
-        if (gameField.cardCountForPlayer(whoAmI.other()) == 0) return;
+        if (!myHero.cardsForActionArePresent(gameField.getRows())) return;
         ArrayList<TargetUnitAction> actions = new ArrayList<>();
         actions.add(Hero.ACTION_GERALD);
         performTargetUnitActions(actions);
         break;
 
       case HEAL:
-        if (gameField.cardCountForPlayer(whoAmI) == 0) return;
+        if (!myHero.cardsForActionArePresent(gameField.getRows())) return;
         actions = new ArrayList<>();
         actions.add(Hero.ACTION_TRISS);
         performTargetUnitActions(actions);

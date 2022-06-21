@@ -11,6 +11,18 @@ public class Hero {
   public static final TargetUnitAction ACTION_TRISS =
       new TargetUnitAction(3, 1, true, true, false, TargetUnitAction.ActionType.BOOST);
 
+  public boolean cardsForActionArePresent(GameFieldRows rows) {
+    switch (heroAction) {
+      case ATTACK:
+        return rows.cardCountForPlayer(InitialPlayer.OPPONENT) > 0;
+      case HEAL:
+        ;
+        return rows.cardCountForPlayer(InitialPlayer.INITIATOR) > 0;
+    }
+
+    return false;
+  }
+
   public enum Action {
     ATTACK,
     HEAL

@@ -59,8 +59,7 @@ public class BoardViewData implements Cloneable {
   private int opponentRoundsWon;
   private GameState currentGameState;
   private String gameId;
-  // TODO: replace with value from gamelogic, when hero is implemented
-  private boolean heroEnabled = true;
+  private boolean heroEnabled;
   private HeroView myHeroView;
 
   public BoardViewData(@NonNull GameField gameField, @NonNull GameLogic gameLogic) {
@@ -82,7 +81,7 @@ public class BoardViewData implements Cloneable {
     this.opponentRoundsWon = (opponent != null) ? opponent.getCurrentMatchPoints() : 0;
     this.currentGameState = gameLogic.getCurrentGameState();
     this.gameId = String.valueOf(gameLogic.getGameId());
-    this.heroEnabled = !gameField.getHeroFor(whoAmI).isOnCooldown();
+    this.heroEnabled = gameField.canHeroUseAction(whoAmI);
     this.myHeroView = whoAmI == InitialPlayer.INITIATOR ? HeroView.GERALD : HeroView.TRISS;
 
     isGameFieldDirty = true;

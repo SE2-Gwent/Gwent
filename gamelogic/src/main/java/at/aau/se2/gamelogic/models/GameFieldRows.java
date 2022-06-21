@@ -77,6 +77,10 @@ public class GameFieldRows {
     return true;
   }
 
+  public int cardCountForPlayer(InitialPlayer player) {
+    return meleeRowFor(player).size() + rangedRowFor(player).size();
+  }
+
   /*
   IMPORTANT NOTE: Pay close attention when calling the getter methods! Normally the getter functions,
   which return the HashMap don't belong here (they should be within the Row Class)!
