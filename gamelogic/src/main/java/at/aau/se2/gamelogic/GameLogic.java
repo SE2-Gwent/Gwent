@@ -287,6 +287,10 @@ public class GameLogic {
   private void turnReset() {
     gameField.getCurrentPlayer().setHasLastPlayed(false);
     gameField.getOpponent().setHasLastPlayed(false);
+
+    // decrease cooldowns for heroes
+    Hero hero = gameField.getHeroFor(whoAmI);
+    if (hero != null) hero.decreaseCooldown();
   }
 
   private void roundReset() {
