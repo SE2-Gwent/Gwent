@@ -11,6 +11,7 @@ import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.GameLogicDataProvider;
 import at.aau.se2.gamelogic.GameStateCallback;
+import at.aau.se2.gamelogic.UIActionListener;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
@@ -21,10 +22,11 @@ import at.aau.se2.gwent.Environment;
 import at.aau.se2.gwent.util.DebugHelper;
 
 public class BoardViewModel extends ViewModel
-    implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
+    implements GameFieldObserver, GameLogicDataProvider, GameStateCallback, UIActionListener {
 
   public enum Event {
     SHOW_MULLIGAN,
+    VIBRATE,
     SHOW_WINNER
   }
 
@@ -39,6 +41,7 @@ public class BoardViewModel extends ViewModel
     gameLogic.registerGameFieldListener(this);
     gameLogic.setGameLogicDataProvider(this);
     gameLogic.getGameStateMachine().registerListener(this);
+    gameLogic.registeruiActionListener(this);
   }
 
   public void didClickPrimaryButton() {
@@ -68,6 +71,10 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickHero() {
+    gameLogic.activateHeroAction();
+  }
+
   public void didClickRowCard(String cardId) {}
 
   public void cancelMulligan() {
@@ -75,8 +82,6 @@ public class BoardViewModel extends ViewModel
   }
 
   public void playSelectedCard(RowType rowType, int location) {
-    // TODO: change when deploy mechanic is merged
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
@@ -99,6 +104,8 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
+    if (gameField == null) return;
+
     BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
     notifyStateChange(boardViewState);
@@ -121,6 +128,12 @@ public class BoardViewModel extends ViewModel
       default:
         break;
     }
+  }
+
+  @Override
+  public void sendVibration() {
+    Log.v(TAG, "VIBRATE VIBRATE VIBRATE ");
+    actionLiveData.setValue(new SingleEvent<>(Event.VIBRATE));
   }
 
   @Override

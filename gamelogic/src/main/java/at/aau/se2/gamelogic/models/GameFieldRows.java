@@ -77,6 +77,19 @@ public class GameFieldRows {
     return true;
   }
 
+  public int cardCountForPlayer(InitialPlayer player) {
+    return meleeRowFor(player).size() + rangedRowFor(player).size();
+  }
+
+  public void cleanRows() {
+    Row[] rows = {p1MeleeRow, p1RangeRow, p2MeleeRow, p2RangeRow};
+    for (Row row : rows) {
+      row.getPlayerRow().clear();
+      row.setRemainingStatusRounds(0);
+      row.setRowStatus(null);
+    }
+  }
+
   /*
   IMPORTANT NOTE: Pay close attention when calling the getter methods! Normally the getter functions,
   which return the HashMap don't belong here (they should be within the Row Class)!
