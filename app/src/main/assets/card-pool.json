@@ -114,12 +114,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage target enemy unit by 5.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "6_index" : {
                "targetingCardUUID":5,
                "points":5,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -139,12 +139,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Destroy target enemy unit.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "7_index" : {
                "targetingCardUUID":6,
                "points":2147483647,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -164,7 +164,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage up to 3 random enemy units by 2.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "8_index" : {
                "targetingCardUUID":7,
                "points":2,
@@ -189,12 +189,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage target enemy unit by 4.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "9_index" : {
                "targetingCardUUID":8,
                "points":4,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -214,7 +214,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage up to 4 random enemy units by 1.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "10_index" : {
                "targetingCardUUID":9,
                "points":1,
@@ -239,12 +239,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Move up to 3 target units to the other row.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "11_index" : {
                "targetingCardUUID":10,
                "points":0,
                "numTargets":3,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":true,
                "actionType":"SWAP"
@@ -264,12 +264,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Move target unit to the other row.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "12_index" : {
                "targetingCardUUID":11,
                "points":0,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":true,
                "actionType":"SWAP"
@@ -289,7 +289,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage up to 2 random enemy units by 2.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "13_index" : {
                "targetingCardUUID":12,
                "points":2,
@@ -314,12 +314,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage target enemy unit by 4.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "14_index" : {
                "targetingCardUUID":13,
                "points":4,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -339,12 +339,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Boost target allied unit by 2.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "15_index" : {
                "targetingCardUUID":14,
                "points":2,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"BOOST"
@@ -364,13 +364,13 @@
       "powerDiff":0,
       "cardText":"Deploy: Move up to 2 target units to the other row.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "16_index" : {
                "targetingCardUUID":15,
                "points":0,
                "numTargets":2,
-               "randomTargets":false,
-               "targetsAlliedUnits":true,
+               "randomTargets":true,
+               "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"SWAP"
             }
@@ -389,7 +389,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage up to 4 random enemy units by 2.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "17_index" : {
                "targetingCardUUID":16,
                "points":2,
@@ -414,7 +414,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage 1 random enemy unit by 4.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "18_index" : {
                "targetingCardUUID":17,
                "points":4,
@@ -439,7 +439,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Damage up to 2 random enemy units by 2.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "19_index" : {
                "targetingCardUUID":18,
                "points":2,
@@ -464,12 +464,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Heal up to 4 target allied units full.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "20_index" : {
                "targetingCardUUID":19,
                "points":100,
                "numTargets":4,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"HEAL"
@@ -489,7 +489,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Move up to 6 random allied units to the other row.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "21_index" : {
                "targetingCardUUID":20,
                "points":0,
@@ -514,12 +514,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Boost target allied unit by 6.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "22_index" : {
                "targetingCardUUID":21,
                "points":6,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"BOOST"
@@ -539,12 +539,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Move target unit to the other row.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "23_index" : {
                "targetingCardUUID":22,
                "points":0,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":true,
                "actionType":"SWAP"
@@ -564,7 +564,7 @@
       "powerDiff":0,
       "cardText":"Deploy: Boost up to 2 random allied units by 2.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "24_index" : {
                "targetingCardUUID":23,
                "points":2,
@@ -589,12 +589,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Boost up to 3 target allied units by 4.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "25_index" : {
                "targetingCardUUID":24,
                "points":4,
                "numTargets":3,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"BOOST"
@@ -614,12 +614,12 @@
       "powerDiff":0,
       "cardText":"Deploy: Heal up to 2 target allied units full.",
       "deployTrigger":{
-         "targetRowActions": {
+         "targetUnitActions": {
             "26_index" : {
                "targetingCardUUID":25,
                "points":100,
                "numTargets":2,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"HEAL"
@@ -700,7 +700,7 @@
                "targetingCardUUID":28,
                "points":1,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"BOOST"
@@ -728,7 +728,7 @@
                "targetingCardUUID":29,
                "points":1,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -756,7 +756,7 @@
                "targetingCardUUID":30,
                "points":2,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -784,7 +784,7 @@
                "targetingCardUUID":31,
                "points":2147483647,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":false,
                "targetsEnemyUnits":true,
                "actionType":"DAMAGE"
@@ -812,7 +812,7 @@
                "targetingCardUUID":32,
                "points":1,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"HEAL"
@@ -840,7 +840,7 @@
                "targetingCardUUID":33,
                "points":100,
                "numTargets":1,
-               "randomTargets":false,
+               "randomTargets":true,
                "targetsAlliedUnits":true,
                "targetsEnemyUnits":false,
                "actionType":"HEAL"
