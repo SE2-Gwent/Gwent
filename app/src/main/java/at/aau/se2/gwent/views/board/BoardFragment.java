@@ -240,7 +240,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
             getResources()
                 .getIdentifier(
                     card.getImgResourceBasic(), "drawable", getContext().getPackageName());
-        cardView.setupWithCard(entry.getKey(), card.getPower(), card.getName(), imageRessourceID);
+        cardView.setupWithCard(
+            entry.getKey(), card.getCurrentAttackPoints(), card.getName(), imageRessourceID);
         cardView.setOnClickListener(
             view -> {
               CardView clickedCardView = (CardView) view;
@@ -279,7 +280,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           getResources()
               .getIdentifier(card.getImgResourceBasic(), "drawable", getContext().getPackageName());
       cardView.setupWithCard(
-          card.getFirebaseId(), card.getPower(), card.getName(), imageRessourceID);
+          card.getFirebaseId(), card.getCurrentAttackPoints(), card.getName(), imageRessourceID);
       rowLayout.getRoot().removeViewAt(i);
       rowLayout.getRoot().addView(cardView, i);
       cardView.setOnClickListener(

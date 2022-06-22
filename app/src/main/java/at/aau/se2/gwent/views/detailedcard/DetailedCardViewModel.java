@@ -50,7 +50,7 @@ public class DetailedCardViewModel extends ViewModel {
           new CardDetails(
               clickedCard.getName(),
               convertTypesToString(clickedCard.getTypes()),
-              clickedCard.getPower(),
+              clickedCard.getCurrentAttackPoints(),
               clickedCard.getPowerDiff(),
               clickedCard.getCardText(),
               clickedCard.getImgResourceDetail());
