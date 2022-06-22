@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import android.util.Log;
@@ -104,8 +105,7 @@ public class GameLogic {
 
               initializeGame(
                   new Player(1, InitialPlayer.INITIATOR),
-                  new CardDecks(new ArrayList<>(), new ArrayList<>()),
-                  new ArrayList<>());
+                  new CardDecks(new ArrayList<>(), new ArrayList<>()));
             }
 
             observer.finished(result);
@@ -235,12 +235,16 @@ public class GameLogic {
         new SyncAction(SyncAction.Type.STARTING_PLAYER, startingPlayer.name()));
   }
 
-  private void initializeGame(Player currentPlayer, CardDecks cardDecks, ArrayList<Hero> heroes) {
+  private void initializeGame(Player currentPlayer, CardDecks cardDecks) {
     if (!gameStateMachine.stateEquals(GameState.WAIT_FOR_OPPONENT)) {
       return;
     }
 
-    gameField = new GameField(new GameFieldRows(), currentPlayer, null, cardDecks, heroes);
+    HashMap<String, Hero> heros = new HashMap<>();
+    heros.put(InitialPlayer.INITIATOR.name(), new Hero(1, Hero.Action.ATTACK, 2));
+    heros.put(InitialPlayer.OPPONENT.name(), new Hero(2, Hero.Action.HEAL, 2));
+
+    gameField = new GameField(new GameFieldRows(), currentPlayer, null, cardDecks, heros);
 
     connector.syncGameField(gameField);
   }
@@ -313,6 +317,11 @@ public class GameLogic {
   private void turnReset() {
     gameField.getCurrentPlayer().setHasLastPlayed(false);
     gameField.getOpponent().setHasLastPlayed(false);
+
+    // decrease cooldowns for heroes
+    Hero hero = gameField.getHeroFor(whoAmI);
+    if (hero != null) hero.decreaseCooldown();
+
     currentPlayerCanPass = true;
     currentPlayerPlayCard = true;
   }
@@ -471,6 +480,36 @@ public class GameLogic {
     }
   }
 
+  // Hero Actions
+
+  public void activateHeroAction() {
+    Hero myHero = gameField.getHeroFor(whoAmI);
+    if (myHero == null) return;
+    if (myHero.isOnCooldown()) return;
+
+    switch (myHero.getHeroAction()) {
+      case ATTACK:
+        if (!myHero.cardsForActionArePresent(gameField.getRows())) return;
+        ArrayList<TargetUnitAction> actions = new ArrayList<>();
+        actions.add(Hero.ACTION_GERALD);
+        performTargetUnitActions(actions);
+        break;
+
+      case HEAL:
+        if (!myHero.cardsForActionArePresent(gameField.getRows())) return;
+        actions = new ArrayList<>();
+        actions.add(Hero.ACTION_TRISS);
+        performTargetUnitActions(actions);
+        break;
+    }
+
+    myHero.didActivateAction(); // sets cooldown
+    currentPlayerCanPass = false;
+    // TODO: let other device vibrate @max
+
+    connector.syncGameField(gameField);
+  }
+
   // Card Actions
 
   /**
@@ -604,6 +643,8 @@ public class GameLogic {
             damageTargetCard(card, targetUnitAction);
             break;
           case HEAL:
+            // TODO: What happens, when random selected card is not damaged? Does not heal and does
+            // notify about that problem
             healTargetCard(card, targetUnitAction);
             break;
           case BOOST:
@@ -625,7 +666,6 @@ public class GameLogic {
    * @param damageAction
    */
   private void damageTargetCard(Card targetCard, TargetUnitAction damageAction) {
-    targetCard.setPower(targetCard.getPower() - damageAction.getPoints());
     targetCard.setPowerDiff(targetCard.getPowerDiff() - damageAction.getPoints());
 
     checkForDestroyedCards();
@@ -640,19 +680,7 @@ public class GameLogic {
    * @param healAction
    */
   private void healTargetCard(Card targetCard, TargetUnitAction healAction) {
-    if (targetCard.getPowerDiff() < 0) {
-      if ((targetCard.getPowerDiff() + healAction.getPoints()) <= 0) {
-        targetCard.setPower(targetCard.getPower() + healAction.getPoints());
-        targetCard.setPowerDiff(targetCard.getPowerDiff() + healAction.getPoints());
-      } else {
-        /*
-         * here we subtract, because powerDiff is neg. when the card is dmg. (results in
-         * increasing the cards power to it's initial power)
-         */
-        targetCard.setPower(targetCard.getPower() - targetCard.getPowerDiff());
-        targetCard.setPowerDiff(0);
-      }
-    }
+    targetCard.setPowerDiff(min(0, targetCard.getPowerDiff() + healAction.getPoints()));
   }
 
   /**
@@ -663,7 +691,6 @@ public class GameLogic {
    * @param boostAction
    */
   private void boostTargetCard(Card targetCard, TargetUnitAction boostAction) {
-    targetCard.setPower(targetCard.getPower() + boostAction.getPoints());
     targetCard.setPowerDiff(targetCard.getPowerDiff() + boostAction.getPoints());
   }
 
@@ -716,33 +743,25 @@ public class GameLogic {
     HashMap<String, Card> p2MeleeRow = gameField.getRows().getMeleeRowForP2();
     HashMap<String, Card> p2RangedRow = gameField.getRows().getRangeRowForP2();
 
-    ArrayList<String> destroyedCardsUUIDs = new ArrayList<>();
-    for (Card card : p1MeleeRow.values()) {
-      if (card.getPower() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p1MeleeRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p1MeleeRow.remove(entry.getKey());
       }
     }
-    for (Card card : p1RangedRow.values()) {
-      if (card.getPower() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p1RangedRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p1RangedRow.remove(entry.getKey());
       }
     }
-    for (Card card : p2MeleeRow.values()) {
-      if (card.getPower() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p2MeleeRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p2MeleeRow.remove(entry.getKey());
       }
     }
-    for (Card card : p2RangedRow.values()) {
-      if (card.getPower() <= 0) {
-        destroyedCardsUUIDs.add(card.getFirebaseId());
+    for (Map.Entry<String, Card> entry : p2RangedRow.entrySet()) {
+      if (entry.getValue().getCurrentAttackPoints() <= 0) {
+        p2RangedRow.remove(entry.getKey());
       }
-    }
-
-    for (String cardUUID : destroyedCardsUUIDs) {
-      p1MeleeRow.remove(cardUUID);
-      p1RangedRow.remove(cardUUID);
-      p2MeleeRow.remove(cardUUID);
-      p2RangedRow.remove(cardUUID);
     }
   }
 
@@ -772,7 +791,6 @@ public class GameLogic {
                 }
               }
 
-              maxPowerCard.setPower(maxPowerCard.getPower() - 2);
               maxPowerCard.setPowerDiff(maxPowerCard.getPowerDiff() - 2);
             }
             break;
@@ -786,7 +804,6 @@ public class GameLogic {
                 }
               }
 
-              minPowerCard.setPower(minPowerCard.getPower() - 2);
               minPowerCard.setPowerDiff(minPowerCard.getPowerDiff() - 2);
             }
             break;
@@ -795,7 +812,6 @@ public class GameLogic {
               Collections.shuffle(currentCardsOnRow);
 
               Card randomCardOnRow = currentCardsOnRow.get(0);
-              randomCardOnRow.setPower(randomCardOnRow.getPower() - 2);
               randomCardOnRow.setPowerDiff(randomCardOnRow.getPowerDiff() - 2);
             }
         }

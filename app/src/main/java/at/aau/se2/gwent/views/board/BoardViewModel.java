@@ -68,6 +68,10 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickHero() {
+    gameLogic.activateHeroAction();
+  }
+
   public void didClickRowCard(String cardId) {}
 
   public void cancelMulligan() {
@@ -97,6 +101,8 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
+    if (gameField == null) return;
+
     BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
     notifyStateChange(boardViewState);

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -106,10 +107,38 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_board_fragment_to_game_debug_fragment);
         });
+
+    binding.currentHeroButton.setOnClickListener(
+        view -> {
+          viewModel.didClickHero();
+        });
+
+    binding.opponentHeroButton.setOnClickListener(
+        view -> {
+          // we could show here some information about hero
+          Toast.makeText(
+                  getContext(),
+                  viewModel.getCurrentState().getValue().getMyHeroView().other().getAlertText(),
+                  Toast.LENGTH_SHORT)
+              .show();
+        });
+  }
+
+  private void resetCardRowsToInitialState() {
+    for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+      CardRowHelper.makeAllPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsOnClickListener(cardViews, this);
+    }
+    for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+      CardRowHelper.makeAllPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+    }
   }
 
   private void updateUI(BoardViewData viewData) {
     if (viewData.isGameFieldDirty()) {
+      resetCardRowsToInitialState();
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
 
@@ -173,6 +202,11 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       // TODO: selection for rowCardViews
     }
 
+    binding.currentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().backgroundDrawable()));
+    binding.opponentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().other().backgroundDrawable()));
+    binding.currentHeroButton.setEnabled(viewData.isHeroEnabled());
     binding.pointView.bind(viewData);
   }
 
@@ -196,7 +230,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         cardView.showAsPlaceholder(false);
       } else {
         cardView.setupWithCard(
-            entry.getKey(), card.getPower(), card.getName(), R.drawable.aguara_basic);
+            entry.getKey(), card.getCurrentAttackPoints(), card.getName(), R.drawable.aguara_basic);
         cardView.setOnClickListener(
             view -> {
               CardView clickedCardView = (CardView) view;
@@ -233,7 +267,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       CardView cardView = new CardView(getContext(), null);
       // TODO: Replace drawable with cards drawable
       cardView.setupWithCard(
-          card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.aguara_basic);
+          card.getFirebaseId(),
+          card.getCurrentAttackPoints(),
+          card.getName(),
+          R.drawable.aguara_basic);
       rowLayout.getRoot().removeViewAt(i);
       rowLayout.getRoot().addView(cardView, i);
       cardView.setOnClickListener(
