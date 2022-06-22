@@ -43,14 +43,16 @@ public class CardView extends FrameLayout {
     this.cardId = cardId;
     pointTextView.setText(String.valueOf(attackPoints));
     nameTextView.setText(name);
-    cardImageView.setImageDrawable(getResources().getDrawable(cardImage));
+    if (cardImage != 0) {
+      cardImageView.setImageResource(cardImage);
+    }
     setAlpha(1.0F);
   }
 
   public void showAsPlaceholder(boolean transparent) {
     pointTextView.setText(null);
     nameTextView.setText(null);
-    cardImageView.setImageDrawable(getResources().getDrawable(R.drawable.card_background));
+    cardImageView.setImageResource(R.drawable.card_background);
     setAlpha(transparent ? 0.4F : 1.0F);
 
     cardId = null;
