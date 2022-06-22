@@ -52,20 +52,19 @@ public class DetailedCardViewModel extends ViewModel {
               convertTypesToString(clickedCard.getTypes()),
               clickedCard.getCurrentAttackPoints(),
               clickedCard.getPowerDiff(),
-              clickedCard.getCardText(),
+              getCardTextWhenNotRowAction(clickedCard),
               clickedCard.getImgResourceDetail());
 
       currentState.setValue(CardDetails.ViewState.LOADED);
     }
+  }
 
-    /*
-    Log.i(TAG, card.getName());
-    Log.i(TAG, card.getTypes());
-    Log.i(TAG, String.valueOf(card.getPower()));
-    Log.i(TAG, String.valueOf(card.getPowerDiff()));
-    Log.i(TAG, card.getCardText());
-    Log.i(TAG, card.getImgResourceName());
-    */
+  // Quick and dirty, do hide not implemented Row Actions from Card Description;
+  private String getCardTextWhenNotRowAction(Card card) {
+    if (card.getDeployTrigger() != null
+        && card.getDeployTrigger().getTargetRowActions() != null
+        && card.getDeployTrigger().getTargetRowActions().size() > 0) return "";
+    return card.getCardText();
   }
 
   public MutableLiveData<CardDetails.ViewState> getCurrentState() {
