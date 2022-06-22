@@ -57,12 +57,12 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
   // TODO Runden checken wieviel Cards angezeigt werden. (R0-6K, R1&2-3K)✅  visibility gone
   private void setUpUI() {
     if (viewModel.roundCounter() == 0) {
-      binding.mulliganCard1.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard2.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard3.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard4.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard5.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard6.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard1.showAsPlaceholder(false);
+      binding.mulliganCard2.showAsPlaceholder(false);
+      binding.mulliganCard3.showAsPlaceholder(false);
+      binding.mulliganCard4.showAsPlaceholder(false);
+      binding.mulliganCard5.showAsPlaceholder(false);
+      binding.mulliganCard6.showAsPlaceholder(false);
       binding.goBackButton.setOnClickListener(
           view -> {
             viewModel.didClickCancel();
@@ -76,9 +76,9 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
       binding.mulliganCard6.setOnClickListener(mulliganCardListener);
 
     } else if (viewModel.roundCounter() == 1 || viewModel.roundCounter() == 2) {
-      binding.mulliganCard1.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard2.setupWithCard("0", 0, "", R.drawable.card_background);
-      binding.mulliganCard3.setupWithCard("0", 0, "", R.drawable.card_background);
+      binding.mulliganCard1.showAsPlaceholder(false);
+      binding.mulliganCard2.showAsPlaceholder(false);
+      binding.mulliganCard3.showAsPlaceholder(false);
       binding.goBackButton.setOnClickListener(
           view -> {
             viewModel.didClickCancel();
@@ -138,7 +138,11 @@ public class MulliganCardFragment extends Fragment implements FragmentBackPressL
 
       CardView mulliganCardView = mulliganCardViews.get(i);
       mulliganCardView.setupWithCard(
-          String.valueOf(card.getId()), card.getPower(), card.getName(), resourceId);
+          String.valueOf(card.getId()),
+          card.getPower(),
+          card.getPowerDiff(),
+          card.getName(),
+          resourceId);
     }
     // TODO sollte sich schließen. (transfer to UpdateUI)✅
     if (!viewModel.hasMulligansLeft()) {
