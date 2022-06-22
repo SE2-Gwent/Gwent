@@ -213,6 +213,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     binding.opponentHeroButton.setBackground(
         getResources().getDrawable(viewData.getMyHeroView().other().backgroundDrawable()));
     binding.currentHeroButton.setEnabled(viewData.isHeroEnabled());
+    binding.opponentHeroButton.setEnabled(viewData.isOpponentHeroEnabled());
     binding.pointView.bind(viewData);
   }
 

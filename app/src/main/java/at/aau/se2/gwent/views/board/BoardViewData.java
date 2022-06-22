@@ -65,6 +65,7 @@ public class BoardViewData implements Cloneable {
   private GameState currentGameState;
   private String gameId;
   private boolean heroEnabled;
+  private boolean opponentHeroEnabled;
   private HeroView myHeroView;
 
   public BoardViewData(@NonNull GameField gameField, @NonNull GameLogic gameLogic) {
@@ -88,6 +89,7 @@ public class BoardViewData implements Cloneable {
     this.gameId = String.valueOf(gameLogic.getGameId());
     this.heroEnabled = gameField.canHeroUseAction(whoAmI);
     this.myHeroView = whoAmI == InitialPlayer.INITIATOR ? HeroView.GERALD : HeroView.TRISS;
+    this.opponentHeroEnabled = gameLogic.getCurrentGameState().equals(GameState.START_PLAYER_TURN);
 
     playerCanPlayCard = gameLogic.canCurrentPlayerPlayCard();
     isGameFieldDirty = true;
@@ -183,5 +185,9 @@ public class BoardViewData implements Cloneable {
 
   public boolean shouldShowCardPlaceholders() {
     return (selectedCardId != null) && playerCanPlayCard;
+  }
+
+  public boolean isOpponentHeroEnabled() {
+    return opponentHeroEnabled;
   }
 }

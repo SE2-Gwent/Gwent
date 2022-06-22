@@ -1,7 +1,5 @@
 package at.aau.se2.gwent.views.debug;
 
-import java.util.Objects;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,8 +73,7 @@ public class GameDebugFragment extends Fragment {
         });
     binding.mulliganCardButton.setOnClickListener(
         view -> {
-          Navigation.findNavController(
-                  getActivity(), R.id.nav_host_fragment_content_main)
+          Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_game_debug_fragment_to_mulliganCardFragment);
         });
     binding.roundDoneButton.setOnClickListener(
