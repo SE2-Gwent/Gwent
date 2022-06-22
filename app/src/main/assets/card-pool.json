@@ -112,7 +112,7 @@
       ],
       "power":3,
       "powerDiff":0,
-      "cardText":"Deploy: Damage target enemy unit by 5.",
+      "cardText":"Deploy: Damage random target enemy unit by 5.",
       "deployTrigger":{
          "targetUnitActions": {
             "6_index" : {
@@ -137,7 +137,7 @@
       ],
       "power":1,
       "powerDiff":0,
-      "cardText":"Deploy: Destroy target enemy unit.",
+      "cardText":"Deploy: Destroy random target enemy unit.",
       "deployTrigger":{
          "targetUnitActions": {
             "7_index" : {
@@ -187,7 +187,7 @@
       ],
       "power":4,
       "powerDiff":0,
-      "cardText":"Deploy: Damage target enemy unit by 4.",
+      "cardText":"Deploy: Damage random target enemy unit by 4.",
       "deployTrigger":{
          "targetUnitActions": {
             "9_index" : {
@@ -237,7 +237,7 @@
       ],
       "power":1,
       "powerDiff":0,
-      "cardText":"Deploy: Move up to 3 target units to the other row.",
+      "cardText":"Deploy: Move up to 3 random target units to the other row.",
       "deployTrigger":{
          "targetUnitActions": {
             "11_index" : {
@@ -262,7 +262,7 @@
       ],
       "power":7,
       "powerDiff":0,
-      "cardText":"Deploy: Move target unit to the other row.",
+      "cardText":"Deploy: Move random target unit to the other row.",
       "deployTrigger":{
          "targetUnitActions": {
             "12_index" : {
@@ -312,7 +312,7 @@
       ],
       "power":2,
       "powerDiff":0,
-      "cardText":"Deploy: Damage target enemy unit by 4.",
+      "cardText":"Deploy: Damage random target enemy unit by 4.",
       "deployTrigger":{
          "targetUnitActions": {
             "14_index" : {
@@ -337,7 +337,7 @@
       ],
       "power":2,
       "powerDiff":0,
-      "cardText":"Deploy: Boost target allied unit by 2.",
+      "cardText":"Deploy: Boost random target allied unit by 2.",
       "deployTrigger":{
          "targetUnitActions": {
             "15_index" : {
@@ -362,7 +362,7 @@
       ],
       "power":4,
       "powerDiff":0,
-      "cardText":"Deploy: Move up to 2 target units to the other row.",
+      "cardText":"Deploy: Move up to 2 random target units to the other row.",
       "deployTrigger":{
          "targetUnitActions": {
             "16_index" : {
@@ -462,7 +462,7 @@
       ],
       "power":3,
       "powerDiff":0,
-      "cardText":"Deploy: Heal up to 4 target allied units full.",
+      "cardText":"Deploy: Heal up to 4 random target allied units full.",
       "deployTrigger":{
          "targetUnitActions": {
             "20_index" : {
@@ -512,7 +512,7 @@
       ],
       "power":1,
       "powerDiff":0,
-      "cardText":"Deploy: Boost target allied unit by 6.",
+      "cardText":"Deploy: Boost random target allied unit by 6.",
       "deployTrigger":{
          "targetUnitActions": {
             "22_index" : {
@@ -537,7 +537,7 @@
       ],
       "power":4,
       "powerDiff":0,
-      "cardText":"Deploy: Move target unit to the other row.",
+      "cardText":"Deploy: Move random target unit to the other row.",
       "deployTrigger":{
          "targetUnitActions": {
             "23_index" : {
@@ -587,7 +587,7 @@
       ],
       "power":3,
       "powerDiff":0,
-      "cardText":"Deploy: Boost up to 3 target allied units by 4.",
+      "cardText":"Deploy: Boost up to 3 random target allied units by 4.",
       "deployTrigger":{
          "targetUnitActions": {
             "25_index" : {
@@ -612,7 +612,7 @@
       ],
       "power":2,
       "powerDiff":0,
-      "cardText":"Deploy: Heal up to 2 target allied units full.",
+      "cardText":"Deploy: Heal up to 2 random target allied units full.",
       "deployTrigger":{
          "targetUnitActions": {
             "26_index" : {
@@ -693,7 +693,7 @@
       ],
       "power":6,
       "powerDiff":0,
-      "cardText":"Zeal. Order: Boost target allied unit by 1. Cooldown: 1.",
+      "cardText":"Zeal. Order: Boost random target allied unit by 1. Cooldown: 1.",
       "orderTrigger":{
          "targetUnitActions": {
             "29_index" : {
@@ -721,7 +721,7 @@
       ],
       "power":5,
       "powerDiff":0,
-      "cardText":"Order: Damage target enemy unit by 1. Cooldown: 1.",
+      "cardText":"Order: Damage random target enemy unit by 1. Cooldown: 1.",
       "orderTrigger":{
          "targetUnitActions": {
             "30_index" : {
@@ -749,7 +749,7 @@
       ],
       "power":6,
       "powerDiff":0,
-      "cardText":"Order: Damage target enemy unit by 2. Cooldown: 2.",
+      "cardText":"Order: Damage random target enemy unit by 2. Cooldown: 2.",
       "orderTrigger":{
          "targetUnitActions": {
             "31_index" : {
@@ -777,7 +777,7 @@
       ],
       "power":5,
       "powerDiff":0,
-      "cardText":"Zeal. Order: Destroy target enemy unit. Cooldown: 2.",
+      "cardText":"Zeal. Order: Destroy random target enemy unit. Cooldown: 2.",
       "orderTrigger":{
          "targetUnitActions": {
             "32_index" : {
@@ -805,7 +805,7 @@
       ],
       "power":5,
       "powerDiff":0,
-      "cardText":"Zeal. Order: Heal target allied unit by 1. Cooldown 1.",
+      "cardText":"Zeal. Order: Heal random target allied unit by 1. Cooldown 1.",
       "orderTrigger":{
          "targetUnitActions": {
             "33_index" : {
@@ -833,7 +833,7 @@
       ],
       "power":7,
       "powerDiff":0,
-      "cardText":"Order: Heal target allied unit  full. Cooldown: 1.",
+      "cardText":"Order: Heal random target allied unit  full. Cooldown: 1.",
       "orderTrigger":{
          "targetUnitActions": {
             "34_index" : {
