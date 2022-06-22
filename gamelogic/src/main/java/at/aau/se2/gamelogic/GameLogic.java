@@ -532,8 +532,11 @@ public class GameLogic {
     if (deployTrigger == null) {
       return;
     }
-    performTargetRowActions(new ArrayList<>(deployTrigger.getTargetRowActions().values()));
-    performTargetUnitActions(new ArrayList<>(deployTrigger.getTargetUnitActions().values()));
+    if (deployTrigger.getTargetRowActions() != null) {
+      performTargetRowActions(new ArrayList<>(deployTrigger.getTargetRowActions().values()));
+    } else if (deployTrigger.getTargetUnitActions() != null) {
+      performTargetUnitActions(new ArrayList<>(deployTrigger.getTargetUnitActions().values()));
+    }
   }
 
   /** @param card the card for which the order trigger should be executed. */
