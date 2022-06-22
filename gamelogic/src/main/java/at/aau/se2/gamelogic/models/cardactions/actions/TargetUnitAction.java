@@ -114,4 +114,40 @@ public class TargetUnitAction {
   public void setTargetedCardsUUIDs(ArrayList<Integer> targetedCardsUUIDs) {
     this.targetedCardsUUIDs = targetedCardsUUIDs;
   }
+
+  public void setPoints(int points) {
+    this.points = points;
+  }
+
+  public void setNumTargets(int numTargets) {
+    this.numTargets = numTargets;
+  }
+
+  public void setRandomTargets(boolean randomTargets) {
+    this.randomTargets = randomTargets;
+  }
+
+  public void setTargetsAlliedUnits(boolean targetsAlliedUnits) {
+    this.targetsAlliedUnits = targetsAlliedUnits;
+  }
+
+  public void setTargetsEnemyUnits(boolean targetsEnemyUnits) {
+    this.targetsEnemyUnits = targetsEnemyUnits;
+  }
+
+  public void setActionType(ActionType actionType) {
+    this.actionType = actionType;
+  }
+
+  public boolean isRandomTargets() {
+    return randomTargets;
+  }
+
+  public boolean isTargetsAlliedUnits() {
+    return targetsAlliedUnits;
+  }
+
+  public boolean isTargetsEnemyUnits() {
+    return targetsEnemyUnits;
+  }
 }
