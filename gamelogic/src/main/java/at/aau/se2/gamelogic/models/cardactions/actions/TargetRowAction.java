@@ -2,6 +2,8 @@ package at.aau.se2.gamelogic.models.cardactions.actions;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
+
 /** this class is used to implement actions which target rows (e.g. frost, rain, fog). */
 public class TargetRowAction {
   private int targetingCardUUID;
@@ -25,6 +27,9 @@ public class TargetRowAction {
     this.randomTargets = randomTargets;
     this.randomStatus = randomStatus;
   }
+
+  @Keep
+  public TargetRowAction() {}
 
   public int getTargetingCardUUID() {
     return targetingCardUUID;

@@ -2,8 +2,11 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.HashMap;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import androidx.annotation.Keep;
 
+@IgnoreExtraProperties
 public class GameFieldRows {
   private Row p1MeleeRow = new Row(0, RowType.MELEE);
   private Row p1RangeRow = new Row(1, RowType.RANGED);

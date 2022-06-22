@@ -532,8 +532,11 @@ public class GameLogic {
     if (deployTrigger == null) {
       return;
     }
-    performTargetRowActions(deployTrigger.getTargetRowActions());
-    performTargetUnitActions(deployTrigger.getTargetUnitActions());
+    if (deployTrigger.getTargetRowActions() != null) {
+      performTargetRowActions(new ArrayList<>(deployTrigger.getTargetRowActions().values()));
+    } else if (deployTrigger.getTargetUnitActions() != null) {
+      performTargetUnitActions(new ArrayList<>(deployTrigger.getTargetUnitActions().values()));
+    }
   }
 
   /** @param card the card for which the order trigger should be executed. */
@@ -543,8 +546,8 @@ public class GameLogic {
       return;
     }
     if (orderTrigger.getRemCoolDown() == 0) {
-      performTargetRowActions(orderTrigger.getTargetRowActions());
-      performTargetUnitActions(orderTrigger.getTargetUnitActions());
+      performTargetRowActions(new ArrayList<>(orderTrigger.getTargetRowActions().values()));
+      performTargetUnitActions(new ArrayList<>(orderTrigger.getTargetUnitActions().values()));
 
       orderTrigger.setRemCoolDown(orderTrigger.getCoolDown());
     } else {
@@ -566,6 +569,8 @@ public class GameLogic {
 
   /** @param targetRowActions */
   private void performTargetRowActions(ArrayList<TargetRowAction> targetRowActions) {
+    if (targetRowActions == null) return;
+
     InitialPlayer opponent = whoAmI.other();
 
     for (TargetRowAction targetRowAction : targetRowActions) {
@@ -711,36 +716,53 @@ public class GameLogic {
    * @param swapAction
    */
   private void swapTargetCard(Card targetCard, TargetUnitAction swapAction) {
-    HashMap<String, Card> p1MeleeRow = gameField.getRows().getMeleeRowForP1();
-    HashMap<String, Card> p1RangedRow = gameField.getRows().getRangeRowForP1();
-    HashMap<String, Card> p2MeleeRow = gameField.getRows().getMeleeRowForP2();
-    HashMap<String, Card> p2RangedRow = gameField.getRows().getRangeRowForP2();
+    HashMap<String, Card> meleeRow = gameField.getRows().meleeRowFor(whoAmI.other());
+    HashMap<String, Card> rangeRow = gameField.getRows().rangedRowFor(whoAmI.other());
 
     // swaps between p1 rows
-    if (p1MeleeRow.containsKey(targetCard.getFirebaseId())) {
-      if (p1RangedRow.size() < ROW_CARD_NUMBER) {
-        p1RangedRow.put(targetCard.getFirebaseId(), targetCard);
-        p1MeleeRow.remove(targetCard.getFirebaseId());
+    String mapKey = findStringedIndexForCardId(meleeRow, targetCard.getId());
+    if (mapKey != null) {
+      if (rangeRow.size() < ROW_CARD_NUMBER) {
+        String index = findFreeIndexInCards(rangeRow);
+        if (index == null) return;
+
+        rangeRow.put(index, targetCard);
+        meleeRow.remove(mapKey);
       }
-    } else if (p1RangedRow.containsKey(targetCard.getFirebaseId())) {
-      if (p1MeleeRow.size() < ROW_CARD_NUMBER) {
-        p1MeleeRow.put(targetCard.getFirebaseId(), targetCard);
-        p1RangedRow.remove(targetCard.getFirebaseId());
+      return; // do not execute rest of function
+    }
+
+    mapKey = findStringedIndexForCardId(rangeRow, targetCard.getId());
+    if (mapKey != null) {
+      if (meleeRow.size() < ROW_CARD_NUMBER) {
+        String index = findFreeIndexInCards(rangeRow);
+        if (index == null) return;
+
+        meleeRow.put(index, targetCard);
+        rangeRow.remove(mapKey);
+      }
+    }
+  }
+
+  private String findStringedIndexForCardId(HashMap<String, Card> haystack, int needle) {
+    for (Map.Entry<String, Card> entry : haystack.entrySet()) {
+      if (entry.getValue().getId() == needle) {
+        return entry.getKey();
       }
     }
 
-    // swaps between p2 rows
-    if (p2MeleeRow.containsKey(targetCard.getFirebaseId())) {
-      if (p2RangedRow.size() < ROW_CARD_NUMBER) {
-        p2RangedRow.put(targetCard.getFirebaseId(), targetCard);
-        p2MeleeRow.remove(targetCard.getFirebaseId());
-      }
-    } else if (p2RangedRow.containsKey(targetCard.getFirebaseId())) {
-      if (p2MeleeRow.size() < ROW_CARD_NUMBER) {
-        p2MeleeRow.put(targetCard.getFirebaseId(), targetCard);
-        p2RangedRow.remove(targetCard.getFirebaseId());
+    return null;
+  }
+
+  private String findFreeIndexInCards(HashMap<String, Card> haystack) {
+    for (int i = 1; i < ROW_CARD_NUMBER; i++) {
+      String key = i + "_index";
+      if (!haystack.containsKey(key)) {
+        return key;
       }
     }
+
+    return null;
   }
 
   /**

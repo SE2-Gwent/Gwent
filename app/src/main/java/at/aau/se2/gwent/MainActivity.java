@@ -1,5 +1,7 @@
 package at.aau.se2.gwent;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,10 +10,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import at.aau.se2.gamelogic.GameLogicDataProvider;
+import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gwent.databinding.ActivityMainBinding;
+import at.aau.se2.gwent.util.DeckGeneration;
 import at.aau.se2.gwent.views.common.FragmentBackPressListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GameLogicDataProvider {
   private static final String TAG = MainActivity.class.getSimpleName();
 
   private ActivityMainBinding binding;
@@ -21,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     binding = ActivityMainBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
+    Environment.getSharedInstance().getGameLogic().setGameLogicDataProvider(this);
   }
 
   @Override
@@ -31,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override
+  public ArrayList<Card> needsCardDeck() {
+    return DeckGeneration.generateCardDeck(getApplicationContext());
+  }
+
   public void onBackPressed() {
     super.onBackPressed();
     Fragment fragment = getCurrentVisibleFragment();

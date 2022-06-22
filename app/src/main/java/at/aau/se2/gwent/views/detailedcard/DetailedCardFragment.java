@@ -102,6 +102,7 @@ public class DetailedCardFragment extends Fragment {
         res.getIdentifier(
             imgResource, "drawable", DetailedCardFragment.this.requireActivity().getPackageName());
     Log.v(TAG, "imgId retrieved: " + imgId);
+    if (imgId == 0) return;
 
     Drawable artwork = ResourcesCompat.getDrawable(res, imgId, null);
     binding.backgroundImageButton.setImageDrawable(artwork);
