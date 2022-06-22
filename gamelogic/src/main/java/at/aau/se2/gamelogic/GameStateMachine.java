@@ -2,10 +2,12 @@ package at.aau.se2.gamelogic;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import at.aau.se2.gamelogic.state.GameState;
-import at.aau.se2.gamelogic.util.Log;
 
 public class GameStateMachine {
+  private static String TAG = GameStateMachine.class.getSimpleName();
+
   private GameState current = GameState.INITIALIZE;
 
   private ArrayList<GameStateCallback> listeners = new ArrayList<>();
@@ -44,7 +46,7 @@ public class GameStateMachine {
 
   public boolean startGame() {
     if (!canProgressTo(GameState.WAIT_FOR_OPPONENT)) {
-      Log.w("Cannot start game.");
+      Log.w(TAG, "Cannot start game.");
       return false;
     }
 
@@ -54,7 +56,7 @@ public class GameStateMachine {
 
   public boolean joinGame() {
     if (!canProgressTo(GameState.START_GAME_ROUND)) {
-      Log.w("Cannot join game.");
+      Log.w(TAG, "Cannot join game.");
       return false;
     }
 
@@ -64,7 +66,7 @@ public class GameStateMachine {
 
   public boolean opponentJoined() {
     if (!canProgressTo(GameState.START_GAME_ROUND)) {
-      Log.w("Cannot wait for opponent.");
+      Log.w(TAG, "Cannot wait for opponent.");
       return false;
     }
 
@@ -74,7 +76,7 @@ public class GameStateMachine {
 
   public boolean roundCanStart() {
     if (!canProgressTo(GameState.DRAW_CARDS)) {
-      Log.w("Cannot wait for opponent.");
+      Log.w(TAG, "Cannot wait for opponent.");
       return false;
     }
 
@@ -84,7 +86,7 @@ public class GameStateMachine {
 
   public boolean cardsDrawn() {
     if (!canProgressTo(GameState.MULLIGAN_CARDS)) {
-      Log.w("Cannot draw cards.");
+      Log.w(TAG, "Cannot draw cards.");
       return false;
     }
 
@@ -94,7 +96,7 @@ public class GameStateMachine {
 
   public boolean cardsChanged() {
     if (!canProgressTo(GameState.START_PLAYER_TURN)) {
-      Log.w("Cannot start game round.");
+      Log.w(TAG, "Cannot start game round.");
       return false;
     }
 
@@ -112,7 +114,7 @@ public class GameStateMachine {
 
   public boolean endRound() {
     if (!canProgressTo(GameState.END_ROUND)) {
-      Log.w("Cannot start game round.");
+      Log.w(TAG, "Cannot start game round.");
       return false;
     }
 
@@ -122,7 +124,7 @@ public class GameStateMachine {
 
   public boolean endPlayerTurns() {
     if (!canProgressTo(GameState.END_PLAYER_TURN)) {
-      Log.w("Cannot start game round.");
+      Log.w(TAG, "Cannot start game round.");
       return false;
     }
 
@@ -132,7 +134,7 @@ public class GameStateMachine {
 
   public boolean endGame() {
     if (!canProgressTo(GameState.END_GAME)) {
-      Log.w("Cannot start game round.");
+      Log.w(TAG, "Cannot start game round.");
       return false;
     }
 

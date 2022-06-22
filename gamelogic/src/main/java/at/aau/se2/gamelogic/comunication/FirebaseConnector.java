@@ -74,6 +74,10 @@ public class FirebaseConnector {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                       SyncRoot update = snapshot.getValue(SyncRoot.class);
+                      if (update == null || update.getGameField() == null) {
+                        observer.finished(Result.Failure(ConnectorError.GameCreationFailed()));
+                        return;
+                      }
                       observer.finished(Result.Success(update.getGameField()));
                     }
 

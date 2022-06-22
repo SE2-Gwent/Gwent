@@ -52,6 +52,8 @@ public class CardView extends FrameLayout {
     nameTextView.setText(null);
     cardImageView.setImageDrawable(getResources().getDrawable(R.drawable.card_background));
     setAlpha(transparent ? 0.4F : 1.0F);
+
+    cardId = null;
   }
 
   public void setSelected(boolean selected) {

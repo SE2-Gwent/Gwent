@@ -88,8 +88,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
     }
 
-    CardRowHelper.removeCardViews(binding.playersHandLayout);
-    CardRowHelper.removeCardViews(binding.opponentsHandLayout);
+    CardRowHelper.removeAllViews(binding.playersHandLayout);
+    CardRowHelper.removeAllViews(binding.opponentsHandLayout);
   }
 
   private void setupButtons() {
@@ -112,6 +112,18 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
     if (viewData.isGameFieldDirty()) {
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
+
+      // clean rows ...
+      for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+        CardRowHelper.makeAllPlaceholder(cardViews);
+        CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+        CardRowHelper.setCardsOnClickListener(cardViews, this);
+      }
+      for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+        CardRowHelper.makeAllPlaceholder(cardViews);
+        CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      }
+
       updateCurrentHandCardRow(
           viewData.getOpponentsHandCards(),
           binding.opponentsHandLayout,
@@ -143,11 +155,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           viewData.getWhoAmI());
     }
 
-    boolean cardIsSelected = viewData.getSelectedCardId() != null;
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.MELEE), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.MELEE),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.RANGED), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.RANGED),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
 
     if (viewModel.getOldViewData() != null
         && viewModel.getOldViewData().getSelectedCardId() != null
@@ -170,7 +183,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       boolean isOpponent) {
     if (cards == null) return;
 
-    CardRowHelper.removeCardViews(handLayout);
+    CardRowHelper.removeAllViews(handLayout);
     handCardViews.clear();
     for (Map.Entry<String, Card> entry : cards.entrySet()) {
       Card card = entry.getValue();
