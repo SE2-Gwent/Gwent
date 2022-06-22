@@ -7,7 +7,7 @@ import androidx.annotation.Keep;
 public class GameFieldRows {
   private Row p1MeleeRow = new Row(0, RowType.MELEE);
   private Row p1RangeRow = new Row(1, RowType.RANGED);
-  private Row p2MeleeRow = new Row(1, RowType.MELEE);
+  private Row p2MeleeRow = new Row(2, RowType.MELEE);
   private Row p2RangeRow = new Row(3, RowType.RANGED);
 
   @Keep
@@ -77,6 +77,19 @@ public class GameFieldRows {
     return true;
   }
 
+  public int cardCountForPlayer(InitialPlayer player) {
+    return meleeRowFor(player).size() + rangedRowFor(player).size();
+  }
+
+  public void cleanRows() {
+    Row[] rows = {p1MeleeRow, p1RangeRow, p2MeleeRow, p2RangeRow};
+    for (Row row : rows) {
+      row.getPlayerRow().clear();
+      row.setRemainingStatusRounds(0);
+      row.setRowStatus(null);
+    }
+  }
+
   /*
   IMPORTANT NOTE: Pay close attention when calling the getter methods! Normally the getter functions,
   which return the HashMap don't belong here (they should be within the Row Class)!
@@ -95,6 +108,16 @@ public class GameFieldRows {
 
   public HashMap<String, Card> getRangeRowForP2() {
     return p2RangeRow.getPlayerRow();
+  }
+
+  public HashMap<String, Card> getAllRows() {
+    HashMap<String, Card> allRows = new HashMap<>();
+    allRows.putAll(p1MeleeRow.getPlayerRow());
+    allRows.putAll(p1RangeRow.getPlayerRow());
+    allRows.putAll(p2MeleeRow.getPlayerRow());
+    allRows.putAll(p2RangeRow.getPlayerRow());
+
+    return allRows;
   }
 
   public Row getP1MeleeRow() {

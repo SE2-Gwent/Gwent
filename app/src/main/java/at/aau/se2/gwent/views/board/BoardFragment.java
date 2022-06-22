@@ -5,12 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -28,6 +33,7 @@ import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
 import at.aau.se2.gwent.util.CardRowHelper;
 import at.aau.se2.gwent.views.common.CardView;
 import at.aau.se2.gwent.views.detailedcard.DetailedCardFragment;
+import at.aau.se2.gwent.views.mulligancard.MulliganCardFragment;
 
 // TODO: Hide NavBar
 
@@ -41,6 +47,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   private HashMap<RowType, ArrayList<CardView>> opponentRowCardViews = new HashMap<>();
   private HashMap<RowType, ArrayList<CardView>> playerRowCardViews = new HashMap<>();
   private DetailedCardFragment detailedCardFragment;
+  private MulliganCardFragment mulliganCardFragment;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,8 +95,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
     }
 
-    CardRowHelper.removeCardViews(binding.playersHandLayout);
-    CardRowHelper.removeCardViews(binding.opponentsHandLayout);
+    CardRowHelper.removeAllViews(binding.playersHandLayout);
+    CardRowHelper.removeAllViews(binding.opponentsHandLayout);
   }
 
   private void setupButtons() {
@@ -106,12 +113,52 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_board_fragment_to_game_debug_fragment);
         });
+
+    binding.currentHeroButton.setOnClickListener(
+        view -> {
+          viewModel.didClickHero();
+        });
+
+    binding.opponentHeroButton.setOnClickListener(
+        view -> {
+          // we could show here some information about hero
+          Toast.makeText(
+                  getContext(),
+                  viewModel.getCurrentState().getValue().getMyHeroView().other().getAlertText(),
+                  Toast.LENGTH_SHORT)
+              .show();
+        });
+  }
+
+  private void resetCardRowsToInitialState() {
+    for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+      CardRowHelper.makeAllPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsOnClickListener(cardViews, this);
+    }
+    for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+      CardRowHelper.makeAllPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+    }
   }
 
   private void updateUI(BoardViewData viewData) {
     if (viewData.isGameFieldDirty()) {
+      resetCardRowsToInitialState();
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
+
+      // clean rows ...
+      for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+        CardRowHelper.makeAllPlaceholder(cardViews);
+        CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+        CardRowHelper.setCardsOnClickListener(cardViews, this);
+      }
+      for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+        CardRowHelper.makeAllPlaceholder(cardViews);
+        CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      }
+
       updateCurrentHandCardRow(
           viewData.getOpponentsHandCards(),
           binding.opponentsHandLayout,
@@ -143,11 +190,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           viewData.getWhoAmI());
     }
 
-    boolean cardIsSelected = viewData.getSelectedCardId() != null;
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.MELEE), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.MELEE),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.RANGED), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.RANGED),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
 
     if (viewModel.getOldViewData() != null
         && viewModel.getOldViewData().getSelectedCardId() != null
@@ -160,6 +208,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       // TODO: selection for rowCardViews
     }
 
+    binding.currentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().backgroundDrawable()));
+    binding.opponentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().other().backgroundDrawable()));
+    binding.currentHeroButton.setEnabled(viewData.isHeroEnabled());
+    binding.opponentHeroButton.setEnabled(viewData.isOpponentHeroEnabled());
     binding.pointView.bind(viewData);
   }
 
@@ -170,7 +224,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       boolean isOpponent) {
     if (cards == null) return;
 
-    CardRowHelper.removeCardViews(handLayout);
+    CardRowHelper.removeAllViews(handLayout);
     handCardViews.clear();
     for (Map.Entry<String, Card> entry : cards.entrySet()) {
       Card card = entry.getValue();
@@ -263,8 +317,13 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void showDetailOverlay(String cardId) {
+
     if (detailedCardFragment == null) {
       detailedCardFragment = DetailedCardFragment.newInstance();
+      Bundle args = new Bundle();
+      args.putString("key_0", cardId);
+      detailedCardFragment.setArguments(args);
+
       detailedCardFragment.setListener(
           new DetailedCardFragment.Listener() {
             @Override
@@ -273,9 +332,15 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
               getChildFragmentManager().beginTransaction().remove(detailedCardFragment).commit();
             }
           });
+    } else {
+      // detailedCardFragment.updateCardId(cardId);
+      Bundle args = new Bundle();
+      args.putString("key_0", cardId);
+      detailedCardFragment.setArguments(args);
     }
 
-    // TODO: configure DetailFragment with card data
+    if (detailedCardFragment.isAdded()) return;
+
     getChildFragmentManager()
         .beginTransaction()
         .add(R.id.overlayFrameLayout, detailedCardFragment)
@@ -283,24 +348,37 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void handleEvents(SingleEvent<BoardViewModel.Event> event) {
+    if (mulliganCardFragment == null) {
+      mulliganCardFragment = MulliganCardFragment.newInstance();
+      mulliganCardFragment.setListener(
+          new MulliganCardFragment.Listener() {
+            @Override
+            public void didClickCancel() {
+              if (mulliganCardFragment == null) return;
+              getChildFragmentManager().beginTransaction().remove(mulliganCardFragment).commit();
+            }
+          });
+    }
     BoardViewModel.Event eventValue = event.getValueIfNotHandled();
     if (eventValue == null) return;
 
     switch (eventValue) {
       case SHOW_MULLIGAN:
-        // TODO: Replace with Mulligan Fragment
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.mulligan);
-        builder.setNegativeButton(
-            R.string.cancel,
-            new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int id) {
-                viewModel.cancelMulligan();
-              }
-            });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        getChildFragmentManager()
+            .beginTransaction()
+            .add(R.id.overlayFrameLayout, mulliganCardFragment)
+            .commit();
+        break;
 
+      case VIBRATE:
+        Vibrator v = (Vibrator) requireActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+          // deprecated in API 26
+          v.vibrate(200);
+        }
         break;
 
       case SHOW_WINNER:

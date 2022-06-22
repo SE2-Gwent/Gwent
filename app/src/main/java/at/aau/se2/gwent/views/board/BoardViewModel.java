@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
 import at.aau.se2.gamelogic.GameStateCallback;
+import at.aau.se2.gamelogic.UIActionListener;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
@@ -16,10 +17,12 @@ import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
 
-public class BoardViewModel extends ViewModel implements GameFieldObserver, GameStateCallback {
+public class BoardViewModel extends ViewModel
+    implements GameFieldObserver, GameStateCallback, UIActionListener {
 
   public enum Event {
     SHOW_MULLIGAN,
+    VIBRATE,
     SHOW_WINNER
   }
 
@@ -33,6 +36,7 @@ public class BoardViewModel extends ViewModel implements GameFieldObserver, Game
   public BoardViewModel() {
     gameLogic.registerGameFieldListener(this);
     gameLogic.getGameStateMachine().registerListener(this);
+    gameLogic.registeruiActionListener(this);
   }
 
   public void didClickPrimaryButton() {
@@ -62,6 +66,10 @@ public class BoardViewModel extends ViewModel implements GameFieldObserver, Game
     }
   }
 
+  public void didClickHero() {
+    gameLogic.activateHeroAction();
+  }
+
   public void didClickRowCard(String cardId) {}
 
   public void cancelMulligan() {
@@ -69,8 +77,6 @@ public class BoardViewModel extends ViewModel implements GameFieldObserver, Game
   }
 
   public void playSelectedCard(RowType rowType, int location) {
-    // TODO: change when deploy mechanic is merged
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
@@ -93,6 +99,8 @@ public class BoardViewModel extends ViewModel implements GameFieldObserver, Game
   }
 
   private void createCurrentViewState(GameField gameField) {
+    if (gameField == null) return;
+
     BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
     notifyStateChange(boardViewState);
@@ -115,6 +123,12 @@ public class BoardViewModel extends ViewModel implements GameFieldObserver, Game
       default:
         break;
     }
+  }
+
+  @Override
+  public void sendVibration() {
+    Log.v(TAG, "VIBRATE VIBRATE VIBRATE ");
+    actionLiveData.setValue(new SingleEvent<>(Event.VIBRATE));
   }
 
   // Getters & Setters

@@ -47,6 +47,14 @@ public class CardDecks {
     return p2Deck;
   }
 
+  public HashMap<String, Card> getAllDecks() {
+    HashMap<String, Card> allDecks = new HashMap<>();
+    allDecks.putAll(p1Deck);
+    allDecks.putAll(p2Deck);
+
+    return allDecks;
+  }
+
   public boolean hasDecksForBothPlayers() {
     return p1Deck.size() > 0 && p2Deck.size() > 0;
   }

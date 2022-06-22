@@ -60,6 +60,21 @@ public class TargetUnitAction {
   @Keep
   public TargetUnitAction() {}
 
+  public TargetUnitAction(
+      int points,
+      int numTargets,
+      boolean randomTargets,
+      boolean targetsAlliedUnits,
+      boolean targetsEnemyUnits,
+      ActionType actionType) {
+    this.points = points;
+    this.numTargets = numTargets;
+    this.randomTargets = randomTargets;
+    this.targetsAlliedUnits = targetsAlliedUnits;
+    this.targetsEnemyUnits = targetsEnemyUnits;
+    this.actionType = actionType;
+  }
+
   public int getTargetingCardUUID() {
     return targetingCardUUID;
   }
