@@ -9,8 +9,10 @@ import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import at.aau.se2.gwent.R;
 
 public class CardView extends FrameLayout {
@@ -39,19 +41,28 @@ public class CardView extends FrameLayout {
   }
 
   public void setupWithCard(
-      String cardId, int attackPoints, String name, @DrawableRes int cardImage) {
+      String cardId, int attackPoints, int pointDiff, String name, @DrawableRes int cardImage) {
     this.cardId = cardId;
     pointTextView.setText(String.valueOf(attackPoints));
     nameTextView.setText(name);
-    cardImageView.setImageDrawable(getResources().getDrawable(cardImage));
+    if (cardImage != 0) {
+      cardImageView.setImageResource(cardImage);
+    }
     setAlpha(1.0F);
+
+    @ColorRes int color = R.color.white;
+    if (pointDiff > 0) color = R.color.green;
+    if (pointDiff < 0) color = R.color.red;
+    pointTextView.setTextColor(ContextCompat.getColor(getContext(), color));
   }
 
   public void showAsPlaceholder(boolean transparent) {
     pointTextView.setText(null);
     nameTextView.setText(null);
-    cardImageView.setImageDrawable(getResources().getDrawable(R.drawable.card_background));
+    cardImageView.setImageResource(R.drawable.card_background);
     setAlpha(transparent ? 0.4F : 1.0F);
+
+    cardId = null;
   }
 
   public void setSelected(boolean selected) {

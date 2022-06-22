@@ -1,7 +1,5 @@
 package at.aau.se2.gwent.views.debug;
 
-import java.util.ArrayList;
-
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,18 +7,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
-import at.aau.se2.gamelogic.GameLogicDataProvider;
 import at.aau.se2.gamelogic.GameStateCallback;
-import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
-import at.aau.se2.gwent.util.DebugHelper;
 
-public class GameDebugViewModel extends ViewModel
-    implements GameStateCallback, GameFieldObserver, GameLogicDataProvider {
+public class GameDebugViewModel extends ViewModel implements GameStateCallback, GameFieldObserver {
   public MutableLiveData<ViewState> state = new MutableLiveData<>();
   public MutableLiveData<String> errorMutableLiveData = new MutableLiveData<>();
 
@@ -32,7 +26,6 @@ public class GameDebugViewModel extends ViewModel
   public GameDebugViewModel() {
     gameLogic.getGameStateMachine().registerListener(this);
     gameLogic.registerGameFieldListener(this);
-    gameLogic.setGameLogicDataProvider(this);
   }
 
   public void cancelMulligan() {
@@ -79,12 +72,9 @@ public class GameDebugViewModel extends ViewModel
     createCurrentViewState();
   }
 
-  @Override
-  public ArrayList<Card> needsCardDeck() {
-    return DebugHelper.generateTestCards();
-  }
-
   private void createCurrentViewState() {
+    if (gameLogic.getGameField() == null) return;
+
     Player current = gameLogic.getGameField().getCurrentPlayer();
     Player opponent = gameLogic.getGameField().getOpponent();
 
@@ -96,13 +86,18 @@ public class GameDebugViewModel extends ViewModel
             gameLogic.getStartingPlayer(),
             gameLogic.getPlayerToTurn(),
             String.valueOf(gameLogic.getGameField().getRoundNumber()),
-            gameLogic
-                .getGameField()
-                .getPointsForPlayer(gameLogic.getGameField().getCurrentPlayer()),
-            gameLogic.getGameField().getPointsForPlayer(gameLogic.getGameField().getOpponent()),
+            (current != null)
+                ? gameLogic.getGameField().getPointsForPlayer(current.getInitialPlayerInformation())
+                : 0,
+            (opponent != null)
+                ? gameLogic
+                    .getGameField()
+                    .getPointsForPlayer(opponent.getInitialPlayerInformation())
+                : 0,
             (current != null) ? current.getCurrentMatchPoints() : 0,
             (opponent != null) ? opponent.getCurrentMatchPoints() : 0,
-            gameLogic.isMyTurn());
+            gameLogic.isMyTurn(),
+            gameLogic.getCardMulligansLeft());
     state.setValue(newState);
   }
 
@@ -115,6 +110,7 @@ public class GameDebugViewModel extends ViewModel
     private String roundNumber;
     private String combinedPlayerPoints;
     private String roundsWon;
+    private String mulliganCardsLeft;
     private boolean isMyTurn;
 
     public ViewState(
@@ -128,7 +124,8 @@ public class GameDebugViewModel extends ViewModel
         int opponentPlayerPoints,
         int currentPlayerRoundsWon,
         int opponentPlayerRoundsWon,
-        boolean isMyTurn) {
+        boolean isMyTurn,
+        int mulliganCardsLeft) {
       this.gameId = gameId;
       this.state = state.name();
       this.player = player == null ? "Not Set" : "Player: " + player.name();
@@ -145,6 +142,7 @@ public class GameDebugViewModel extends ViewModel
               + opponentPlayerRoundsWon
               + " Opponent";
       this.isMyTurn = isMyTurn;
+      this.mulliganCardsLeft = String.valueOf(mulliganCardsLeft);
     }
 
     public String getGameId() {
@@ -181,6 +179,10 @@ public class GameDebugViewModel extends ViewModel
 
     public String getCombinedPlayerPoints() {
       return combinedPlayerPoints;
+    }
+
+    public String getMulliganCardsLeft() {
+      return mulliganCardsLeft;
     }
   }
 }

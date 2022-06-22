@@ -19,7 +19,7 @@ public class GameField {
   private CardDecks cardDecks = new CardDecks();
   // Cards the player should get displayed in their hand
   private CardDecks currentHandCards = new CardDecks();
-  private ArrayList<Hero> heroes;
+  private HashMap<String, Hero> heroes = new HashMap();
 
   @Keep
   public GameField() {}
@@ -29,7 +29,7 @@ public class GameField {
       Player currentPlayer,
       Player opponent,
       CardDecks cardDecks,
-      ArrayList<Hero> heroes) {
+      HashMap<String, Hero> heroes) {
     this.rows = rows;
     this.currentPlayer = currentPlayer;
     this.opponent = opponent;
@@ -48,31 +48,29 @@ public class GameField {
 
   @Exclude
   public @Nullable Player getPointLeadingPlayer() {
-    int currentPoints = getPointsForPlayer(currentPlayer);
-    int opponentPoints = getPointsForPlayer(opponent);
+    int currentPoints = getPointsForPlayer(currentPlayer.getInitialPlayerInformation());
+    int opponentPoints = getPointsForPlayer(opponent.getInitialPlayerInformation());
 
     if (currentPoints == opponentPoints) {
       return null;
     }
 
-    return (getPointsForPlayer(currentPlayer) > getPointsForPlayer(opponent))
-        ? currentPlayer
-        : opponent;
+    return (currentPoints > opponentPoints) ? currentPlayer : opponent;
   }
 
   @Exclude
-  public int getPointsForPlayer(Player player) {
+  public int getPointsForPlayer(InitialPlayer player) {
     if (player == null) return 0;
 
     int points = 0;
 
-    for (Card card : getRows().meleeRowFor(player.getInitialPlayerInformation()).values()) {
+    for (Card card : getRows().meleeRowFor(player).values()) {
       if (card == null) continue;
-      points = +card.getPower() + card.getPowerDiff();
+      points += card.getPower() + card.getPowerDiff();
     }
-    for (Card card : getRows().rangedRowFor(player.getInitialPlayerInformation()).values()) {
+    for (Card card : getRows().rangedRowFor(player).values()) {
       if (card == null) continue;
-      points = +card.getPower() + card.getPowerDiff();
+      points += card.getPower() + card.getPowerDiff();
     }
 
     return points;
@@ -143,7 +141,7 @@ public class GameField {
         : currentHandCards.getP2Deck();
   }
 
-  public ArrayList<Hero> getHeroes() {
+  public HashMap<String, Hero> getHeroes() {
     return heroes;
   }
 
@@ -153,5 +151,13 @@ public class GameField {
 
   public void setCardDecks(CardDecks cardDecks) {
     this.cardDecks = cardDecks;
+  }
+
+  public Hero getHeroFor(InitialPlayer initialPlayer) {
+    return heroes.get(initialPlayer.name());
+  }
+
+  public boolean canHeroUseAction(InitialPlayer player) {
+    return !getHeroFor(player).isOnCooldown() && getHeroFor(player).cardsForActionArePresent(rows);
   }
 }

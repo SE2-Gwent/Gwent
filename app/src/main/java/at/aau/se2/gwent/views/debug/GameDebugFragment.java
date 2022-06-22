@@ -27,6 +27,32 @@ public class GameDebugFragment extends Fragment {
   }
 
   @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    viewModel = new ViewModelProvider(this).get(GameDebugViewModel.class);
+    viewModel.state.observe(
+        this,
+        viewState -> {
+          binding.gameIdTextView.setText(viewState.getGameId());
+          binding.stateTextView.setText(viewState.getState());
+          binding.playerTextView.setText(viewState.getPlayer());
+          binding.startingPlayerTextView.setText(viewState.getStartingPlayer());
+          binding.playersTurnTextView.setText(viewState.getPlayersTurn());
+          binding.roundTextView.setText(viewState.getRoundNumber());
+          binding.cardPointsView.setText(viewState.getCombinedPlayerPoints());
+          binding.roundPointsView.setText(viewState.getRoundsWon());
+          binding.mulliganCardsLeft.setText("CardsToMulligan: " + viewState.getMulliganCardsLeft());
+        });
+
+    viewModel.errorMutableLiveData.observe(
+        this,
+        error -> {
+          Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+        });
+  }
+
+  @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       @Nullable ViewGroup container,
@@ -41,39 +67,14 @@ public class GameDebugFragment extends Fragment {
     NavigationUI.setupActionBarWithNavController(
         (AppCompatActivity) getActivity(), navController, appBarConfiguration);
 
-    return binding.getRoot();
-  }
-
-  @Override
-  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-    viewModel = new ViewModelProvider(this).get(GameDebugViewModel.class);
-    viewModel.state.observe(
-        this,
-        viewState -> {
-          binding.gameIdTextView.setText(viewState.getGameId());
-          binding.stateTextView.setText(viewState.getState());
-          binding.playerTextView.setText(viewState.getPlayer());
-          binding.startingPlayerTextView.setText(viewState.getStartingPlayer());
-          binding.playersTurnTextView.setText(viewState.getPlayersTurn());
-          binding.roundTextView.setText(viewState.getRoundNumber());
-          binding.cardPointsView.setText(viewState.getCombinedPlayerPoints());
-          binding.roundPointsView.setText(viewState.getRoundsWon());
-        });
-
-    viewModel.errorMutableLiveData.observe(
-        this,
-        error -> {
-          Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-        });
-
     binding.cancelMulliganCardButton.setOnClickListener(
         view -> {
           viewModel.cancelMulligan();
         });
     binding.mulliganCardButton.setOnClickListener(
         view -> {
-          viewModel.mulliganCard();
+          Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main)
+              .navigate(R.id.action_game_debug_fragment_to_mulliganCardFragment);
         });
     binding.roundDoneButton.setOnClickListener(
         view -> {
@@ -83,5 +84,7 @@ public class GameDebugFragment extends Fragment {
         view -> {
           viewModel.passRound();
         });
+
+    return binding.getRoot();
   }
 }

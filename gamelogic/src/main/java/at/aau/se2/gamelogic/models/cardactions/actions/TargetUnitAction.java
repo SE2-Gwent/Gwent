@@ -2,6 +2,8 @@ package at.aau.se2.gamelogic.models.cardactions.actions;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
+
 /** This class is used to implement actions which target units (damage, heal, boost, swap) */
 public class TargetUnitAction {
   /**
@@ -55,6 +57,24 @@ public class TargetUnitAction {
     this.actionType = actionType;
   }
 
+  @Keep
+  public TargetUnitAction() {}
+
+  public TargetUnitAction(
+      int points,
+      int numTargets,
+      boolean randomTargets,
+      boolean targetsAlliedUnits,
+      boolean targetsEnemyUnits,
+      ActionType actionType) {
+    this.points = points;
+    this.numTargets = numTargets;
+    this.randomTargets = randomTargets;
+    this.targetsAlliedUnits = targetsAlliedUnits;
+    this.targetsEnemyUnits = targetsEnemyUnits;
+    this.actionType = actionType;
+  }
+
   public int getTargetingCardUUID() {
     return targetingCardUUID;
   }
@@ -93,5 +113,41 @@ public class TargetUnitAction {
 
   public void setTargetedCardsUUIDs(ArrayList<Integer> targetedCardsUUIDs) {
     this.targetedCardsUUIDs = targetedCardsUUIDs;
+  }
+
+  public void setPoints(int points) {
+    this.points = points;
+  }
+
+  public void setNumTargets(int numTargets) {
+    this.numTargets = numTargets;
+  }
+
+  public void setRandomTargets(boolean randomTargets) {
+    this.randomTargets = randomTargets;
+  }
+
+  public void setTargetsAlliedUnits(boolean targetsAlliedUnits) {
+    this.targetsAlliedUnits = targetsAlliedUnits;
+  }
+
+  public void setTargetsEnemyUnits(boolean targetsEnemyUnits) {
+    this.targetsEnemyUnits = targetsEnemyUnits;
+  }
+
+  public void setActionType(ActionType actionType) {
+    this.actionType = actionType;
+  }
+
+  public boolean isRandomTargets() {
+    return randomTargets;
+  }
+
+  public boolean isTargetsAlliedUnits() {
+    return targetsAlliedUnits;
+  }
+
+  public boolean isTargetsEnemyUnits() {
+    return targetsEnemyUnits;
   }
 }

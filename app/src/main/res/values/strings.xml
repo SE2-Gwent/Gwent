@@ -1,16 +1,10 @@
 <resources>
     <string name="app_name">Gwent</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">Gwent</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Start Game</string>
     <string name="previous">Previous</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
-
-    <string name="hello_first_fragment">Gwent</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="ok">OK</string>
 
     <!-- Sample card for detailedcard - TODO: remove -->
     <string name="card_name">Rainfarn of Attre</string>
@@ -18,6 +12,7 @@
     <string name="card_text">Deploy: Damage an enemy unit by 2. Conspiracy: Increase damage by 2.</string>
     <string name="card_flavortext">When Cintra fell, Attre followed, leaving its defenders a choice: accept the Nilfgaardian leash or die.</string>
     <string name="card_power">5</string>
+
     <string name="activate_ability">Ability</string>
     <string name="action_detailed_card">Detailed card</string>
     <string name="close">Close</string>
@@ -25,5 +20,22 @@
     <string name="done">Done</string>
     <string name="pass_round">Pass</string>
     <string name="end_round">Finish</string>
+    <string name="your_turn">Your turn</string>
+    <string name="opponents_turn">Opponents turn</string>
+    <string name="round">Round</string>
+    <string name="game_id">GameId</string>
+    <string name="waiting_for_opponent">Waiting for opponent</string>
+    <string name="join_game">Join Game</string>
+    <string name="join_game_instructions">Input GameId from other Player.</string>
+    <string name="join">Join</string>
+    <string name="could_not_join_game">Could not join game</string>
+    <string name="game_created">Game Created:</string>
+    <string name="could_not_create_game">Could not create game</string>
+
+    <string name="game_ended">Game Ended</string>
+    <string name="you_have_won">You have won!</string>
+    <string name="opponents_has_won">Your opponent has won!</string>
+    <string name="this_is_triss_merigold">"This is Triss Merigold, your opponent"</string>
+    <string name="this_is_gerald_riva">This is Gerald of Riva, your opponent</string>
 
 </resources>

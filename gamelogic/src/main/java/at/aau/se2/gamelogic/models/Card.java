@@ -2,10 +2,13 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.ArrayList;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.triggers.DeployTrigger;
 import at.aau.se2.gamelogic.models.cardactions.triggers.OrderTrigger;
 
+@IgnoreExtraProperties
 public class Card {
   private int id;
   private String name;
@@ -77,8 +80,8 @@ public class Card {
     return power;
   }
 
-  public void setPower(int power) {
-    this.power = power;
+  public int getCurrentAttackPoints() {
+    return power + powerDiff;
   }
 
   public int getPowerDiff() {

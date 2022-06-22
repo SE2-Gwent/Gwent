@@ -3,8 +3,11 @@ package at.aau.se2.gamelogic.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import androidx.annotation.Keep;
 
+@IgnoreExtraProperties
 public class CardDecks {
   private HashMap<String, Card> p1Deck = new HashMap<>();
   private HashMap<String, Card> p2Deck = new HashMap<>();
@@ -45,6 +48,14 @@ public class CardDecks {
 
   public HashMap<String, Card> getP2Deck() {
     return p2Deck;
+  }
+
+  public HashMap<String, Card> getAllDecks() {
+    HashMap<String, Card> allDecks = new HashMap<>();
+    allDecks.putAll(p1Deck);
+    allDecks.putAll(p2Deck);
+
+    return allDecks;
   }
 
   public boolean hasDecksForBothPlayers() {

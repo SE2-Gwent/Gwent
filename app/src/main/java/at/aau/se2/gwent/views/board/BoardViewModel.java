@@ -1,7 +1,5 @@
 package at.aau.se2.gwent.views.board;
 
-import java.util.ArrayList;
-
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,21 +7,23 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
-import at.aau.se2.gamelogic.GameLogicDataProvider;
 import at.aau.se2.gamelogic.GameStateCallback;
+import at.aau.se2.gamelogic.UIActionListener;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
+import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
-import at.aau.se2.gwent.util.DebugHelper;
 
 public class BoardViewModel extends ViewModel
-    implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
+    implements GameFieldObserver, GameStateCallback, UIActionListener {
 
   public enum Event {
-    SHOW_MULLIGAN
+    SHOW_MULLIGAN,
+    VIBRATE,
+    SHOW_WINNER
   }
 
   private static final String TAG = BoardViewModel.class.getSimpleName();
@@ -35,8 +35,8 @@ public class BoardViewModel extends ViewModel
 
   public BoardViewModel() {
     gameLogic.registerGameFieldListener(this);
-    gameLogic.setGameLogicDataProvider(this);
     gameLogic.getGameStateMachine().registerListener(this);
+    gameLogic.registeruiActionListener(this);
   }
 
   public void didClickPrimaryButton() {
@@ -66,6 +66,10 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickHero() {
+    gameLogic.activateHeroAction();
+  }
+
   public void didClickRowCard(String cardId) {}
 
   public void cancelMulligan() {
@@ -73,8 +77,6 @@ public class BoardViewModel extends ViewModel
   }
 
   public void playSelectedCard(RowType rowType, int location) {
-    // TODO: change when deploy mechanic is merged
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
@@ -85,10 +87,7 @@ public class BoardViewModel extends ViewModel
       return;
     }
 
-    gameLogic
-        .getGameField()
-        .getRows()
-        .setCardIfPossible(gameLogic.getWhoAmI(), rowType, location, playedCard);
+    gameLogic.deployCard(playedCard, rowType, location);
 
     createCurrentViewState(gameLogic.getGameField());
   }
@@ -100,6 +99,8 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
+    if (gameField == null) return;
+
     BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
     notifyStateChange(boardViewState);
@@ -117,14 +118,17 @@ public class BoardViewModel extends ViewModel
     switch (current) {
       case MULLIGAN_CARDS:
         actionLiveData.setValue(new SingleEvent<>(Event.SHOW_MULLIGAN));
+      case END_GAME:
+        actionLiveData.setValue(new SingleEvent<>(Event.SHOW_WINNER));
       default:
         break;
     }
   }
 
   @Override
-  public ArrayList<Card> needsCardDeck() {
-    return DebugHelper.generateTestCards();
+  public void sendVibration() {
+    Log.v(TAG, "VIBRATE VIBRATE VIBRATE ");
+    actionLiveData.setValue(new SingleEvent<>(Event.VIBRATE));
   }
 
   // Getters & Setters
@@ -138,5 +142,12 @@ public class BoardViewModel extends ViewModel
 
   public BoardViewData getOldViewData() {
     return oldViewData;
+  }
+
+  // not in viewData, because we need it maybe before last update
+  public Boolean haveIWon() {
+    Player winner = gameLogic.getWinner();
+    if (winner == null) return null;
+    return winner.getInitialPlayerInformation() == gameLogic.getWhoAmI();
   }
 }

@@ -1,18 +1,48 @@
 package at.aau.se2.gamelogic.models;
 
-import at.aau.se2.gamelogic.models.heroactions.HeroActionParams;
+import static java.lang.Math.max;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import androidx.annotation.Keep;
+import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
+
+@IgnoreExtraProperties
 public class Hero {
-  private int id;
-  private String name;
-  private HeroActionParams heroAction;
-  private int heroActionCoolDown; // Cooldown in Zuegen
+  public static final TargetUnitAction ACTION_GERALD =
+      new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE);
+  public static final TargetUnitAction ACTION_TRISS =
+      new TargetUnitAction(3, 1, true, true, false, TargetUnitAction.ActionType.BOOST);
 
-  public Hero(int id, String name, HeroActionParams heroAction) {
+  public boolean cardsForActionArePresent(GameFieldRows rows) {
+    switch (heroAction) {
+      case ATTACK:
+        return rows.cardCountForPlayer(InitialPlayer.OPPONENT) > 0;
+      case HEAL:
+        ;
+        return rows.cardCountForPlayer(InitialPlayer.INITIATOR) > 0;
+    }
+
+    return false;
+  }
+
+  public enum Action {
+    ATTACK,
+    HEAL
+  }
+
+  private int id;
+  private Action heroAction;
+  private int heroActionCoolDown; // Cooldown in Zuegen
+  private int cooldownCount; // Cooldown in Zuegen
+
+  @Keep
+  public Hero() {}
+
+  public Hero(int id, Action heroAction, int heroActionCoolDown) {
     this.id = id;
-    this.name = name;
     this.heroAction = heroAction;
-    this.heroActionCoolDown = 0;
+    this.heroActionCoolDown = heroActionCoolDown;
   }
 
   public int getId() {
@@ -23,27 +53,31 @@ public class Hero {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public HeroActionParams getHeroAction() {
-    return heroAction;
-  }
-
-  public void setHeroAction(HeroActionParams heroAction) {
-    this.heroAction = heroAction;
-  }
-
   public int getHeroActionCoolDown() {
     return heroActionCoolDown;
   }
 
+  public Action getHeroAction() {
+    return heroAction;
+  }
+
+  public int getCooldownCount() {
+    return cooldownCount;
+  }
+
   public void setHeroActionCoolDown(int heroActionCoolDown) {
     this.heroActionCoolDown = heroActionCoolDown;
+  }
+
+  public void decreaseCooldown() {
+    cooldownCount = max(0, cooldownCount - 1);
+  }
+
+  public void didActivateAction() {
+    cooldownCount = heroActionCoolDown;
+  }
+
+  public boolean isOnCooldown() {
+    return cooldownCount > 0;
   }
 }

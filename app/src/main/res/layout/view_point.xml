@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="false"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/pointBackgroundImageView"
+        android:layout_width="42dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:src="@drawable/pointview_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/mainButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_round_gold_background"
+        android:text="@string/pass_round"
+        android:textColor="@drawable/button_round_gold_textcolor"
+        android:elevation="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/roundTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Round 1"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="8sp"
+        android:layout_marginBottom="@dimen/default_related_margin"
+        app:layout_constraintBottom_toTopOf="@+id/opponentFirstRoundWon"
+        app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView" />
+
+    <TextView
+        android:id="@+id/turnTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_related_margin"
+        android:text="Opponents Turn"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView"
+        app:layout_constraintTop_toBottomOf="@+id/currentPlayerFirstRoundWon" />
+
+    <android.widget.Button
+        android:id="@+id/opponentFirstRoundWon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginBottom="@dimen/default_related_margin"
+        android:background="@drawable/round_indicator_background"
+        android:enabled="false"
+        android:clickable="false"
+        app:layout_constraintBottom_toTopOf="@+id/mainButton"
+        app:layout_constraintEnd_toStartOf="@+id/opponentSecondRoundWon"
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView" />
+
+    <android.widget.Button
+        android:id="@+id/opponentSecondRoundWon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:enabled="false"
+        android:clickable="false"
+        android:background="@drawable/round_indicator_background"
+        android:layout_marginTop="@dimen/default_related_margin"
+        app:layout_constraintTop_toBottomOf="@+id/mainButton"
+        app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/opponentFirstRoundWon" />
+
+    <android.widget.Button
+        android:id="@+id/currentPlayerFirstRoundWon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="@dimen/default_related_margin"
+        android:background="@drawable/round_indicator_background"
+        android:enabled="false"
+        android:clickable="false"
+        app:layout_constraintTop_toBottomOf="@+id/mainButton"
+        app:layout_constraintEnd_toStartOf="@+id/opponentSecondRoundWon"
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView" />
+
+    <android.widget.Button
+        android:id="@+id/currentPlayerSecondRoundWon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:enabled="false"
+        android:clickable="false"
+        android:background="@drawable/round_indicator_background"
+        android:layout_marginBottom="@dimen/default_related_margin"
+        app:layout_constraintBottom_toTopOf="@+id/mainButton"
+        app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/opponentFirstRoundWon" />
+
+    <TextView
+        android:id="@+id/opponentPlayerPoints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_related_margin"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="@dimen/default_related_margin"
+        android:layout_marginBottom="32dp"
+        android:text="23"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/roundTextView"
+        app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView"
+        app:layout_constraintTop_toTopOf="@+id/pointBackgroundImageView" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gwent_gold"
+        app:layout_constraintEnd_toEndOf="@+id/opponentPlayerPoints"
+        app:layout_constraintStart_toStartOf="@+id/opponentPlayerPoints"
+        app:layout_constraintTop_toBottomOf="@+id/opponentPlayerPoints" />
+
+    <TextView
+        android:id="@+id/currentPlayerPoints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_related_margin"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="@dimen/default_related_margin"
+        android:layout_marginBottom="32dp"
+        android:text="23"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pointBackgroundImageView"
+        app:layout_constraintEnd_toEndOf="@+id/pointBackgroundImageView"
+        app:layout_constraintStart_toStartOf="@+id/pointBackgroundImageView"
+        app:layout_constraintTop_toBottomOf="@+id/turnTextView" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gwent_gold"
+        app:layout_constraintEnd_toEndOf="@+id/currentPlayerPoints"
+        app:layout_constraintStart_toStartOf="@+id/currentPlayerPoints"
+        app:layout_constraintTop_toBottomOf="@+id/currentPlayerPoints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
