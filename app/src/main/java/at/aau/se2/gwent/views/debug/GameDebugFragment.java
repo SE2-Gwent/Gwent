@@ -42,6 +42,7 @@ public class GameDebugFragment extends Fragment {
           binding.roundTextView.setText(viewState.getRoundNumber());
           binding.cardPointsView.setText(viewState.getCombinedPlayerPoints());
           binding.roundPointsView.setText(viewState.getRoundsWon());
+          binding.mulliganCardsLeft.setText("CardsToMulligan: " + viewState.getMulliganCardsLeft());
         });
 
     viewModel.errorMutableLiveData.observe(
@@ -72,7 +73,8 @@ public class GameDebugFragment extends Fragment {
         });
     binding.mulliganCardButton.setOnClickListener(
         view -> {
-          viewModel.mulliganCard();
+          Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main)
+              .navigate(R.id.action_game_debug_fragment_to_mulliganCardFragment);
         });
     binding.roundDoneButton.setOnClickListener(
         view -> {

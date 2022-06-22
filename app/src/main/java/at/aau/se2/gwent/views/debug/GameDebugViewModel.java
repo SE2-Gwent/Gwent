@@ -85,6 +85,8 @@ public class GameDebugViewModel extends ViewModel
   }
 
   private void createCurrentViewState() {
+    if (gameLogic.getGameField() == null) return;
+
     Player current = gameLogic.getGameField().getCurrentPlayer();
     Player opponent = gameLogic.getGameField().getOpponent();
 
@@ -106,7 +108,8 @@ public class GameDebugViewModel extends ViewModel
                 : 0,
             (current != null) ? current.getCurrentMatchPoints() : 0,
             (opponent != null) ? opponent.getCurrentMatchPoints() : 0,
-            gameLogic.isMyTurn());
+            gameLogic.isMyTurn(),
+            gameLogic.getCardMulligansLeft());
     state.setValue(newState);
   }
 
@@ -119,6 +122,7 @@ public class GameDebugViewModel extends ViewModel
     private String roundNumber;
     private String combinedPlayerPoints;
     private String roundsWon;
+    private String mulliganCardsLeft;
     private boolean isMyTurn;
 
     public ViewState(
@@ -132,7 +136,8 @@ public class GameDebugViewModel extends ViewModel
         int opponentPlayerPoints,
         int currentPlayerRoundsWon,
         int opponentPlayerRoundsWon,
-        boolean isMyTurn) {
+        boolean isMyTurn,
+        int mulliganCardsLeft) {
       this.gameId = gameId;
       this.state = state.name();
       this.player = player == null ? "Not Set" : "Player: " + player.name();
@@ -149,6 +154,7 @@ public class GameDebugViewModel extends ViewModel
               + opponentPlayerRoundsWon
               + " Opponent";
       this.isMyTurn = isMyTurn;
+      this.mulliganCardsLeft = String.valueOf(mulliganCardsLeft);
     }
 
     public String getGameId() {
@@ -185,6 +191,10 @@ public class GameDebugViewModel extends ViewModel
 
     public String getCombinedPlayerPoints() {
       return combinedPlayerPoints;
+    }
+
+    public String getMulliganCardsLeft() {
+      return mulliganCardsLeft;
     }
   }
 }

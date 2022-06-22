@@ -24,7 +24,11 @@
         android:id="@+id/game_debug_fragment"
         android:name="at.aau.se2.gwent.views.debug.GameDebugFragment"
         android:label="game_debug_fragment"
-        tools:layout="@layout/fragment_game_debug" />
+        tools:layout="@layout/fragment_game_debug" >
+        <action
+            android:id="@+id/action_game_debug_fragment_to_mulliganCardFragment"
+            app:destination="@id/mulliganCardFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailed_card"
@@ -36,6 +40,11 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/mulliganCardFragment"
+        android:name="at.aau.se2.gwent.views.mulligancard.MulliganCardFragment"
+        android:label="MulliganCardFragment" />
+
 
     <fragment
         android:id="@+id/board_fragment"
