@@ -6,10 +6,21 @@ import androidx.annotation.Nullable;
 import at.aau.se2.gamelogic.comunication.SyncAction;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 
+// HelperClass
 public class SyncActionUtil {
   public static @Nullable InitialPlayer findStartingPlayer(ArrayList<SyncAction> actions) {
     for (SyncAction action : actions) {
       if (action.getType() == SyncAction.Type.STARTING_PLAYER) {
+        return InitialPlayer.valueOf(action.getMessage());
+      }
+    }
+
+    return null;
+  }
+
+  public static @Nullable InitialPlayer findVibrationOn2ndDevice(ArrayList<SyncAction> actions) {
+    for (SyncAction action : actions) {
+      if (action.getType() == SyncAction.Type.VIBRATION) {
         return InitialPlayer.valueOf(action.getMessage());
       }
     }

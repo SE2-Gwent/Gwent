@@ -77,8 +77,8 @@ public class Card {
     return power;
   }
 
-  public void setPower(int power) {
-    this.power = power;
+  public int getCurrentAttackPoints() {
+    return power + powerDiff;
   }
 
   public int getPowerDiff() {

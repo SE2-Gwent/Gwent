@@ -2,16 +2,41 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.HashMap;
 
-import at.aau.se2.gamelogic.GameLogic;
+import androidx.annotation.Keep;
 
 public class GameFieldRows {
-  private HashMap<String, Card> p1MeleeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
-  private HashMap<String, Card> p1RangeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
-  private HashMap<String, Card> p2MeleeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
-  private HashMap<String, Card> p2RangeRow = new HashMap<>(GameLogic.ROW_CARD_NUMBER);
+  private Row p1MeleeRow = new Row(0, RowType.MELEE);
+  private Row p1RangeRow = new Row(1, RowType.RANGED);
+  private Row p2MeleeRow = new Row(1, RowType.MELEE);
+  private Row p2RangeRow = new Row(3, RowType.RANGED);
+
+  @Keep
+  public GameFieldRows() {}
 
   // Still wrong, because we dont know who is me.
   public HashMap<String, Card> meleeRowFor(InitialPlayer player) {
+    switch (player) {
+      case INITIATOR:
+        return p1MeleeRow.getPlayerRow();
+      case OPPONENT:
+        return p2MeleeRow.getPlayerRow();
+      default:
+        return null;
+    }
+  }
+
+  public HashMap<String, Card> rangedRowFor(InitialPlayer player) {
+    switch (player) {
+      case INITIATOR:
+        return p1RangeRow.getPlayerRow();
+      case OPPONENT:
+        return p2RangeRow.getPlayerRow();
+      default:
+        return null;
+    }
+  }
+
+  public Row getMeleeRowFor(InitialPlayer player) {
     switch (player) {
       case INITIATOR:
         return p1MeleeRow;
@@ -22,7 +47,7 @@ public class GameFieldRows {
     }
   }
 
-  public HashMap<String, Card> rangedRowFor(InitialPlayer player) {
+  public Row getRangedRowFor(InitialPlayer player) {
     switch (player) {
       case INITIATOR:
         return p1RangeRow;
@@ -52,19 +77,52 @@ public class GameFieldRows {
     return true;
   }
 
-  public HashMap<String, Card> getP1MeleeRow() {
+  public int cardCountForPlayer(InitialPlayer player) {
+    return meleeRowFor(player).size() + rangedRowFor(player).size();
+  }
+
+  public void cleanRows() {
+    Row[] rows = {p1MeleeRow, p1RangeRow, p2MeleeRow, p2RangeRow};
+    for (Row row : rows) {
+      row.getPlayerRow().clear();
+      row.setRemainingStatusRounds(0);
+      row.setRowStatus(null);
+    }
+  }
+
+  /*
+  IMPORTANT NOTE: Pay close attention when calling the getter methods! Normally the getter functions,
+  which return the HashMap don't belong here (they should be within the Row Class)!
+   */
+  public HashMap<String, Card> getMeleeRowForP1() {
+    return p1MeleeRow.getPlayerRow();
+  }
+
+  public HashMap<String, Card> getRangeRowForP1() {
+    return p1RangeRow.getPlayerRow();
+  }
+
+  public HashMap<String, Card> getMeleeRowForP2() {
+    return p2MeleeRow.getPlayerRow();
+  }
+
+  public HashMap<String, Card> getRangeRowForP2() {
+    return p2RangeRow.getPlayerRow();
+  }
+
+  public Row getP1MeleeRow() {
     return p1MeleeRow;
   }
 
-  public HashMap<String, Card> getP1RangeRow() {
+  public Row getP1RangeRow() {
     return p1RangeRow;
   }
 
-  public HashMap<String, Card> getP2MeleeRow() {
+  public Row getP2MeleeRow() {
     return p2MeleeRow;
   }
 
-  public HashMap<String, Card> getP2RangeRow() {
+  public Row getP2RangeRow() {
     return p2RangeRow;
   }
 }
