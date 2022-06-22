@@ -2,9 +2,12 @@ package at.aau.se2.gamelogic.models;
 
 import static java.lang.Math.max;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
 
+@IgnoreExtraProperties
 public class Hero {
   public static final TargetUnitAction ACTION_GERALD =
       new TargetUnitAction(3, 1, true, false, true, TargetUnitAction.ActionType.DAMAGE);
