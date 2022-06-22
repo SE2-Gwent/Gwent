@@ -1,6 +1,6 @@
 package at.aau.se2.gamelogic.models.cardactions.triggers;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.annotation.Keep;
 import at.aau.se2.gamelogic.models.cardactions.actions.TargetRowAction;
@@ -8,11 +8,12 @@ import at.aau.se2.gamelogic.models.cardactions.actions.TargetUnitAction;
 
 /** This class is used to implement the deploy ability of a card. */
 public class DeployTrigger {
-  private ArrayList<TargetRowAction> targetRowActions;
-  private ArrayList<TargetUnitAction> targetUnitActions;
+  private HashMap<String, TargetRowAction> targetRowActions;
+  private HashMap<String, TargetUnitAction> targetUnitActions;
 
   public DeployTrigger(
-      ArrayList<TargetRowAction> targetRowActions, ArrayList<TargetUnitAction> targetUnitActions) {
+      HashMap<String, TargetRowAction> targetRowActions,
+      HashMap<String, TargetUnitAction> targetUnitActions) {
     this.targetRowActions = targetRowActions;
     this.targetUnitActions = targetUnitActions;
   }
@@ -20,19 +21,19 @@ public class DeployTrigger {
   @Keep
   public DeployTrigger() {}
 
-  public ArrayList<TargetRowAction> getTargetRowActions() {
+  public HashMap<String, TargetRowAction> getTargetRowActions() {
     return targetRowActions;
   }
 
-  public void setTargetRowActions(ArrayList<TargetRowAction> targetRowActions) {
+  public void setTargetRowActions(HashMap<String, TargetRowAction> targetRowActions) {
     this.targetRowActions = targetRowActions;
   }
 
-  public ArrayList<TargetUnitAction> getTargetUnitActions() {
+  public HashMap<String, TargetUnitAction> getTargetUnitActions() {
     return targetUnitActions;
   }
 
-  public void setTargetUnitActions(ArrayList<TargetUnitAction> targetUnitActions) {
+  public void setTargetUnitActions(HashMap<String, TargetUnitAction> targetUnitActions) {
     this.targetUnitActions = targetUnitActions;
   }
 }

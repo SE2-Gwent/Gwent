@@ -439,8 +439,8 @@ public class GameLogic {
     if (deployTrigger == null) {
       return;
     }
-    performTargetRowActions(deployTrigger.getTargetRowActions());
-    performTargetUnitActions(deployTrigger.getTargetUnitActions());
+    performTargetRowActions(new ArrayList<>(deployTrigger.getTargetRowActions().values()));
+    performTargetUnitActions(new ArrayList<>(deployTrigger.getTargetUnitActions().values()));
   }
 
   /** @param card the card for which the order trigger should be executed. */
@@ -450,8 +450,8 @@ public class GameLogic {
       return;
     }
     if (orderTrigger.getRemCoolDown() == 0) {
-      performTargetRowActions(orderTrigger.getTargetRowActions());
-      performTargetUnitActions(orderTrigger.getTargetUnitActions());
+      performTargetRowActions(new ArrayList<>(orderTrigger.getTargetRowActions().values()));
+      performTargetUnitActions(new ArrayList<>(orderTrigger.getTargetUnitActions().values()));
 
       orderTrigger.setRemCoolDown(orderTrigger.getCoolDown());
     } else {
