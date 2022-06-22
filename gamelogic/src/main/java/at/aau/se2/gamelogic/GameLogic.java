@@ -49,9 +49,12 @@ public class GameLogic {
   private FirebaseConnector connector;
   private GameStateMachine gameStateMachine = new GameStateMachine();
   private InitialPlayer startingPlayer;
+
   private int cardMulligansLeft = 3;
   // set when playing card or using hero activity
   private boolean currentPlayerCanPass = true;
+  private boolean currentPlayerPlayCard = true;
+
   private HashMap<InitialPlayer, Boolean> playerHasMulliganedCards = new HashMap<>();
   private int lastSavedActionSize = 0;
   private ArrayList<InitialPlayer> playersRoundsWon = new ArrayList<>();
@@ -246,23 +249,49 @@ public class GameLogic {
     connector.syncGameField(gameField);
   }
 
+  /*
+   * 10 cards to begin the game. 3 Cards drawn each round.
+   * If cards exceed 10, difference will get added to mulligans;
+   */
   private void drawCards() {
-    ArrayList<Card> cards = new ArrayList<Card>(gameField.getCardDeck(whoAmI).values());
-    if (cards.size() < HAND_CARD_NUMBER) {
+    if (whoAmI != InitialPlayer.INITIATOR) return;
+
+    for (InitialPlayer player : InitialPlayer.values()) {
+      ArrayList<Card> cardDeck = new ArrayList(gameField.getCardDeck(player).values());
+      ArrayList<Card> playersCards =
+          new ArrayList(gameField.getCurrentHandCardsFor(player).values());
+
+      playersCards = drawCardsFor(cardDeck, playersCards);
+
+      gameField.setPlayingCardsFor(player, playersCards);
+    }
+  }
+
+  private ArrayList<Card> drawCardsFor(ArrayList<Card> cardDeck, ArrayList<Card> playersCards) {
+    if (cardDeck.size() < HAND_CARD_NUMBER) {
       Log.w(TAG, "CardDecks not setup");
-      return;
+      return new ArrayList<>();
     }
 
+    int maxCardsInHand = HAND_CARD_NUMBER;
+    if (gameField.getRoundNumber() > 0) {
+      maxCardsInHand = playersCards.size() + 3;
+
+      if (maxCardsInHand > HAND_CARD_NUMBER) {
+        int diff = maxCardsInHand - HAND_CARD_NUMBER;
+        maxCardsInHand = min(maxCardsInHand, HAND_CARD_NUMBER);
+        cardMulligansLeft += diff;
+      }
+    }
     Random random = new Random();
     // 10 random unique cards from set cardDecks
-    HashMap<Integer, Card> drawnCards = new HashMap<>();
-    while (drawnCards.size() < HAND_CARD_NUMBER) {
-      int randomIndex = random.nextInt(cards.size());
-      Card card = cards.get(randomIndex);
-      drawnCards.put(card.getId(), card);
+    while (playersCards.size() < maxCardsInHand) {
+      int randomIndex = random.nextInt(cardDeck.size());
+      Card card = cardDeck.remove(randomIndex);
+      playersCards.add(card);
     }
 
-    gameField.setPlayingCardsFor(whoAmI, new ArrayList<>(drawnCards.values()));
+    return playersCards;
   }
 
   // Need to do it person per person to prevent race-condidition, where both players
@@ -292,13 +321,19 @@ public class GameLogic {
     // decrease cooldowns for heroes
     Hero hero = gameField.getHeroFor(whoAmI);
     if (hero != null) hero.decreaseCooldown();
+
+    currentPlayerCanPass = true;
+    currentPlayerPlayCard = true;
   }
 
   private void roundReset() {
     turnReset();
+    gameField.getRows().cleanRows();
     gameField.getCurrentPlayer().setHasPassed(false);
     gameField.getOpponent().setHasPassed(false);
+
     cardMulligansLeft = 1;
+
     playerHasMulliganedCards.put(InitialPlayer.INITIATOR, false);
     playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
   }
@@ -332,16 +367,25 @@ public class GameLogic {
         if (gameStateMachine.roundCanStart()) {
           lastSavedActionSize = syncRoot.getSyncActions().size();
           this.startingPlayer = startingPlayer;
+          handleGameSyncUpdates(syncRoot); // trigger that draw cards get accessed
         }
         break;
 
       case DRAW_CARDS:
         if (gameField == null || gameField.getCurrentPlayer() == null) return;
-        drawCards();
 
-        if (gameStateMachine.cardsDrawn()) {
-          connector.syncGameField(this.gameField);
+        if (whoAmI == InitialPlayer.INITIATOR) {
+          drawCards();
+          if (gameStateMachine.cardsDrawn()) {
+            connector.syncGameField(this.gameField);
+          }
+        } else {
+          // opponent gets cards drawn by initiator
+          if (gameField.getCurrentHandCards().hasDecksForBothPlayers()) {
+            gameStateMachine.cardsDrawn();
+          }
         }
+
         break;
 
       case MULLIGAN_CARDS:
@@ -428,7 +472,7 @@ public class GameLogic {
           roundReset();
           connector.syncGameField(this.gameField);
         }
-        // TODO: clean gameboard
+
         break;
 
       default:
@@ -803,6 +847,8 @@ public class GameLogic {
    * @param position The position on the given row where the card is put.
    */
   public void deployCard(Card card, RowType rowType, int position) {
+    if (!currentPlayerPlayCard) return;
+
     InitialPlayer currentPlayer = getPlayerToTurn();
 
     gameField.getRows().setCardIfPossible(currentPlayer, rowType, position, card);
@@ -812,6 +858,7 @@ public class GameLogic {
     currentHand.remove(key);
 
     currentPlayerCanPass = false;
+    currentPlayerPlayCard = false;
 
     performDeployTrigger(card);
 
@@ -968,6 +1015,10 @@ public class GameLogic {
 
   public boolean getCurrentPlayerCanPass() {
     return currentPlayerCanPass;
+  }
+
+  public boolean canCurrentPlayerPlayCard() {
+    return currentPlayerPlayCard;
   }
 
   protected void setPlayersRoundsWon(ArrayList<InitialPlayer> playersRoundsWon) {
