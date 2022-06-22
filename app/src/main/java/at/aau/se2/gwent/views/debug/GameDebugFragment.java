@@ -76,7 +76,7 @@ public class GameDebugFragment extends Fragment {
     binding.mulliganCardButton.setOnClickListener(
         view -> {
           Navigation.findNavController(
-                  Objects.requireNonNull(getActivity()), R.id.nav_host_fragment_content_main)
+                  getActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_game_debug_fragment_to_mulliganCardFragment);
         });
     binding.roundDoneButton.setOnClickListener(
