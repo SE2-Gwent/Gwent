@@ -126,12 +126,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
 
   private void resetCardRowsToInitialState() {
     for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
-      CardRowHelper.showCardsAsPlaceholder(cardViews);
+      CardRowHelper.makeAllPlaceholder(cardViews);
       CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
       CardRowHelper.setCardsOnClickListener(cardViews, this);
     }
     for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
-      CardRowHelper.showCardsAsPlaceholder(cardViews);
+      CardRowHelper.makeAllPlaceholder(cardViews);
       CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
     }
   }

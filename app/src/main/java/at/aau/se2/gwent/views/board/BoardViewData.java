@@ -180,7 +180,7 @@ public class BoardViewData implements Cloneable {
   public HeroView getMyHeroView() {
     return myHeroView;
   }
-  
+
   public boolean shouldShowCardPlaceholders() {
     return (selectedCardId != null) && playerCanPlayCard;
   }

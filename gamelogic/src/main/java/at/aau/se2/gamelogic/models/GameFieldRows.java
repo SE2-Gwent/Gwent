@@ -2,7 +2,6 @@ package at.aau.se2.gamelogic.models;
 
 import java.util.HashMap;
 
-import android.util.Log;
 import androidx.annotation.Keep;
 
 public class GameFieldRows {
