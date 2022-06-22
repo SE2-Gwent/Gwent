@@ -49,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_related_margin"
-        android:text="Opponents Turn"
+        android:text="@string/opponents_turn"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="8sp"

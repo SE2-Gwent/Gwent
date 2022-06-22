@@ -29,4 +29,10 @@
     <string name="opponents_has_won">Der Gegner hat gewonnen!</string>
     <string name="this_is_triss_merigold">Das ist Triss Merigold, dein Gegner</string>
     <string name="this_is_gerald_riva">Das ist Gerald von Riva, dein Gegner</string>
+    <string name="choose_a_card_to_redraw">Wählen Sie eine Karte zum auswechseln aus.</string>
+    <string name="card_s_remaining">Karte(n) verbleibend</string>
+    <string name="cancel_mulligan">Cancel Mulligan</string>
+    <string name="version">Version</string>
+    <string name="code">Code</string>
+    <string name="rules">Rules</string>
 </resources>
