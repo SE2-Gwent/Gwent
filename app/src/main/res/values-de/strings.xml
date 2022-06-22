@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gwent</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="next">Spiel starten</string>
+    <string name="previous">Vorheriges</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="ok">OK</string>
+    <string name="activate_ability">Fähigkeiten</string>
+    <string name="action_detailed_card">Detail Karte</string>
+    <string name="close">Schließen</string>
+    <string name="mulligan">Auswechseln</string>
+    <string name="done">Fertig</string>
+    <string name="pass_round">Passen</string>
+    <string name="end_round">Zug beenden</string>
+    <string name="your_turn">Dein Zug</string>
+    <string name="opponents_turn">Gegner ist am Zug</string>
+    <string name="round">Runde</string>
+    <string name="waiting_for_opponent">Warten auf den Gegner</string>
+    <string name="join_game">Spiel beitreten</string>
+    <string name="join_game_instructions">Geben Sie die SpielID des anderen Spielers ein</string>
+    <string name="game_id">SpielID</string>
+    <string name="join">Beirtreten</string>
+    <string name="could_not_join_game">Konnte dem Spiel nicht beitreten</string>
+    <string name="game_created">Spiel erstellt</string>
+    <string name="could_not_create_game">Konnte das Spiel nicht erstellen!</string>
+    <string name="game_ended">Spiel beendet</string>
+    <string name="you_have_won">Du hast gewonnen!</string>
+    <string name="opponents_has_won">Der Gegner hat gewonnen!</string>
+    <string name="this_is_triss_merigold">Das ist Triss Merigold, dein Gegner</string>
+    <string name="this_is_gerald_riva">Das ist Gerald von Riva, dein Gegner</string>
+</resources>
