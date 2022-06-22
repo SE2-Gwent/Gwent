@@ -473,6 +473,8 @@ public class GameLogic {
 
   /** @param targetRowActions */
   private void performTargetRowActions(ArrayList<TargetRowAction> targetRowActions) {
+    if (targetRowActions == null) return;
+
     InitialPlayer opponent = whoAmI.other();
 
     for (TargetRowAction targetRowAction : targetRowActions) {
