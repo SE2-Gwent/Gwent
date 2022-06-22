@@ -1,7 +1,5 @@
 package at.aau.se2.gwent.views.board;
 
-import java.util.ArrayList;
-
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import at.aau.se2.gamelogic.GameFieldObserver;
 import at.aau.se2.gamelogic.GameLogic;
-import at.aau.se2.gamelogic.GameLogicDataProvider;
 import at.aau.se2.gamelogic.GameStateCallback;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
@@ -18,10 +15,8 @@ import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
-import at.aau.se2.gwent.util.DeckGeneration;
 
-public class BoardViewModel extends ViewModel
-    implements GameFieldObserver, GameLogicDataProvider, GameStateCallback {
+public class BoardViewModel extends ViewModel implements GameFieldObserver, GameStateCallback {
 
   public enum Event {
     SHOW_MULLIGAN,
@@ -37,7 +32,6 @@ public class BoardViewModel extends ViewModel
 
   public BoardViewModel() {
     gameLogic.registerGameFieldListener(this);
-    gameLogic.setGameLogicDataProvider(this);
     gameLogic.getGameStateMachine().registerListener(this);
   }
 
@@ -121,11 +115,6 @@ public class BoardViewModel extends ViewModel
       default:
         break;
     }
-  }
-
-  @Override
-  public ArrayList<Card> needsCardDeck() {
-    return DeckGeneration.generateCardDeck();
   }
 
   // Getters & Setters

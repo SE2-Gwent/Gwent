@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.app.Application;
+import android.content.Context;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.util.json.JsonConverter;
 
@@ -12,9 +12,9 @@ public class DeckGeneration {
   private static final String DECK_DATA = "card-pool.json";
   private static final Integer DECK_SIZE = 25;
 
-  public static ArrayList<Card> generateCardDeck() {
+  public static ArrayList<Card> generateCardDeck(Context applicationContext) {
     ArrayList<Card> deck = new ArrayList<>();
-    String json = readFileAsString();
+    String json = readFileAsString(applicationContext);
     if (json != null) {
       deck = JsonConverter.deserializeCardList(json);
       limitDeck(deck);
@@ -24,14 +24,10 @@ public class DeckGeneration {
     }
   }
 
-  private static String readFileAsString() {
+  private static String readFileAsString(Context applicationContext) {
     String jsonString;
     try {
-      InputStream is =
-          DeckGeneration.getApplicationUsingReflection()
-              .getApplicationContext()
-              .getAssets()
-              .open(DECK_DATA);
+      InputStream is = applicationContext.getAssets().open(DECK_DATA);
       int size = is.available();
       byte[] buffer = new byte[size];
       is.read(buffer);
@@ -41,13 +37,6 @@ public class DeckGeneration {
       return null;
     }
     return jsonString;
-  }
-
-  private static Application getApplicationUsingReflection() throws Exception {
-    return (Application)
-        Class.forName("android.app.AppGlobals")
-            .getMethod("getInitialApplication")
-            .invoke(null, (Object[]) null);
   }
 
   private static void limitDeck(ArrayList<Card> deck) {
