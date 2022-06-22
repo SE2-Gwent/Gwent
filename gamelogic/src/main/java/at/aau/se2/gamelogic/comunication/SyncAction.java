@@ -6,7 +6,8 @@ public class SyncAction {
   public enum Type {
     STARTING_PLAYER,
     MULLIGAN_COMPLETE,
-    ROUND_WINNER
+    ROUND_WINNER,
+    VIBRATION
   }
 
   private Type type;

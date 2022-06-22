@@ -63,6 +63,7 @@ public class GameLogic {
 
   @Nullable private GameLogicDataProvider gameLogicDataProvider;
 
+  private ArrayList<UIActionListener> uiActionListenerArrayList = new ArrayList<>();
   private ArrayList<GameFieldObserver> gameFieldObservers = new ArrayList<>();
   private CommuncationObserver communcationObserver =
       sync -> {
@@ -189,6 +190,7 @@ public class GameLogic {
     return mulliganedCardId;
   }
 
+  // TODO send same syncAction with Vibration Type
   public void abortMulliganCards() {
     cardMulligansLeft = 0;
     connector.sendSyncAction(new SyncAction(SyncAction.Type.MULLIGAN_COMPLETE, whoAmI.name()));
@@ -338,6 +340,7 @@ public class GameLogic {
     playerHasMulliganedCards.put(InitialPlayer.OPPONENT, false);
   }
 
+  // checks curent game state + more
   protected void handleGameSyncUpdates(SyncRoot syncRoot) {
     if (syncRoot == null) return;
 
@@ -362,7 +365,6 @@ public class GameLogic {
           Log.w(TAG, "Only one Player has choosen his deck");
           return;
         }
-
         InitialPlayer startingPlayer = SyncActionUtil.findStartingPlayer(newSyncActions);
         if (gameStateMachine.roundCanStart()) {
           lastSavedActionSize = syncRoot.getSyncActions().size();
@@ -401,6 +403,14 @@ public class GameLogic {
 
       case START_PLAYER_TURN:
         updateBoardState();
+
+        InitialPlayer playerToVibrate = SyncActionUtil.findVibrationOn2ndDevice(newSyncActions);
+        if (playerToVibrate != null) {
+          lastSavedActionSize = syncRoot.getSyncActions().size();
+          if (whoAmI == playerToVibrate) {
+            notifyVibrationActionListener();
+          }
+        }
 
         if (!bothPlayerHavePlayed()) {
           Log.w(TAG, "Not both players played");
@@ -862,6 +872,8 @@ public class GameLogic {
 
     performDeployTrigger(card);
 
+    sendVibrationAction();
+
     connector.syncGameField(this.gameField);
   }
 
@@ -869,6 +881,11 @@ public class GameLogic {
     if (gameFieldObservers.contains(observer)) return;
     gameFieldObservers.add(observer);
     observer.updateGameField(gameField);
+  }
+
+  public void registeruiActionListener(UIActionListener uiListener) {
+    if (uiActionListenerArrayList.contains(uiListener)) return;
+    uiActionListenerArrayList.add(uiListener);
   }
 
   public ArrayList<Card> getCardsToMulligan() {
@@ -946,6 +963,17 @@ public class GameLogic {
     Player currentPlayer = gameField.getCurrentPlayer();
     Player opponent = gameField.getOpponent();
     return currentPlayer.isHasPassed() && opponent.isHasPassed();
+  }
+
+  private void sendVibrationAction() {
+    notifyVibrationActionListener();
+    connector.sendSyncAction(new SyncAction(SyncAction.Type.VIBRATION, whoAmI.other().name()));
+  }
+
+  private void notifyVibrationActionListener() {
+    for (UIActionListener actionListener : uiActionListenerArrayList) {
+      actionListener.sendVibration();
+    }
   }
 
   // Getters & Setters
