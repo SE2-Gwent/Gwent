@@ -3,7 +3,6 @@ package at.aau.se2.gwent.views.board;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,6 +15,7 @@ import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,6 +26,7 @@ import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.InitialPlayer;
 import at.aau.se2.gamelogic.models.RowType;
+import at.aau.se2.gwent.Environment;
 import at.aau.se2.gwent.R;
 import at.aau.se2.gwent.databinding.CardareaBinding;
 import at.aau.se2.gwent.databinding.FragmentBoardviewBinding;
@@ -92,8 +93,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
     }
 
-    CardRowHelper.removeCardViews(binding.playersHandLayout);
-    CardRowHelper.removeCardViews(binding.opponentsHandLayout);
+    CardRowHelper.removeAllViews(binding.playersHandLayout);
+    CardRowHelper.removeAllViews(binding.opponentsHandLayout);
   }
 
   private void setupButtons() {
@@ -110,12 +111,52 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
               .navigate(R.id.action_board_fragment_to_game_debug_fragment);
         });
+
+    binding.currentHeroButton.setOnClickListener(
+        view -> {
+          viewModel.didClickHero();
+        });
+
+    binding.opponentHeroButton.setOnClickListener(
+        view -> {
+          // we could show here some information about hero
+          Toast.makeText(
+                  getContext(),
+                  viewModel.getCurrentState().getValue().getMyHeroView().other().getAlertText(),
+                  Toast.LENGTH_SHORT)
+              .show();
+        });
+  }
+
+  private void resetCardRowsToInitialState() {
+    for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+      CardRowHelper.makeAllPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      CardRowHelper.setCardsOnClickListener(cardViews, this);
+    }
+    for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+      CardRowHelper.makeAllPlaceholder(cardViews);
+      CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+    }
   }
 
   private void updateUI(BoardViewData viewData) {
     if (viewData.isGameFieldDirty()) {
+      resetCardRowsToInitialState();
       updateCurrentHandCardRow(
           viewData.getPlayersHandCards(), binding.playersHandLayout, playersHandCardViews, false);
+
+      // clean rows ...
+      for (ArrayList<CardView> cardViews : playerRowCardViews.values()) {
+        CardRowHelper.makeAllPlaceholder(cardViews);
+        CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+        CardRowHelper.setCardsOnClickListener(cardViews, this);
+      }
+      for (ArrayList<CardView> cardViews : opponentRowCardViews.values()) {
+        CardRowHelper.makeAllPlaceholder(cardViews);
+        CardRowHelper.setCardsVisibilityForPlaceholders(cardViews, View.INVISIBLE);
+      }
+
       updateCurrentHandCardRow(
           viewData.getOpponentsHandCards(),
           binding.opponentsHandLayout,
@@ -147,11 +188,12 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           viewData.getWhoAmI());
     }
 
-    boolean cardIsSelected = viewData.getSelectedCardId() != null;
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.MELEE), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.MELEE),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
     CardRowHelper.setCardsVisibilityForPlaceholders(
-        playerRowCardViews.get(RowType.RANGED), cardIsSelected ? View.VISIBLE : View.INVISIBLE);
+        playerRowCardViews.get(RowType.RANGED),
+        viewData.shouldShowCardPlaceholders() ? View.VISIBLE : View.INVISIBLE);
 
     if (viewModel.getOldViewData() != null
         && viewModel.getOldViewData().getSelectedCardId() != null
@@ -164,6 +206,11 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       // TODO: selection for rowCardViews
     }
 
+    binding.currentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().backgroundDrawable()));
+    binding.opponentHeroButton.setBackground(
+        getResources().getDrawable(viewData.getMyHeroView().other().backgroundDrawable()));
+    binding.currentHeroButton.setEnabled(viewData.isHeroEnabled());
     binding.pointView.bind(viewData);
   }
 
@@ -174,7 +221,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       boolean isOpponent) {
     if (cards == null) return;
 
-    CardRowHelper.removeCardViews(handLayout);
+    CardRowHelper.removeAllViews(handLayout);
     handCardViews.clear();
     for (Map.Entry<String, Card> entry : cards.entrySet()) {
       Card card = entry.getValue();
@@ -187,7 +234,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
         cardView.showAsPlaceholder(false);
       } else {
         cardView.setupWithCard(
-            entry.getKey(), card.getPower(), card.getName(), R.drawable.aguara_basic);
+            entry.getKey(), card.getCurrentAttackPoints(), card.getName(), R.drawable.aguara_basic);
         cardView.setOnClickListener(
             view -> {
               CardView clickedCardView = (CardView) view;
@@ -224,7 +271,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       CardView cardView = new CardView(getContext(), null);
       // TODO: Replace drawable with cards drawable
       cardView.setupWithCard(
-          card.getFirebaseId(), card.getPower(), card.getName(), R.drawable.aguara_basic);
+          card.getFirebaseId(),
+          card.getCurrentAttackPoints(),
+          card.getName(),
+          R.drawable.aguara_basic);
       rowLayout.getRoot().removeViewAt(i);
       rowLayout.getRoot().addView(cardView, i);
       cardView.setOnClickListener(
@@ -299,12 +349,10 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
             });
         AlertDialog dialog = builder.create();
         dialog.show();
-
         break;
+
       case VIBRATE:
-        Vibrator v =
-            (Vibrator)
-                Objects.requireNonNull(getActivity()).getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator v = (Vibrator) requireActivity().getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -313,8 +361,34 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
           v.vibrate(200);
         }
         break;
+
+      case SHOW_WINNER:
+        showWinner();
+        break;
+
       default:
         break;
     }
+  }
+
+  private void showWinner() {
+    if (viewModel.haveIWon() == null) return;
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    builder.setTitle(R.string.game_ended);
+    builder.setCancelable(false);
+
+    builder.setMessage(viewModel.haveIWon() ? R.string.you_have_won : R.string.opponents_has_won);
+    builder.setNegativeButton(
+        R.string.ok,
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+            Environment.getSharedInstance().resetGameLogic();
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
+                .popBackStack();
+          }
+        });
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 }

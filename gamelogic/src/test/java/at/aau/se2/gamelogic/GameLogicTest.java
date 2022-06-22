@@ -183,7 +183,8 @@ public class GameLogicTest {
     when(mockSyncRoot.getGameField()).thenReturn(gameField);
     when(mockSyncRoot.getLastActions(eq(0)))
         .thenReturn(new ArrayList(Collections.singletonList(startingSyncAction)));
-    when(mockGameStateMachine.getCurrent()).thenReturn(GameState.START_GAME_ROUND);
+    when(mockGameStateMachine.getCurrent())
+        .thenReturn(GameState.START_GAME_ROUND, GameState.WAIT_FOR_OPPONENT);
     when(mockGameStateMachine.roundCanStart()).thenReturn(true);
 
     sut.handleGameSyncUpdates(mockSyncRoot);
@@ -541,6 +542,25 @@ public class GameLogicTest {
     ArrayList<Card> cards = sut.getCardsToMulligan();
 
     assertEquals(3, cards.size());
+  }
+
+  @Test
+  public void testMulliganCardsCountForLaterRounds() {
+    sut.setWhoAmI(InitialPlayer.INITIATOR);
+    GameField gameField = new GameField();
+    ArrayList<Card> initialPlayerCards = playerCardsFrom(testCards);
+    gameField.setPlayingCardsFor(InitialPlayer.INITIATOR, initialPlayerCards);
+    gameField.getCurrentHandCardsFor(InitialPlayer.INITIATOR).remove("1_card");
+    gameField.setCardDecks(cardDecks);
+    gameField.setCurrentPlayer(currentPlayer);
+    gameField.setOpponent(currentPlayer);
+    currentPlayer.setCurrentMatchPoints(1);
+    gameField.setCurrentPlayer(currentPlayer);
+    sut.setGameField(gameField);
+    when(mockGameStateMachine.stateEquals(GameState.MULLIGAN_CARDS)).thenReturn(true);
+
+    // normaly 1, but 3, because drawing 3 cards overflowed handCardsMaximum by 2
+    assertEquals(3, sut.getCardMulligansLeft());
   }
 
   @Test

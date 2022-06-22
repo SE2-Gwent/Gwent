@@ -15,6 +15,7 @@ import at.aau.se2.gamelogic.UIActionListener;
 import at.aau.se2.gamelogic.comunication.SingleEvent;
 import at.aau.se2.gamelogic.models.Card;
 import at.aau.se2.gamelogic.models.GameField;
+import at.aau.se2.gamelogic.models.Player;
 import at.aau.se2.gamelogic.models.RowType;
 import at.aau.se2.gamelogic.state.GameState;
 import at.aau.se2.gwent.Environment;
@@ -25,7 +26,8 @@ public class BoardViewModel extends ViewModel
 
   public enum Event {
     SHOW_MULLIGAN,
-    VIBRATE
+    VIBRATE,
+    SHOW_WINNER
   }
 
   private static final String TAG = BoardViewModel.class.getSimpleName();
@@ -69,6 +71,10 @@ public class BoardViewModel extends ViewModel
     }
   }
 
+  public void didClickHero() {
+    gameLogic.activateHeroAction();
+  }
+
   public void didClickRowCard(String cardId) {}
 
   public void cancelMulligan() {
@@ -76,8 +82,6 @@ public class BoardViewModel extends ViewModel
   }
 
   public void playSelectedCard(RowType rowType, int location) {
-    // TODO: change when deploy mechanic is merged
-
     String cardId = getCurrentState().getValue().getSelectedCardId();
     if (cardId == null) return;
 
@@ -100,6 +104,8 @@ public class BoardViewModel extends ViewModel
   }
 
   private void createCurrentViewState(GameField gameField) {
+    if (gameField == null) return;
+
     BoardViewData boardViewState = new BoardViewData(gameField, gameLogic);
 
     notifyStateChange(boardViewState);
@@ -117,6 +123,8 @@ public class BoardViewModel extends ViewModel
     switch (current) {
       case MULLIGAN_CARDS:
         actionLiveData.setValue(new SingleEvent<>(Event.SHOW_MULLIGAN));
+      case END_GAME:
+        actionLiveData.setValue(new SingleEvent<>(Event.SHOW_WINNER));
       default:
         break;
     }
@@ -144,5 +152,12 @@ public class BoardViewModel extends ViewModel
 
   public BoardViewData getOldViewData() {
     return oldViewData;
+  }
+
+  // not in viewData, because we need it maybe before last update
+  public Boolean haveIWon() {
+    Player winner = gameLogic.getWinner();
+    if (winner == null) return null;
+    return winner.getInitialPlayerInformation() == gameLogic.getWhoAmI();
   }
 }
