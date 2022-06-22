@@ -7,11 +7,11 @@
     <string name="ok">OK</string>
 
     <!-- Sample card for detailedcard - TODO: remove -->
-    <string name="card_name">Rainfarn of Attre</string>
-    <string name="card_types">Human, Knight</string>
-    <string name="card_text">Deploy: Damage an enemy unit by 2. Conspiracy: Increase damage by 2.</string>
-    <string name="card_flavortext">When Cintra fell, Attre followed, leaving its defenders a choice: accept the Nilfgaardian leash or die.</string>
-    <string name="card_power">5</string>
+    <string name="card_name" translatable="false">Rainfarn of Attre</string>
+    <string name="card_types" translatable="false">Human, Knight</string>
+    <string name="card_text" translatable="false">Deploy: Damage an enemy unit by 2. Conspiracy: Increase damage by 2.</string>
+    <string name="card_flavortext" translatable="false">When Cintra fell, Attre followed, leaving its defenders a choice: accept the Nilfgaardian leash or die.</string>
+    <string name="card_power" translatable="false">5</string>
 
     <string name="activate_ability">Ability</string>
     <string name="action_detailed_card">Detailed card</string>
@@ -37,5 +37,11 @@
     <string name="opponents_has_won">Your opponent has won!</string>
     <string name="this_is_triss_merigold">"This is Triss Merigold, your opponent"</string>
     <string name="this_is_gerald_riva">This is Gerald of Riva, your opponent</string>
+    <string name="choose_a_card_to_redraw">Choose a card to redraw</string>
+    <string name="card_s_remaining">Card(s) remaining</string>
+    <string name="cancel_mulligan">Cancel Mulligan</string>
+    <string name="version">Version</string>
+    <string name="code">Code</string>
+    <string name="rules">Rules</string>
 
 </resources>

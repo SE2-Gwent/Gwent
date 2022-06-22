@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
-            android:text="Version"
+            android:text="@string/version"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_related_margin"
-            android:text="Code"
+            android:text="@string/code"
             app:layout_constraintStart_toStartOf="@+id/versionNameLabel"
             app:layout_constraintTop_toBottomOf="@+id/versionNameLabel" />
 
