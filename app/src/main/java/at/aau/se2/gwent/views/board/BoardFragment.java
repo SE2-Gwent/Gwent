@@ -315,6 +315,7 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
   }
 
   private void showDetailOverlay(String cardId) {
+
     if (detailedCardFragment == null) {
       detailedCardFragment = DetailedCardFragment.newInstance();
       Bundle args = new Bundle();
@@ -335,6 +336,8 @@ public class BoardFragment extends Fragment implements View.OnClickListener {
       args.putString("key_0", cardId);
       detailedCardFragment.setArguments(args);
     }
+
+    if (detailedCardFragment.isAdded()) return;
 
     getChildFragmentManager()
         .beginTransaction()
