@@ -775,22 +775,27 @@ public class GameLogic {
     HashMap<String, Card> p2MeleeRow = gameField.getRows().getMeleeRowForP2();
     HashMap<String, Card> p2RangedRow = gameField.getRows().getRangeRowForP2();
 
-    for (Map.Entry<String, Card> entry : p1MeleeRow.entrySet()) {
+    HashMap<String, Card> p1MeleeRowCp = new HashMap<>(p1MeleeRow);
+    HashMap<String, Card> p1RangedRowCp = new HashMap<>(p1RangedRow);
+    HashMap<String, Card> p2MeleeRowCp = new HashMap<>(p2MeleeRow);
+    HashMap<String, Card> p2RangedRowCp = new HashMap<>(p2RangedRow);
+
+    for (Map.Entry<String, Card> entry : p1MeleeRowCp.entrySet()) {
       if (entry.getValue().getCurrentAttackPoints() <= 0) {
         p1MeleeRow.remove(entry.getKey());
       }
     }
-    for (Map.Entry<String, Card> entry : p1RangedRow.entrySet()) {
+    for (Map.Entry<String, Card> entry : p1RangedRowCp.entrySet()) {
       if (entry.getValue().getCurrentAttackPoints() <= 0) {
         p1RangedRow.remove(entry.getKey());
       }
     }
-    for (Map.Entry<String, Card> entry : p2MeleeRow.entrySet()) {
+    for (Map.Entry<String, Card> entry : p2MeleeRowCp.entrySet()) {
       if (entry.getValue().getCurrentAttackPoints() <= 0) {
         p2MeleeRow.remove(entry.getKey());
       }
     }
-    for (Map.Entry<String, Card> entry : p2RangedRow.entrySet()) {
+    for (Map.Entry<String, Card> entry : p2RangedRowCp.entrySet()) {
       if (entry.getValue().getCurrentAttackPoints() <= 0) {
         p2RangedRow.remove(entry.getKey());
       }
@@ -919,7 +924,7 @@ public class GameLogic {
     int cardCountToMulligan = 3;
     if (gameField.getRoundNumber() == 0) cardCountToMulligan = 6;
 
-    for (int i = 0; i < cardCountToMulligan; i++) {
+    for (int i = 0; i < cardCountToMulligan && i < playingCards.size(); i++) {
       cardsToMulligan.add(playingCards.get(i));
     }
 
