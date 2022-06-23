@@ -924,7 +924,7 @@ public class GameLogic {
     int cardCountToMulligan = 3;
     if (gameField.getRoundNumber() == 0) cardCountToMulligan = 6;
 
-    for (int i = 0; i < cardCountToMulligan; i++) {
+    for (int i = 0; i < cardCountToMulligan && i < playingCards.size(); i++) {
       cardsToMulligan.add(playingCards.get(i));
     }
 
