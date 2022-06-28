@@ -25,3 +25,7 @@ Firebase communication and all the gamelogic stuff you need locally.
 > In general we stick to a PR [Workflow](https://github.com/SE2-Gwent/Gwent/wiki/Pull-Request-(PR)-Work-Flow)
 > This workflow consists of creating feature branches and pair reviews.
 > 
+
+# The finished Game
+![Slide 16_9 - 4](https://user-images.githubusercontent.com/1867718/176129181-0808021d-d98b-4019-b1e3-93594d4c3e09.png)
+![Slide 16_9 - 11](https://user-images.githubusercontent.com/1867718/176129193-11f82033-7950-4ba0-a5d2-d72cb5476966.png)
